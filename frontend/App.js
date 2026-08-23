@@ -105,28 +105,48 @@ export default function App() {
 }
 
 function DesktopAside({ styles }) {
+  const pickRole = useAppStore((s) => s.pickRole)
+
   return (
     <View style={styles.aside} accessibilityRole='complementary'>
       <BrandLogo size={72} />
       <Text style={styles.asideBrand}>TOWERBELL</Text>
       <Text style={styles.asideTeam}>ZERO-KNOLAGE · WEB DEMO</Text>
       <Text style={styles.asideLead}>
-        This is the Expo phone UI in a desktop frame. Same scan / beacon contract as the Pear CLI —
-        mock swarm on web.
+        Click a mode here or inside the phone. Same scan / beacon contract as the Pear CLI — mock
+        swarm on web.
       </Text>
 
-      <View style={styles.asideCard}>
-        <Text style={styles.asideCardTitle}>1 · SCAN</Text>
+      <Pressable
+        style={({ pressed }) => [
+          styles.asideCard,
+          styles.asideCardBtn,
+          pressed && styles.asideCardPressed
+        ]}
+        onPress={() => pickRole('visitor')}
+        accessibilityRole='button'
+        accessibilityLabel='Start SCAN traveler mode'
+      >
+        <Text style={styles.asideCardTitle}>▶ SCAN</Text>
         <Text style={styles.asideCardBody}>
           Traveler mode. Wait a few seconds for Café Rivadavia and nearby shops.
         </Text>
-      </View>
-      <View style={styles.asideCard}>
-        <Text style={styles.asideCardTitle}>2 · BEACON</Text>
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.asideCard,
+          styles.asideCardBtn,
+          pressed && styles.asideCardPressed
+        ]}
+        onPress={() => pickRole('merchant')}
+        accessibilityRole='button'
+        accessibilityLabel='Start BEACON shop mode'
+      >
+        <Text style={styles.asideCardTitle}>▶ BEACON</Text>
         <Text style={styles.asideCardBody}>
-          Shop mode. Gear → Switch identity → Shop, then start broadcasting.
+          Shop mode. Start broadcasting your name, hours and promo.
         </Text>
-      </View>
+      </Pressable>
 
       <Pressable
         style={styles.asideBtn}
@@ -239,6 +259,13 @@ function makeStyles(c, height) {
       backgroundColor: c.panel,
       padding: 12,
       gap: 6
+    },
+    asideCardBtn: {
+      cursor: 'pointer'
+    },
+    asideCardPressed: {
+      backgroundColor: c.greenDark,
+      borderColor: c.sky
     },
     asideCardTitle: {
       color: c.sky,

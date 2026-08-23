@@ -43,20 +43,24 @@ export function RoleSelectScreen() {
       {cards.map((card) => (
         <Pressable
           key={card.role}
-          style={styles.card}
+          style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
           accessibilityRole='button'
           accessibilityLabel={card.name}
-          onPress={() => pickRole(card.role)}
+          onPress={() => {
+            pickRole(card.role)
+          }}
         >
-          <View style={styles.icon}>
+          <View style={styles.icon} pointerEvents='none'>
             <Icon name={card.icon} size={22} color={c.sky} />
           </View>
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1 }} pointerEvents='none'>
             <Text style={styles.kicker}>{card.kicker}</Text>
             <Text style={styles.name}>{card.name}</Text>
             <Text style={styles.text}>{card.text}</Text>
           </View>
-          <Icon name='arrow-up-right' size={18} color={c.sky} />
+          <View pointerEvents='none'>
+            <Icon name='arrow-up-right' size={18} color={c.sky} />
+          </View>
         </Pressable>
       ))}
 
@@ -105,7 +109,12 @@ function makeStyles(c) {
       gap: 12,
       alignItems: 'center',
       borderWidth: 2,
-      borderColor: c.border
+      borderColor: c.border,
+      cursor: 'pointer'
+    },
+    cardPressed: {
+      backgroundColor: c.greenDark,
+      borderColor: c.sky
     },
     icon: {
       width: 48,

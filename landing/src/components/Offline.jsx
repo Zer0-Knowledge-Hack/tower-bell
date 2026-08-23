@@ -38,7 +38,7 @@ export function Offline() {
           {layers.map((layer, i) => (
             <li key={layer.name} className="layer">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-                <p className="font-display text-[22px] leading-tight sm:text-[26px] sm:leading-none">
+                <p className="font-display text-[12px] leading-relaxed sm:text-[14px]">
                   <span className="mr-3 font-mono text-[12px] text-mute">
                     0{i + 1}
                   </span>

@@ -105,7 +105,7 @@ function ScanPanel() {
         </div>
         <hr className="rule my-3" />
         {count === 0 ? (
-          <p className="py-8 text-center font-display text-[20px] italic text-mute">
+          <p className="py-8 text-center font-mono text-[20px] text-mute">
             Searching nearby…
           </p>
         ) : (

@@ -4,12 +4,7 @@ export function Logo({ size = 40, className = '' }) {
       className={`logo-badge ${className}`}
       style={{ width: size, height: size }}
     >
-      <img
-        src="/Logo-TowerBell.jpeg"
-        alt="Towerbell"
-        width={size}
-        height={size}
-      />
+      <img src="/owl-tower.jpg" alt="Towerbell" width={size} height={size} />
     </span>
   )
 }

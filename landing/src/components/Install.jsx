@@ -21,7 +21,7 @@ export function Install() {
             one command · then pick a side
           </p>
         </div>
-        <div className="mt-10 min-w-0 bg-[#111410] px-3 py-4 sm:px-6 sm:py-5">
+        <div className="mt-10 min-w-0 border-2 border-sky bg-deep px-3 py-4 sm:px-6 sm:py-5">
           <ol className="m-0 flex list-none flex-col gap-3 p-0">
             <li className="min-w-0">
               <CopyCommand command={INSTALL_COMMAND} />

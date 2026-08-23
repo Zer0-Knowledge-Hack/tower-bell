@@ -1,4 +1,4 @@
-export const PEAR_LINK = 'pear://9on7du4dmnmty8qsdjxoyrw6rz9dio5wzj6wqux9j6jjn545i49y'
+export const PEAR_LINK = 'pear://xtj3nobayrtccxp68dnngayheeor3bc8kt8j4q19b3d5znrj1yqy'
 
 export const INSTALL_COMMAND = `pear install ${PEAR_LINK}`
 

@@ -16,8 +16,8 @@ export function Masthead() {
           <Logo size={36} />
           <span className="min-w-0">
             <span className="wordmark block">Towerbell</span>
-            <span className="font-display text-[13px] italic text-mute">
-              Walk by. It shows up.
+            <span className="font-mono text-[16px] tracking-[0.12em] text-amber uppercase">
+              Zero-Knolage · 8-bit
             </span>
           </span>
         </a>

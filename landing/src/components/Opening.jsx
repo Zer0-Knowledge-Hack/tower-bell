@@ -7,11 +7,9 @@ export function Opening() {
     <section id="opening" className="paper">
       <div className="mx-auto grid max-w-[1120px] items-end gap-10 px-5 py-10 sm:px-8 sm:py-16 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:py-24">
         <div className="min-w-0">
-          <p className="kicker mb-5">Walk by. It shows up.</p>
-          <h1 className="display text-[clamp(2rem,8.2vw,4.6rem)] text-ink">
-            Walk past a shop.{' '}
-            <em className="font-normal italic">See today’s promo.</em> No
-            internet.
+          <p className="kicker mb-5">Owl tower · scan / beacon</p>
+          <h1 className="display text-[clamp(1.15rem,3.8vw,1.85rem)] text-ink">
+            Walk past a shop. <em>See today’s promo.</em> No internet.
           </h1>
           <p className="mt-7 max-w-[38rem] text-[18px] leading-[1.55] text-ink/90">
             Maps is slow. The pins are paid. The café it shows you closed last
@@ -39,6 +37,13 @@ export function Opening() {
           </p>
         </div>
         <div className="min-w-0 lg:mb-1 lg:translate-y-2">
+          <div className="mb-4 flex justify-center">
+            <img
+              src="/owl-tower.jpg"
+              alt=""
+              className="h-28 w-28 border-2 border-sky object-cover [image-rendering:pixelated]"
+            />
+          </div>
           <ScanDevice shops={SHOPS} />
         </div>
       </div>

@@ -3,19 +3,19 @@ import { SHOPS } from '../data'
 export function ScanDevice({ shops = SHOPS, live = false }) {
   return (
     <figure className="device mx-auto w-full max-w-[400px] min-w-0 overflow-hidden p-3">
-      <div className="mb-2 flex items-center justify-between px-1 font-mono text-[10px] tracking-[0.14em] text-[#c9c2b3] uppercase">
+      <div className="mb-2 flex items-center justify-between px-1 font-mono text-[14px] tracking-[0.14em] text-mute uppercase">
         <span>Towerbell · field</span>
         <span>{live ? 'live' : 'scan'}</span>
       </div>
       <div className="device-screen px-4 py-4">
-        <p className="font-mono text-[10px] tracking-[0.16em] text-navy uppercase">
-          Walker
+        <p className="font-mono text-[14px] tracking-[0.16em] text-sky uppercase">
+          SCAN
         </p>
-        <p className="mt-1 font-display text-[22px] leading-tight">
+        <p className="mt-2 font-display text-[11px] leading-relaxed text-ink">
           Shops next to you
         </p>
         <p className="mt-3 flex items-center gap-2 font-mono text-[11px] text-mute">
-          <span className="inline-block h-1.5 w-1.5 rounded-full bg-sky" />
+          <span className="inline-block h-2 w-2 bg-sky" />
           Looking around · this sidewalk
         </p>
         <hr className="rule my-3" />

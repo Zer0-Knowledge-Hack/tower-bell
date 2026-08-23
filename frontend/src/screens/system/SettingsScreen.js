@@ -1,11 +1,11 @@
 import { useNavigation } from '@react-navigation/native'
 import { useMemo } from 'react'
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { HeaderBar } from '../components/common/HeaderBar'
-import { Icon } from '../components/common/Icon'
-import { useAppStore } from '../store/app.store'
-import { can, ROLE_LABELS } from '../utils/acl'
-import { useThemeColors } from '../utils/useThemeColors'
+import { HeaderBar } from '../../components/common/HeaderBar'
+import { Icon } from '../../components/common/Icon'
+import { useAppStore } from '../../store/app.store'
+import { can, ROLE_LABELS } from '../../utils/acl'
+import { useThemeColors } from '../../utils/useThemeColors'
 
 const roles = ['visitor', 'merchant', 'admin']
 
@@ -62,15 +62,22 @@ export function SettingsScreen() {
 
         <Text style={styles.section}>SYSTEM</Text>
         <NavRow
-          icon='bell'
-          label='Notifications'
+          icon="compass"
+          label="About / pitch for judges"
+          onPress={() => navigation.navigate('About')}
+          c={c}
+          styles={styles}
+        />
+        <NavRow
+          icon="bell"
+          label="Notifications"
           onPress={() => navigation.navigate('Notifications')}
           c={c}
           styles={styles}
         />
         <NavRow
-          icon='shield'
-          label='Phone permissions'
+          icon="shield"
+          label="Phone permissions"
           onPress={() => navigation.navigate('Permissions')}
           c={c}
           styles={styles}

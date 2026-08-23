@@ -1,12 +1,12 @@
 import { useNavigation } from '@react-navigation/native'
 import { useState } from 'react'
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import { HeaderBar } from '../components/common/HeaderBar'
-import { RoleGuard } from '../components/common/RoleGuard'
-import { Icon } from '../components/common/Icon'
-import { CATEGORIES, CATEGORY_META } from '../../backend'
-import { useAppStore } from '../store/app.store'
-import { colors } from '../utils/colors'
+import { HeaderBar } from '../../components/common/HeaderBar'
+import { RoleGuard } from '../../components/common/RoleGuard'
+import { Icon } from '../../components/common/Icon'
+import { CATEGORIES, CATEGORY_META } from '../../../backend'
+import { useAppStore } from '../../store/app.store'
+import { colors } from '../../utils/colors'
 
 export function AdminDashboardScreen() {
   const navigation = useNavigation()

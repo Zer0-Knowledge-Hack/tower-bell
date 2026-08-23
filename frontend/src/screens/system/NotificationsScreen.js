@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native'
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { HeaderBar } from '../components/common/HeaderBar'
-import { Icon } from '../components/common/Icon'
-import { useAppStore } from '../store/app.store'
-import { colors } from '../utils/colors'
+import { HeaderBar } from '../../components/common/HeaderBar'
+import { Icon } from '../../components/common/Icon'
+import { useAppStore } from '../../store/app.store'
+import { colors } from '../../utils/colors'
 
 export function NotificationsScreen() {
   const navigation = useNavigation()

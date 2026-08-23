@@ -6,7 +6,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Icon } from '../components/common/Icon'
 import { AdminDashboardScreen } from '../screens/AdminDashboardScreen'
 import { BeaconScreen } from '../screens/BeaconScreen'
-import { ChatScreen } from '../screens/ChatScreen'
 import { DiscoverScreen } from '../screens/DiscoverScreen'
 import { NetworkDebugScreen } from '../screens/NetworkDebugScreen'
 import { NotificationsScreen } from '../screens/NotificationsScreen'
@@ -14,7 +13,6 @@ import { PermissionsScreen } from '../screens/PermissionsScreen'
 import { RoleSelectScreen } from '../screens/RoleSelectScreen'
 import { SettingsScreen } from '../screens/SettingsScreen'
 import { VisitorsScreen } from '../screens/VisitorsScreen'
-import { WalletScreen } from '../screens/WalletScreen'
 import { useAppStore } from '../store/app.store'
 import { useThemeColors } from '../utils/useThemeColors'
 
@@ -31,10 +29,11 @@ function RoleTabBar({ icons, children }) {
         headerShown: false,
         tabBarActiveTintColor: c.sky,
         tabBarInactiveTintColor: c.muted,
-        tabBarLabelStyle: { fontSize: 11, fontWeight: '800' },
+        tabBarLabelStyle: { fontSize: 10, fontFamily: 'monospace', fontWeight: '400' },
         tabBarStyle: {
-          backgroundColor: c.panel,
+          backgroundColor: c.deep,
           borderTopColor: c.border,
+          borderTopWidth: 2,
           height: 56 + bottom,
           paddingBottom: bottom,
           paddingTop: 6
@@ -49,19 +48,17 @@ function RoleTabBar({ icons, children }) {
 
 function VisitorTabs() {
   return (
-    <RoleTabBar icons={{ Discover: 'compass', Chat: 'users', Wallet: 'credit-card' }}>
-      <Tab.Screen name='Discover' component={DiscoverScreen} options={{ title: 'Nearby' }} />
-      <Tab.Screen name='Chat' component={ChatScreen} options={{ title: 'Chat' }} />
-      <Tab.Screen name='Wallet' component={WalletScreen} options={{ title: 'Wallet' }} />
+    <RoleTabBar icons={{ Discover: 'compass' }}>
+      <Tab.Screen name='Discover' component={DiscoverScreen} options={{ title: 'SCAN' }} />
     </RoleTabBar>
   )
 }
 
 function MerchantTabs() {
   return (
-    <RoleTabBar icons={{ Beacon: 'signal', Visitantes: 'users' }}>
-      <Tab.Screen name='Beacon' component={BeaconScreen} options={{ title: 'My shop' }} />
-      <Tab.Screen name='Visitantes' component={VisitorsScreen} options={{ title: 'Visitors' }} />
+    <RoleTabBar icons={{ Beacon: 'signal', Hits: 'users' }}>
+      <Tab.Screen name='Beacon' component={BeaconScreen} options={{ title: 'BEACON' }} />
+      <Tab.Screen name='Hits' component={VisitorsScreen} options={{ title: 'HITS' }} />
     </RoleTabBar>
   )
 }
@@ -85,7 +82,6 @@ function RoleTabs() {
 export function AppNavigator() {
   const ready = useAppStore((s) => s.ready)
   const picked = useAppStore((s) => s.db?.pickedRole)
-  const permissionsReady = useAppStore((s) => s.db?.permissionsReady)
   const role = useAppStore((s) => s.db?.user?.role || 'visitor')
   const darkMode = useAppStore((s) => !!s.db?.darkMode)
   const c = useThemeColors()
@@ -116,8 +112,6 @@ export function AppNavigator() {
       >
         {!picked ? (
           <Stack.Screen name='RoleSelect' component={RoleSelectScreen} />
-        ) : !permissionsReady ? (
-          <Stack.Screen name='PermissionsGate' component={PermissionsScreen} />
         ) : (
           <>
             <Stack.Screen name='Main' component={RoleTabs} key={role} />

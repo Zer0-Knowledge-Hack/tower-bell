@@ -3,8 +3,7 @@ import { useAppStore } from '../store/app.store'
 import { palette } from './colors'
 
 export function useThemeColors() {
-  const darkMode = useAppStore((s) => !!s.db?.darkMode)
-  return useMemo(() => palette(darkMode), [darkMode])
+  return useMemo(() => palette(), [])
 }
 
 export function useDarkMode() {

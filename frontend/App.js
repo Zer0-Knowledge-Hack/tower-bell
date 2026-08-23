@@ -14,17 +14,18 @@ import { ToastHost } from './src/components/common/ToastHost'
 import { AppNavigator } from './src/navigation/AppNavigator'
 import { useAppStore } from './src/store/app.store'
 import { useThemeColors } from './src/utils/useThemeColors'
+import { loadPixelFonts, pixelBody, pixelTitle } from './src/utils/pixel'
 
 export default function App() {
   const hydrate = useAppStore((s) => s.hydrate)
   const ready = useAppStore((s) => s.ready)
   const c = useThemeColors()
-  const darkMode = useAppStore((s) => !!s.db?.darkMode)
   const { width } = useWindowDimensions()
   const framed = Platform.OS === 'web' && width > 520
   const styles = useMemo(() => makeStyles(c), [c])
 
   useEffect(() => {
+    loadPixelFonts()
     hydrate()
   }, [hydrate])
 
@@ -32,17 +33,17 @@ export default function App() {
     <SafeAreaProvider>
       <View style={[styles.shell, framed && styles.shellWeb]}>
         <SafeAreaView style={styles.safe} edges={['top']}>
-          <StatusBar style={darkMode ? 'light' : 'light'} />
+          <StatusBar style='light' />
           <View style={[styles.phone, framed && styles.phoneWeb]}>
             {ready ? (
               <AppNavigator />
             ) : (
               <View style={styles.boot}>
-                <BrandLogo size={96} />
-                <Text style={styles.bootTitle}>Towerbell</Text>
-                <Text style={styles.bootLead}>Local map · P2P discovery</Text>
+                <BrandLogo size={112} />
+                <Text style={styles.bootTitle}>TOWERBELL</Text>
+                <Text style={styles.bootLead}>OWL TOWER · SCAN / BEACON</Text>
                 <ActivityIndicator color={c.sky} style={{ marginTop: 16 }} />
-                <Text style={styles.bootLoading}>Loading...</Text>
+                <Text style={styles.bootLoading}>boot sequence...</Text>
               </View>
             )}
             <ToastHost />
@@ -55,17 +56,17 @@ export default function App() {
 
 function makeStyles(c) {
   return StyleSheet.create({
-    shell: { flex: 1, backgroundColor: c.header },
+    shell: { flex: 1, backgroundColor: c.deep },
     shellWeb: { alignItems: 'center', backgroundColor: c.shell },
-    safe: { flex: 1, backgroundColor: c.header, width: '100%', maxWidth: 480 },
+    safe: { flex: 1, backgroundColor: c.deep, width: '100%', maxWidth: 480 },
     phone: { flex: 1, backgroundColor: c.bg, width: '100%' },
     phoneWeb: {
       maxWidth: 430,
       width: '100%',
       alignSelf: 'center',
       overflow: 'hidden',
-      borderLeftWidth: 1,
-      borderRightWidth: 1,
+      borderLeftWidth: 2,
+      borderRightWidth: 2,
       borderColor: c.border
     },
     boot: {
@@ -73,17 +74,23 @@ function makeStyles(c) {
       backgroundColor: c.deep,
       alignItems: 'center',
       justifyContent: 'center',
-      gap: 8,
+      gap: 10,
       padding: 24
     },
     bootTitle: {
-      color: '#FFFFFF',
-      fontSize: 28,
-      fontWeight: '800',
-      letterSpacing: 1,
-      marginTop: 8
+      color: c.sky,
+      fontSize: 16,
+      fontFamily: pixelTitle,
+      letterSpacing: 2,
+      marginTop: 10
     },
-    bootLead: { color: 'rgba(255,255,255,0.72)', fontSize: 14, textAlign: 'center' },
-    bootLoading: { color: 'rgba(255,255,255,0.55)', fontSize: 12, marginTop: 8 }
+    bootLead: {
+      color: c.muted,
+      fontSize: 18,
+      fontFamily: pixelBody,
+      textAlign: 'center',
+      letterSpacing: 1
+    },
+    bootLoading: { color: c.muted, fontSize: 16, fontFamily: pixelBody, marginTop: 8 }
   })
 }

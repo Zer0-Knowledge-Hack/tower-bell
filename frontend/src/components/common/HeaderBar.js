@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { useThemeColors } from '../../utils/useThemeColors'
+import { pixelBody, pixelTitle } from '../../utils/pixel'
 import { BrandLogo } from './BrandLogo'
 import { Icon } from './Icon'
 import { NotificationBell } from './NotificationBell'
@@ -11,8 +12,9 @@ export function HeaderBar({ title, subtitle, right, onSettings, showBell = true 
 
   return (
     <View style={styles.wrap}>
+      <View style={styles.hud} />
       <View style={styles.left}>
-        <BrandLogo size={38} />
+        <BrandLogo size={40} />
         <View style={{ flex: 1 }}>
           <Text style={styles.title}>{title}</Text>
           {subtitle ? <Text style={styles.sub}>{subtitle}</Text> : null}
@@ -35,24 +37,43 @@ function makeStyles(c) {
   return StyleSheet.create({
     wrap: {
       backgroundColor: c.header,
-      paddingHorizontal: 16,
+      paddingHorizontal: 12,
       paddingTop: 10,
-      paddingBottom: 14,
+      paddingBottom: 12,
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      borderBottomWidth: 2,
+      borderBottomColor: c.border
+    },
+    hud: {
+      position: 'absolute',
+      top: 6,
+      left: 6,
+      right: 6,
+      bottom: 6,
+      borderWidth: 1,
+      borderColor: 'rgba(28,255,255,0.25)',
+      pointerEvents: 'none'
     },
     left: { flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 },
-    title: { color: c.headerText, fontSize: 18, fontWeight: '800', letterSpacing: 0.4 },
-    sub: { color: 'rgba(255,255,255,0.78)', fontSize: 11, marginTop: 2 },
+    title: {
+      color: c.headerText,
+      fontSize: 11,
+      fontFamily: pixelTitle,
+      letterSpacing: 1
+    },
+    sub: { color: c.muted, fontSize: 16, fontFamily: pixelBody, marginTop: 4 },
     right: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     gear: {
       width: 34,
       height: 34,
-      borderRadius: 8,
+      borderRadius: 0,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: 'rgba(255,255,255,0.14)'
+      borderWidth: 2,
+      borderColor: c.border,
+      backgroundColor: c.panel
     }
   })
 }

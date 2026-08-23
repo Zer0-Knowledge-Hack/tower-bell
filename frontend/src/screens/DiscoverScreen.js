@@ -34,8 +34,6 @@ export function DiscoverScreen() {
   const setFilter = useAppStore((s) => s.setFilter)
   const setDiscoverView = useAppStore((s) => s.setDiscoverView)
   const selectMerchant = useAppStore((s) => s.selectMerchant)
-  const connectPeer = useAppStore((s) => s.connectPeer)
-  const saveToWallet = useAppStore((s) => s.saveToWallet)
   const [bootLoading, setBootLoading] = useState(true)
 
   const view = db?.discoverView || 'map'
@@ -58,8 +56,8 @@ export function DiscoverScreen() {
     <RoleGuard feature='discover'>
       <View style={styles.screen}>
         <HeaderBar
-          title='Nearby'
-          subtitle='Free local map · no Google Maps'
+          title='SCAN'
+          subtitle='Nearby beacons · no server'
           onSettings={() => navigation.navigate('Settings')}
           right={
             <View style={styles.live}>
@@ -156,8 +154,6 @@ export function DiscoverScreen() {
         <MerchantDetailModal
           merchant={selected}
           onClose={() => selectMerchant(null)}
-          onConnect={connectPeer}
-          onSave={saveToWallet}
         />
       </View>
     </RoleGuard>
@@ -175,8 +171,8 @@ function makeStyles(c) {
     viewBtn: {
       flex: 1,
       minHeight: 40,
-      borderRadius: 12,
-      borderWidth: 1,
+      borderRadius: 0,
+      borderWidth: 2,
       borderColor: c.border,
       backgroundColor: c.panel,
       flexDirection: 'row',
@@ -184,16 +180,16 @@ function makeStyles(c) {
       justifyContent: 'center',
       gap: 6
     },
-    viewBtnOn: { backgroundColor: c.header, borderColor: c.header },
+    viewBtnOn: { backgroundColor: c.greenDark, borderColor: c.sky },
     viewText: { color: c.muted, fontWeight: '800', fontSize: 12 },
     viewTextOn: { color: c.headerText },
     hint: { color: c.muted, fontSize: 12, lineHeight: 17 },
     filters: { gap: 8 },
     chip: {
-      borderWidth: 1,
+      borderWidth: 2,
       borderColor: c.border,
       backgroundColor: c.panel,
-      borderRadius: 999,
+      borderRadius: 0,
       paddingHorizontal: 12,
       paddingVertical: 8
     },
@@ -202,9 +198,9 @@ function makeStyles(c) {
     chipTextOn: { color: c.sky },
     emptyBox: {
       backgroundColor: c.panel,
-      borderRadius: 14,
+      borderRadius: 0,
       padding: 18,
-      borderWidth: 1,
+      borderWidth: 2,
       borderColor: c.border
     },
     emptyTitle: { color: c.navy, fontWeight: '800', textAlign: 'center', marginBottom: 6 },

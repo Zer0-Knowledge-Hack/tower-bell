@@ -1,19 +1,23 @@
-import { Image, StyleSheet, View } from 'react-native'
+import { Image, Platform, StyleSheet, View } from 'react-native'
+
+const owl = require('../../../assets/owl-tower.jpg')
 
 export function BrandLogo({ size = 72, framed = true }) {
   return (
     <View
       style={[
         styles.wrap,
-        {
-          width: size,
-          height: size,
-          borderRadius: Math.round(size * 0.22)
-        },
+        { width: size, height: size },
         !framed && styles.flat
       ]}
     >
-      <Image source={require('../../../assets/owl.png')} style={styles.image} />
+      <Image
+        source={owl}
+        style={[
+          styles.image,
+          Platform.OS === 'web' ? { imageRendering: 'pixelated' } : null
+        ]}
+      />
     </View>
   )
 }
@@ -21,9 +25,10 @@ export function BrandLogo({ size = 72, framed = true }) {
 const styles = StyleSheet.create({
   wrap: {
     overflow: 'hidden',
-    backgroundColor: '#000000',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.18)'
+    backgroundColor: '#020617',
+    borderWidth: 2,
+    borderColor: '#1CFFFF',
+    borderRadius: 0
   },
   flat: {
     borderWidth: 0,

@@ -1,0 +1,58 @@
+<h1>Towerbell</h1>
+<p>Team <b>Zero-Knolage</b>. Hyperlocal peer-to-peer shop discovery for the <b>Pears Track</b> (Tether / Holepunch). A shop broadcasts who they are. A traveler nearby sees that record. No accounts, no servers, no App Store in the discovery path.</p>
+
+<h2>What we built</h2>
+<p>A standalone tool you install with Pear. A shop runs <b>beacon</b> mode. A traveler runs <b>scan</b> mode. When they are on the same swarm topic, the traveler sees the shop’s name, category, open/closed status, hours, and promo — copied device to device.</p>
+<ul>
+  <li><b>Pear CLI + 8-bit TUI</b> — this is the track product. Real Hyperswarm. Judges install it with <code>pear install</code>.</li>
+  <li><b>P2P OTA</b> — new versions of the same <code>pear://</code> link reach an already-installed copy over the swarm, with no app store and no download server of ours.</li>
+  <li><b>Phone UI (Expo / React Native)</b> — 8-bit SCAN / BEACON screens for the demo video. Same <code>scan()</code> / <code>beacon()</code> contract. Expo cannot load Hyperswarm, so that shell uses a mock swarm.</li>
+</ul>
+<p>We started from Holepunch’s <code>hello-pear-bare</code> template (<code>main</code> branch: long-lived TUI with the updater in a Bare worker). This weekend’s release is the Windows x64 binary.</p>
+
+<h2>The problem</h2>
+<p>To know what is on this block today you usually need all three:</p>
+<ul>
+  <li>the internet (Maps, Instagram, the shop’s Wi‑Fi)</li>
+  <li>an account on someone else’s app</li>
+  <li>luck that the listing is still true</li>
+</ul>
+<p>If coverage dies, the street goes blank. Towerbell treats the sidewalk as the network: the two devices are enough.</p>
+
+<h2>How it works</h2>
+<h3>Discovery (the product)</h3>
+<ol>
+  <li>Both sides join one Hyperswarm topic: <code>towerbell-discovery-v1</code>.</li>
+  <li>The beacon sends a small JSON record: <code>id</code>, <code>name</code>, <code>category</code>, <code>status</code> (open or closed), <code>message</code>, <code>hours</code>, <code>updated</code>.</li>
+  <li>The scanner emits <code>peer-found</code> when that record arrives. The TUI lists the shop. There is no REST API and no central database.</li>
+</ol>
+<p>The UI never contains the swarm code. <code>backend/</code> exposes only <code>scan()</code> and <code>beacon()</code>. Shells (TUI or Expo) subscribe to events.</p>
+
+<h3>Delivery (how the tool reaches people)</h3>
+<ol>
+  <li>We compile a standalone Bare binary (<code>towerbell.exe</code> on Windows x64).</li>
+  <li>We stage it to our upgrade link and keep <code>pear seed</code> running so peers can fetch blocks.</li>
+  <li>Anyone installs with <code>pear install pear://xtj3nobayrtccxp68dnngayheeor3bc8kt8j4q19b3d5znrj1yqy</code>.</li>
+  <li>Then <code>towerbell scan</code> or <code>towerbell beacon --name "Cafe del Puerto" --message "2x1 until 18h"</code>.</li>
+  <li>A later version (higher <code>package.json</code> version, restage the same link) is the OTA path. The installed copy logs updater events: updating → updated.</li>
+</ol>
+<p>Two processes on one PC need different <code>--storage</code> directories. The seed must stay up through judging or <code>pear install</code> cannot fetch the binary.</p>
+
+<h2>What we use</h2>
+<ul>
+  <li><b>Pear</b> — install link, seed, stage, over-the-air updates</li>
+  <li><b>Bare</b> — runtime inside the standalone binary (users do not need Node)</li>
+  <li><b>Hyperswarm</b> — find shops and travelers by topic, not by IP</li>
+  <li><b>Hyperbee / Corestore</b> — local record store on each device</li>
+  <li><b>pear-runtime</b> — OTA worker in the CLI process</li>
+</ul>
+<p>Pear fits because we have two P2P jobs, not one: shipping the program, and letting two programs talk with no server. A classic frontend → REST → database would be the opposite of this product and of the track.</p>
+
+<h2>How to try it</h2>
+<ul>
+  <li>Install: <code>pear install pear://xtj3nobayrtccxp68dnngayheeor3bc8kt8j4q19b3d5znrj1yqy</code></li>
+  <li>Repo: <a href="https://github.com/Zer0-Knowledge-Hack/tower-bell">https://github.com/Zer0-Knowledge-Hack/tower-bell</a></li>
+</ul>
+
+<h2>Team</h2>
+<p><b>Zero-Knolage</b> — frontend, speaker, business, security, backend.</p>

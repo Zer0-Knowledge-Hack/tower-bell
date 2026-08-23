@@ -33,8 +33,8 @@ export function FullScreenLoader({
 
 const styles = StyleSheet.create({
   wrap: {
-    borderWidth: 1,
-    borderRadius: 16,
+    borderWidth: 2,
+    borderRadius: 0,
     padding: 24,
     alignItems: 'center',
     justifyContent: 'center',

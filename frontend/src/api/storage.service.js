@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { seedDb } from './mock-data'
 
-const KEY = 'towerbell.db.v7'
+const KEY = 'towerbell.db.v8'
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value))

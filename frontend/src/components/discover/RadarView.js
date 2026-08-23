@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Animated, Image, Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { colors, statusColor } from '../../utils/colors'
+import { pixelBody } from '../../utils/pixel'
 
 function positionFor(index, total, distance) {
   const angle = (index / Math.max(total, 1)) * Math.PI * 2 - Math.PI / 2
@@ -33,7 +34,10 @@ export function RadarView({ merchants, onSelect }) {
       <View style={[styles.ring, styles.inner]} />
       <Animated.View style={[styles.pulse, { transform: [{ scale }], opacity }]} />
       <View style={styles.core}>
-        <Image source={require('../../../assets/owl.png')} style={styles.owl} />
+        <Image
+          source={require('../../../assets/owl-tower.jpg')}
+          style={[styles.owl, Platform.OS === 'web' ? { imageRendering: 'pixelated' } : null]}
+        />
       </View>
       {merchants.map((m, i) => {
         const pos = positionFor(i, merchants.length, m.distance || 120)
@@ -54,19 +58,21 @@ export function RadarView({ merchants, onSelect }) {
 const styles = StyleSheet.create({
   box: {
     height: 300,
-    borderRadius: 20,
+    borderRadius: 0,
     backgroundColor: colors.deep,
     overflow: 'hidden',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: colors.border
   },
   ring: {
     position: 'absolute',
     width: '78%',
     aspectRatio: 1,
-    borderRadius: 999,
+    borderRadius: 0,
     borderWidth: 1,
-    borderColor: 'rgba(84,173,246,0.28)'
+    borderColor: 'rgba(92,225,255,0.28)'
   },
   mid: { width: '52%' },
   inner: { width: '26%' },
@@ -74,14 +80,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 90,
     height: 90,
-    borderRadius: 45,
+    borderRadius: 0,
     borderWidth: 1,
     borderColor: colors.sky
   },
   core: {
-    width: 52,
-    height: 52,
-    borderRadius: 16,
+    width: 56,
+    height: 56,
+    borderRadius: 0,
     overflow: 'hidden',
     borderWidth: 2,
     borderColor: colors.sky,
@@ -94,15 +100,16 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -20 }, { translateY: -10 }],
     width: 80
   },
-  dot: { width: 10, height: 10, borderRadius: 5 },
+  dot: { width: 10, height: 10, borderRadius: 0 },
   label: {
     marginTop: 4,
-    color: colors.white,
-    fontSize: 9,
-    fontWeight: '700',
-    backgroundColor: 'rgba(7,21,54,0.72)',
+    color: colors.sky,
+    fontSize: 14,
+    fontFamily: pixelBody,
+    backgroundColor: 'rgba(2,6,23,0.85)',
     paddingHorizontal: 4,
     overflow: 'hidden',
-    borderRadius: 4
+    borderWidth: 1,
+    borderColor: colors.border
   }
 })

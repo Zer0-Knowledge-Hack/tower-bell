@@ -276,6 +276,7 @@ export const useAppStore = create((set, get) => ({
     await get().persist({
       ...db,
       pickedRole: true,
+      permissionsReady: true,
       user: { ...db.user, role, name: names[role] || db.user.name }
     })
     set({ selectedMerchant: null, peers: role === 'visitor' ? get().peers : [] })

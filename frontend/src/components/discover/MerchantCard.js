@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { pixelBody, pixelTitle } from '../../utils/pixel'
 import { useThemeColors } from '../../utils/useThemeColors'
 import { Icon } from '../common/Icon'
 import { StatusBadge } from '../common/StatusBadge'
@@ -26,7 +27,7 @@ export function MerchantCard({ merchant, onView }) {
         <Text style={styles.promo}>{merchant.message || merchant.promotion}</Text>
       ) : null}
       <View style={styles.btn}>
-        <Text style={styles.btnText}>View place</Text>
+        <Text style={styles.btnText}>OPEN RECORD</Text>
       </View>
     </Pressable>
   )
@@ -36,9 +37,9 @@ function makeStyles(c) {
   return StyleSheet.create({
     card: {
       backgroundColor: c.panel,
-      borderWidth: 1,
+      borderWidth: 2,
       borderColor: c.border,
-      borderRadius: 16,
+      borderRadius: 0,
       padding: 14,
       gap: 10
     },
@@ -46,21 +47,25 @@ function makeStyles(c) {
     icon: {
       width: 40,
       height: 40,
-      borderRadius: 12,
+      borderRadius: 0,
+      borderWidth: 2,
+      borderColor: c.border,
       backgroundColor: c.greenDark,
       alignItems: 'center',
       justifyContent: 'center'
     },
-    name: { color: c.text, fontSize: 16, fontWeight: '800' },
-    meta: { color: c.muted, fontSize: 12, marginTop: 2 },
-    promo: { color: c.sky, fontSize: 13, fontWeight: '600' },
+    name: { color: c.text, fontSize: 18, fontFamily: pixelBody },
+    meta: { color: c.muted, fontSize: 14, marginTop: 2, fontFamily: pixelBody },
+    promo: { color: c.sky, fontSize: 16, fontFamily: pixelBody },
     btn: {
       alignSelf: 'flex-start',
       backgroundColor: c.greenDark,
-      borderRadius: 8,
+      borderRadius: 0,
+      borderWidth: 2,
+      borderColor: c.sky,
       paddingHorizontal: 14,
       paddingVertical: 8
     },
-    btnText: { color: c.sky, fontWeight: '800', fontSize: 12 }
+    btnText: { color: c.sky, fontFamily: pixelTitle, fontSize: 8 }
   })
 }

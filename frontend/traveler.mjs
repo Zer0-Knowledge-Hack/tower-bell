@@ -8,7 +8,7 @@ const { BOLD, DIM, CYAN, GREEN, YELLOW, RED, WHITE } = colors
 export function startTravelerPanel(backendFn) {
   console.clear()
   console.log(BANNER)
-  console.log(BOLD(WHITE('  📡 TRAVELER MODE — Scanning for nearby peers...\n')))
+  console.log(BOLD(WHITE('  SCAN MODE — listening for nearby beacons\n')))
   console.log(separatorLine())
   console.log(DIM('  Connecting to P2P network...\n'))
 
@@ -45,12 +45,12 @@ export function startTravelerPanel(backendFn) {
 
 function renderPeers(peers) {
   if (peers.size === 0) {
-    console.log(`\n  ${DIM('👀 No peers nearby for now...')}`)
+    console.log(`\n  ${DIM('No beacons nearby yet...')}`)
     console.log(DIM('  Still searching. Leave the terminal open.\n'))
     return
   }
 
-  console.log(`\n  ${BOLD(WHITE(`🏘️  ${peers.size} peer${peers.size > 1 ? 's' : ''} nearby:`))}`)
+  console.log(`\n  ${BOLD(WHITE(`${peers.size} beacon${peers.size > 1 ? 's' : ''} nearby:`))}`)
   console.log()
 
   let i = 1
@@ -58,10 +58,10 @@ function renderPeers(peers) {
     const icon = categoryIcon(reg.category)
     console.log(`  ${CYAN(String(i) + '.')} ${icon}  ${BOLD(reg.name)}  ${statusBadge(reg.status)}`)
     if (reg.message) {
-      console.log(`     ${YELLOW('💬')} ${reg.message}`)
+      console.log(`     ${YELLOW('>')} ${reg.message}`)
     }
     if (reg.hours) {
-      console.log(`     ${DIM('🕐 ' + reg.hours)}`)
+      console.log(`     ${DIM('hours ' + reg.hours)}`)
     }
     console.log(`     ${DIM('ID: ' + id.slice(0, 12) + '...')}`)
     console.log()

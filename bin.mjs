@@ -21,7 +21,12 @@ const cmd = command(
   flag('--storage <dir>', 'custom storage directory'),
   flag('--no-updates', 'disable OTA updates for this run'),
   flag('--fake', 'use mock data instead of real P2P'),
-  arg('<mode>', 'Mode: scan or beacon')
+  flag('--name <name>', 'Beacon shop name'),
+  flag('--category <category>', 'Beacon category (cafeteria, restaurant, ...)'),
+  flag('--status <status>', 'Beacon status: open or closed'),
+  flag('--message <message>', 'Beacon promo message'),
+  flag('--hours <hours>', 'Beacon opening hours'),
+  arg('[mode]', 'Mode: scan or beacon')
 )
 
 cmd.parse(Bare.argv.slice(isDev ? 2 : 1))
@@ -96,11 +101,11 @@ try {
     startTravelerPanel(backendScan)
   } else if (mode === 'beacon') {
     const myRecord = {
-      name: 'Café Rivadavia',
-      category: 'cafeteria',
-      status: 'open',
-      message: '2 for 1 croissants until 6PM',
-      hours: '08:00-20:00',
+      name: cmd.flags.name || 'Café Rivadavia',
+      category: cmd.flags.category || 'cafeteria',
+      status: cmd.flags.status || 'open',
+      message: cmd.flags.message || '2 for 1 croissants until 6PM',
+      hours: cmd.flags.hours || '08:00-20:00',
       updated: new Date().toISOString()
     }
     startBeaconPanel(backendBeacon, myRecord)
@@ -110,8 +115,15 @@ try {
     console.log('    scan      Traveler mode — discovers nearby peers')
     console.log('    beacon    Trade mode — broadcasts your record')
     console.log('\n  Options:')
-    console.log('    --fake    Use test data (no P2P network)')
-    console.log('    --help    Show this help\n')
+    console.log('    --fake                Use test data (no P2P network)')
+    console.log('    --name <name>         Beacon shop name')
+    console.log('    --category <category> Beacon category')
+    console.log('    --status <status>     open or closed')
+    console.log('    --message <message>   Promo message')
+    console.log('    --hours <hours>       Opening hours')
+    console.log('    --help                Show this help\n')
+    await app.exit(0)
+    Bare.exit(0)
   }
 } catch (err) {
   console.error('[app:error]', err)

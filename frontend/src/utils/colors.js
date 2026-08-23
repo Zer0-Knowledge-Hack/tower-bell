@@ -1,64 +1,40 @@
-export const lightColors = {
-  sky: '#54ADF6',
-  navy: '#0D47A1',
-  deep: '#071536',
-  bg: '#E8EEF7',
-  ink: '#0A110F',
-  white: '#FFFFFF',
-  panel: '#FFFFFF',
-  panelAlt: '#F3F6FB',
-  text: '#0A110F',
-  muted: '#5B6475',
-  green: '#0D47A1',
-  greenDark: '#D6E6F8',
-  blue: '#54ADF6',
+const pixel = {
+  sky: '#5CE1FF',
+  navy: '#5CE1FF',
+  deep: '#020617',
+  bg: '#050814',
+  ink: '#E8F7FF',
+  white: '#07101C',
+  panel: '#0A1224',
+  panelAlt: '#101A30',
+  text: '#E8F7FF',
+  muted: '#6B8A9A',
+  green: '#5CE1FF',
+  greenDark: '#0C2233',
+  blue: '#5CE1FF',
   gold: '#F0A43A',
-  rose: '#C62828',
-  border: '#D4DCEC',
-  header: '#0D47A1',
-  headerText: '#FFFFFF',
-  accent: '#54ADF6',
+  rose: '#FF4D6D',
+  border: '#1CFFFF',
+  header: '#050814',
+  headerText: '#5CE1FF',
+  accent: '#5CE1FF',
   feet: '#F0A43A',
-  success: '#1F8A4C',
-  mapTile: 'light',
-  shell: '#9AA7B8',
-  overlay: 'rgba(7,21,54,0.55)'
-}
-
-export const darkColors = {
-  sky: '#54ADF6',
-  navy: '#54ADF6',
-  deep: '#050B18',
-  bg: '#0B1220',
-  ink: '#E8EEF7',
-  white: '#121A2B',
-  panel: '#151E31',
-  panelAlt: '#1A2438',
-  text: '#E8EEF7',
-  muted: '#8B95A8',
-  green: '#54ADF6',
-  greenDark: '#1A2A44',
-  blue: '#54ADF6',
-  gold: '#F0A43A',
-  rose: '#EF5350',
-  border: '#243049',
-  header: '#0A1628',
-  headerText: '#FFFFFF',
-  accent: '#54ADF6',
-  feet: '#F0A43A',
-  success: '#3DDC84',
+  success: '#3DFF9A',
   mapTile: 'dark',
-  shell: '#050B18',
-  overlay: 'rgba(0,0,0,0.65)'
+  shell: '#000000',
+  overlay: 'rgba(0,0,0,0.78)'
 }
 
-/** Default light palette for static StyleSheets / boot splash */
-export const colors = lightColors
+export const lightColors = pixel
+export const darkColors = pixel
+
+/** Default palette for static StyleSheets / boot splash */
+export const colors = pixel
 
 export const statusColor = {
-  open: '#1F8A4C',
-  busy: '#0D47A1',
-  closed: '#C62828'
+  open: '#3DFF9A',
+  busy: '#5CE1FF',
+  closed: '#FF4D6D'
 }
 
 export const categoryIcons = {
@@ -72,6 +48,6 @@ export const categoryIcons = {
   other: 'store'
 }
 
-export function palette(darkMode) {
-  return darkMode ? darkColors : lightColors
+export function palette() {
+  return pixel
 }

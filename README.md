@@ -1,154 +1,87 @@
-# hello-pear-bare
+# Towerbell
 
-> Pear Hello World for Standalone Bare Processes with `pear-runtime` worker
+Hyperlocal P2P shop discovery. A shop broadcasts name, category, hours and promo. A traveler nearby sees that record. No accounts, no servers, no App Store.
 
-End-to-end boilerplate for embedding [pear-runtime] into the [Bare] worker of a [Bare] CLI with peer-to-peer OTA update support.
+Team: **Zero-Knolage**. Built from [`hello-pear-bare`](https://github.com/holepunchto/hello-pear-bare) (`main`).
 
-This boilerplate uses the companion [`hello-pear-worker`][hello-pear-worker] as a reusable cross-platform local backend. Keeping networking, storage and updates in a separate worker lets mobile apps, desktop UIs and standalone Bare applications share the same backend implementation while each parent owns its platform-specific interface.
+Two surfaces, one contract (`scan()` / `beacon()`, topic `towerbell-discovery-v1`):
 
-- Peer-to-Peer deployment with [pear][pear-docs] CLI
-- Peer-to-Peer Over-the-Air updates with [`pear-runtime`][pear-runtime] module
-- Bare worker process via `PearRuntime.run(...)`
-- Cross-platform standalone distributables via [`bare-build`][bare-build]
+| Surface | What it is | What judges should use |
+| --- | --- | --- |
+| Pear CLI + 8-bit TUI | Real Hyperswarm. This is the track binary. | `pear install` below |
+| Expo / React Native | Phone UI for the video. Same contract, mock swarm (Expo cannot load Hyperswarm). | `http://localhost:8081` |
 
-## Variants
+## Install (Pears Track — this is the entry)
 
-- (current) [`main`](https://github.com/holepunchto/hello-pear-bare/tree/main): runs `pear-runtime` inside a Bare worker thread.
-- [`single-thread`](https://github.com/holepunchto/hello-pear-bare/tree/variant/single-thread): workerless with `pear-runtime` updates.
-- [`daemon`](https://github.com/holepunchto/hello-pear-bare/tree/variant/daemon): runs `pear-runtime` in a detached updater daemon.
+Keep this link **seeded** through judging:
 
-## Table of Contents
-
-- [OS Support](#os-support)
-- [Requirements](#requirements)
-- [Development](#development)
-  - [Install Dependencies](#install-dependencies)
-  - [Create an upgrade link](#create-an-upgrade-link)
-  - [Start](#start)
-- [Architecture](#architecture)
-  - [Updates](#updates)
-  - [Workers](#workers)
-- [Peer-to-Peer Deployments](#peer-to-peer-deployments)
-- [Installing Distributables](#installing-distributables)
-- [Scripts](#scripts)
-- [Project Structure](#project-structure)
-- [Troubleshooting](#troubleshooting)
-
-## OS Support
-
-- **macOS** — arm64, x64
-- **Linux** — arm64, x64
-- **Windows** — arm64, x64
-
-## Requirements
-
-- `npm` via [Node.js][nodejs]
-- [pear][pear-docs] - `npx pear`
-
-## Development
-
-### Install Dependencies
-
-```sh
-npm install
+```text
+pear install pear://xtj3nobayrtccxp68dnngayheeor3bc8kt8j4q19b3d5znrj1yqy
 ```
 
-### Create an upgrade link
+Then:
 
-This template expects `package.json` to contain a valid `pear://` link in the `upgrade` field. If it still contains the placeholder `pear://<YOUR_KEY_HERE>`, startup will fail with `INVALID_URL`.
-
-Create a link with [`pear touch`](https://docs.pears.com/reference/cli.html#pear-touch-flags-channel):
-
-```sh
-pear touch
+```text
+towerbell scan
+towerbell beacon --name "Cafe del Puerto" --message "2x1 until 18h"
 ```
 
-Copy the generated `pear://...` link into the `upgrade` field in `package.json`.
+Two processes on one PC need different `--storage` dirs. This weekend the binary is **Windows x64**.
 
-### Start
+Someone on the team must keep this running:
 
-Start app in development mode:
-
-```sh
-npm start
+```text
+pear seed pear://xtj3nobayrtccxp68dnngayheeor3bc8kt8j4q19b3d5znrj1yqy
 ```
 
-By default this repo starts with `--no-updates` in development to avoid local dev binaries being swapped while you iterate.
+Without a seeder, `pear install` cannot fetch the app. OTA: bump `version` in `package.json`, rebuild, `pear stage` the same link. An installed copy logs `[updater] updating` → `updated`.
 
-Enable updates for local flow testing:
+## Phone UI demo (Expo)
 
-```sh
-npm start -- --updates
+Record this in a browser (phone frame) or Expo Go. Mock peers appear in a few seconds.
+
+```powershell
+cd frontend
+pnpm install
+pnpm start -- --web --port 8081
 ```
 
-## Architecture
+Open **http://localhost:8081**
 
-### Updates
+Shot list (~90 seconds):
 
-Updates are managed by the `App` class in `app.js`, which wraps the updater lifecycle as a ready resource and emits update events for `bin.mjs` to log.
+1. **CHOOSE MODE** → **SCAN** (traveler). Wait until Cafe Rivadavia / Farmacia Norte show on map, radar or list. Tap a shop.
+2. Header gear → **Settings** → **SWITCH IDENTITY** → **Shop**.
+3. **BEACON**: fill name / promo if needed → **Start broadcasting** until it says **ON AIR**. Open **HITS**.
+4. Optional: Settings → **Reset** to return to CHOOSE MODE.
 
-The worker uses `pear-runtime` and the configured `upgrade` link in `package.json`.
+Expo Go: same `pnpm start` in `frontend/`, scan the QR on a phone on the same Wi‑Fi.
 
-Per-run disable updates:
+This UI is a preview. The Pear-installed CLI is the P2P product.
 
-```sh
-npm start -- --no-updates
+## Local CLI (optional)
+
+```powershell
+pnpm install
+pnpm run scan
+pnpm run beacon -- --name "Cafe Nucleo" --message "Nucleus live test"
 ```
 
-### Workers
+`--fake` is mock data in one terminal. `pnpm start` uses `--no-updates` so a live release does not swap the binary while you iterate.
 
-The main CLI starts `workers/main.js` as a Bare sidecar and communicates with it over framed IPC.
+## Pitch
 
-## Peer-to-Peer Deployments
+English deck (open in a browser) and speaking script:
 
-Use the [`pear`][pear-docs] CLI to deploy applications.
+- [docs/pitch/index.html](docs/pitch/index.html) — 12 slides. Arrows / click. `n` = notes. `f` = fullscreen.
+- [docs/pitch/SCRIPT.md](docs/pitch/SCRIPT.md) — ~3 minute talk track.
 
-Set the `upgrade` field in `package.json` to your distribution drive link, then follow the default flow from section 4 onward:
+## Submission text
 
-[hello-pear-electron: 4. Build Deployment Directory and onward](https://github.com/holepunchto/hello-pear-electron#4-build-deployment-directory-)
+Paste this into the form field “Explain what you built and how it works” (headings + lists):
 
-## Installing Distributables
+- [docs/submit/what-we-built.txt](docs/submit/what-we-built.txt) — plain text for the **Details** field.
 
-Once the `pear://<key>` upgrade link is seeding the build deployment folder the CLI standalone binary can be installed peer-to-peer directly onto the system with Pear:
+## Repo
 
-```sh
-npx pear-install pear://<key>
-```
-
-## Scripts
-
-- `npm start` - run the Bare CLI in dev mode (`bare bin.mjs --no-updates`)
-- `npm test` - run `brittle-bare` tests
-- `npm run lint` - run prettier check and lunte
-- `npm run format` - format repository with prettier
-- `npm run make` - auto-detect host OS/arch and run matching build target
-- `npm run make:darwin-arm64` - build standalone to `out/darwin-arm64`
-- `npm run make:darwin-x64` - build standalone to `out/darwin-x64`
-- `npm run make:linux-arm64` - build standalone to `out/linux-arm64`
-- `npm run make:linux-x64` - build standalone to `out/linux-x64`
-- `npm run make:win32-arm64` - build standalone to `out/win32-arm64`
-- `npm run make:win32-x64` - build standalone to `out/win32-x64`
-
-## Project Structure
-
-- `bin.mjs` - CLI entrypoint and runtime wiring
-- `app.js` - update resource used by the entrypoint
-- `workers/main.js` - Bare worker example
-- `scripts/make.js` - platform/arch build target selector
-- `test/index.js` - brittle-bare tests
-
-## Troubleshooting
-
-- `INVALID_URL: Invalid URL 'pear://<YOUR_KEY_HERE>'` means the placeholder `upgrade` link in `package.json` has not been replaced. Run `pear touch`, then put the generated `pear://...` link in `package.json`.
-- If updates do not trigger, verify `package.json` contains a valid `upgrade` Pear link and that peers are seeding the target drive.
-- If `npm run make` fails on unsupported hosts, run a specific `make:<platform>-<arch>` script or build on a supported host.
-- This template does not implement app-level data persistence; it is a minimal CLI + updater example.
-
-<!-- Reference Links -->
-
-[pear-docs]: https://docs.pears.com
-[hello-pear-worker]: https://github.com/holepunchto/hello-pear-worker
-[pear-runtime]: https://github.com/holepunchto/pear-runtime
-[Bare]: https://github.com/holepunchto/bare
-[nodejs]: https://nodejs.org
-[bare-build]: https://github.com/holepunchto/bare-build
+https://github.com/Zer0-Knowledge-Hack/tower-bell

@@ -1,0 +1,62 @@
+Towerbell
+
+Team Zero-Knolage. Hyperlocal peer-to-peer shop discovery for the Pears Track (Tether / Holepunch). A shop broadcasts who they are. A traveler nearby sees that record. No accounts, no servers, no App Store in the discovery path.
+
+What we built
+
+A standalone tool you install with Pear. A shop runs beacon mode. A traveler runs scan mode. When they are on the same swarm topic, the traveler sees the shop’s name, category, open/closed status, hours, and promo — copied device to device.
+
+- Pear CLI + 8-bit TUI — this is the track product. Real Hyperswarm. Judges install it with pear install.
+- P2P OTA — new versions of the same pear:// link reach an already-installed copy over the swarm, with no app store and no download server of ours.
+- Phone UI (Expo / React Native) — 8-bit SCAN / BEACON screens for the demo video. Same scan() / beacon() contract. Expo cannot load Hyperswarm, so that shell uses a mock swarm.
+
+We started from Holepunch’s hello-pear-bare template (main branch: long-lived TUI with the updater in a Bare worker). This weekend’s release is the Windows x64 binary.
+
+The problem
+
+To know what is on this block today you usually need all three:
+
+- the internet (Maps, Instagram, the shop’s Wi‑Fi)
+- an account on someone else’s app
+- luck that the listing is still true
+
+If coverage dies, the street goes blank. Towerbell treats the sidewalk as the network: the two devices are enough.
+
+How it works
+
+Discovery (the product)
+
+1. Both sides join one Hyperswarm topic: towerbell-discovery-v1.
+2. The beacon sends a small JSON record: id, name, category, status (open or closed), message, hours, updated.
+3. The scanner emits peer-found when that record arrives. The TUI lists the shop. There is no REST API and no central database.
+
+The UI never contains the swarm code. backend/ exposes only scan() and beacon(). Shells (TUI or Expo) subscribe to events.
+
+Delivery (how the tool reaches people)
+
+1. We compile a standalone Bare binary (towerbell.exe on Windows x64).
+2. We stage it to our upgrade link and keep pear seed running so peers can fetch blocks.
+3. Anyone installs with: pear install pear://xtj3nobayrtccxp68dnngayheeor3bc8kt8j4q19b3d5znrj1yqy
+4. Then: towerbell scan   or   towerbell beacon --name "Cafe del Puerto" --message "2x1 until 18h"
+5. A later version (higher package.json version, restage the same link) is the OTA path. The installed copy logs updater events: updating → updated.
+
+Two processes on one PC need different --storage directories. The seed must stay up through judging or pear install cannot fetch the binary.
+
+What we use
+
+- Pear — install link, seed, stage, over-the-air updates
+- Bare — runtime inside the standalone binary (users do not need Node)
+- Hyperswarm — find shops and travelers by topic, not by IP
+- Hyperbee / Corestore — local record store on each device
+- pear-runtime — OTA worker in the CLI process
+
+Pear fits because we have two P2P jobs, not one: shipping the program, and letting two programs talk with no server. A classic frontend → REST → database would be the opposite of this product and of the track.
+
+How to try it
+
+- Install: pear install pear://xtj3nobayrtccxp68dnngayheeor3bc8kt8j4q19b3d5znrj1yqy
+- Repo: https://github.com/Zer0-Knowledge-Hack/tower-bell
+
+Team
+
+Zero-Knolage — frontend, speaker, business, security, backend.

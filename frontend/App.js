@@ -83,7 +83,7 @@ export default function App() {
               <Text style={styles.deviceLabel}>PHONE FRAME · USE THE APP INSIDE</Text>
               <View style={[styles.phone, styles.phoneWeb, styles.phoneDesktop]}>
                 <SafeAreaView style={styles.safeFill} edges={['top']}>
-                  {appBody}
+                  <View style={styles.navHost}>{appBody}</View>
                   <ToastHost />
                 </SafeAreaView>
               </View>
@@ -94,7 +94,7 @@ export default function App() {
           <SafeAreaView style={[styles.safe, framed && styles.safeFramed]} edges={['top']}>
             {framed ? <Text style={styles.deviceLabel}>TOWERBELL DEMO</Text> : null}
             <View style={[styles.phone, framed && styles.phoneWeb]}>
-              {appBody}
+              <View style={styles.navHost}>{appBody}</View>
               <ToastHost />
             </View>
           </SafeAreaView>
@@ -181,8 +181,20 @@ function makeStyles(c, height) {
     },
     safe: { flex: 1, backgroundColor: c.deep, width: '100%' },
     safeFramed: { maxWidth: 480, alignItems: 'center', paddingVertical: 16 },
-    safeFill: { flex: 1, backgroundColor: c.bg, width: '100%' },
-    phone: { flex: 1, backgroundColor: c.bg, width: '100%' },
+    safeFill: {
+      flex: 1,
+      backgroundColor: c.bg,
+      width: '100%',
+      height: '100%',
+      minHeight: 0
+    },
+    navHost: {
+      flex: 1,
+      width: '100%',
+      minHeight: 0,
+      ...(Platform.OS === 'web' ? { height: '100%', display: 'flex' } : null)
+    },
+    phone: { flex: 1, backgroundColor: c.bg, width: '100%', minHeight: 0 },
     phoneWeb: {
       maxWidth: 430,
       width: '100%',
@@ -190,7 +202,8 @@ function makeStyles(c, height) {
       overflow: 'hidden',
       borderWidth: 2,
       borderColor: c.border,
-      backgroundColor: c.bg
+      backgroundColor: c.bg,
+      minHeight: 0
     },
     phoneDesktop: {
       height: frameH,
@@ -198,7 +211,9 @@ function makeStyles(c, height) {
       flexGrow: 0,
       flexShrink: 0,
       borderWidth: 3,
-      boxShadow: Platform.OS === 'web' ? '8px 8px 0 rgba(92,225,255,0.22)' : undefined
+      ...(Platform.OS === 'web'
+        ? { display: 'flex', flexDirection: 'column', boxShadow: '8px 8px 0 rgba(92,225,255,0.22)' }
+        : null)
     },
     desktopRow: {
       flex: 1,

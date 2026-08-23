@@ -106,16 +106,20 @@ export function AppNavigator() {
 
   if (!ready) return null
 
+  // Remount when pickedRole/role changes. Swapping Stack.Screen trees in place
+  // leaves the old route mounted on web until a full remount (e.g. resize).
+  const navKey = picked ? `main-${role}` : 'role-select'
+
   return (
-    <NavigationContainer theme={theme}>
+    <NavigationContainer key={navKey} theme={theme}>
       <Stack.Navigator
-        screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg } }}
+        screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg, flex: 1 } }}
       >
         {!picked ? (
           <Stack.Screen name='RoleSelect' component={RoleSelectScreen} />
         ) : (
           <>
-            <Stack.Screen name='Main' component={RoleTabs} key={role} />
+            <Stack.Screen name='Main' component={RoleTabs} />
             <Stack.Screen name='Settings' component={SettingsScreen} />
             <Stack.Screen name='Permissions' component={PermissionsScreen} />
             <Stack.Screen name='Notifications' component={NotificationsScreen} />

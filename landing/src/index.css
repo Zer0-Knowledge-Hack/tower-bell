@@ -32,6 +32,7 @@
     font-family: var(--font-sans);
     font-size: 17px;
     line-height: 1.55;
+    overflow-wrap: break-word;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -168,12 +169,15 @@
     display: flex;
     align-items: stretch;
     gap: 0;
+    max-width: 100%;
+    min-width: 0;
     border: 1px solid rgba(244, 241, 234, 0.22);
     background: #111410;
   }
 
   .cmd code {
     flex: 1;
+    min-width: 0;
     padding: 12px 14px;
     font-family: var(--font-mono);
     font-size: 13px;
@@ -181,6 +185,7 @@
     overflow-x: auto;
     color: #f4f1ea;
     white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
   }
 
   .cmd button {
@@ -195,6 +200,34 @@
     text-transform: uppercase;
     padding: 0 14px;
     cursor: pointer;
+  }
+
+  @media (max-width: 640px) {
+    .cmd {
+      flex-direction: column;
+    }
+
+    .cmd code {
+      white-space: normal;
+      overflow-wrap: anywhere;
+      font-size: 12px;
+    }
+
+    .cmd button {
+      border-left: 0;
+      border-top: 1px solid rgba(244, 241, 234, 0.18);
+      padding: 10px 14px;
+      text-align: left;
+    }
+
+    .field-row {
+      grid-template-columns: 1fr;
+      gap: 2px;
+    }
+
+    svg text {
+      display: none;
+    }
   }
 
   .cmd button:hover {
@@ -263,5 +296,48 @@
 
   svg text {
     font-family: var(--font-mono);
+  }
+
+  .logo-badge {
+    display: inline-block;
+    flex: none;
+    overflow: hidden;
+    border-radius: 5px;
+    background: #050b18;
+    box-shadow: 0 0 0 1px rgba(10, 17, 15, 0.22);
+    line-height: 0;
+  }
+
+  .logo-badge img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+
+  .score {
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    gap: 12px;
+    border-top: 1px solid var(--color-rule);
+    padding: 14px 0 15px;
+  }
+
+  .score:last-child {
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .score-mark {
+    width: 9px;
+    height: 9px;
+    margin-top: 6px;
+    background: var(--color-navy);
+  }
+
+  .score-mark.is-aim {
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px var(--color-navy);
   }
 }

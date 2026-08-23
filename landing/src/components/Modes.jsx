@@ -7,10 +7,10 @@ const BEACON = SHOPS[0]
 export function Modes() {
   return (
     <section className="paper border-t border-rule">
-      <div className="mx-auto max-w-[1120px] px-5 py-16 sm:px-8 lg:py-24">
-        <p className="kicker mb-3">Two modes. One binary.</p>
-        <h2 className="display max-w-[22rem] text-[clamp(1.9rem,3.2vw,2.8rem)]">
-          Beacon writes the card. Scan reads the sidewalk.
+      <div className="mx-auto max-w-[1120px] px-5 py-10 sm:px-8 sm:py-16 lg:py-24">
+        <p className="kicker mb-3">Two sides. Same sidewalk.</p>
+        <h2 className="display max-w-[26rem] text-[clamp(1.9rem,3.2vw,2.8rem)]">
+          The shop talks. The walker hears it.
         </h2>
         <div className="mt-14 grid items-start gap-16 lg:grid-cols-[1.2fr_0.8fr]">
           <BeaconPanel />
@@ -27,15 +27,14 @@ function BeaconPanel() {
       <p className="font-mono text-[12px] tracking-[0.16em] text-navy uppercase">
         Beacon
       </p>
+      <p className="mt-1 text-[13px] text-mute">The shop announces itself.</p>
       <p className="mt-3 max-w-[34rem] text-[17px]">
-        You are the shop. You fill a card — name, rubro, hours, today’s line —
-        and you broadcast. Nearby scanners see you. There is no page to claim,
-        no pin to buy.
+        Turn it on. Nearby people see your name, hours, and today’s deal. No
+        page to claim. No pin to buy.
       </p>
-      <div className="notice mt-8 max-w-[440px] px-5 py-5">
+      <div className="notice mt-8 max-w-[440px] min-w-0 px-5 py-5">
         <div className="flex items-center justify-between gap-4">
-          <span className="badge-live">Broadcasting</span>
-          <span className="font-mono text-[11px] text-mute">1 KB max</span>
+          <span className="badge-live">You’re on</span>
         </div>
         <dl className="mt-4">
           <div className="field-row">
@@ -43,12 +42,12 @@ function BeaconPanel() {
             <dd>{BEACON.name}</dd>
           </div>
           <div className="field-row">
-            <dt>Category</dt>
+            <dt>Kind</dt>
             <dd>{BEACON.category}</dd>
           </div>
           <div className="field-row">
             <dt>Status</dt>
-            <dd>{BEACON.status}</dd>
+            <dd>Open</dd>
           </div>
           <div className="field-row">
             <dt>Today</dt>
@@ -60,7 +59,7 @@ function BeaconPanel() {
           </div>
         </dl>
         <p className="mt-2 font-mono text-[12px] text-mute">
-          4 scanners have read this card
+          4 people walked by
         </p>
       </div>
     </div>
@@ -90,17 +89,18 @@ function ScanPanel() {
       <p className="font-mono text-[12px] tracking-[0.16em] text-navy uppercase">
         Scan
       </p>
+      <p className="mt-1 text-[13px] text-mute">You see what’s nearby.</p>
       <p className="mt-3 text-[17px]">
-        You are walking. The list is empty until a peer is close. Then it is
-        not.
+        Open it. Shops around you appear. If nobody is close, the list stays
+        empty. That’s honest.
       </p>
       <div className="mt-8 border border-rule bg-paper px-4 py-4">
         <div className="flex items-center justify-between gap-3">
           <p className="font-mono text-[11px] tracking-[0.12em] text-mute uppercase">
-            Traveler
+            Walker
           </p>
           <p className="font-mono text-[11px] text-mute">
-            {count === 0 ? 'searching' : `${count} nearby`}
+            {count === 0 ? 'looking' : `${count} nearby`}
           </p>
         </div>
         <hr className="rule my-3" />
@@ -113,13 +113,13 @@ function ScanPanel() {
             {SHOPS.slice(0, count).map((shop, i) => (
               <li key={shop.id} className="peer is-in">
                 <div className="flex items-baseline justify-between gap-3">
-                  <span>
+                  <span className="min-w-0">
                     <span className="mr-2 font-mono text-[11px] text-mute">
                       {i + 1}.
                     </span>
                     {shop.name}
                   </span>
-                  <span className="badge-open">Open</span>
+                  <span className="badge-open shrink-0">Open</span>
                 </div>
                 <p className="mt-1 text-[14px] text-amber">{shop.message}</p>
                 <p className="font-mono text-[11px] text-mute">{shop.hours}</p>

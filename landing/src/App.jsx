@@ -5,6 +5,7 @@ import { Modes } from './components/Modes'
 import { Offline } from './components/Offline'
 import { Opening } from './components/Opening'
 import { Street } from './components/Street'
+import { Track } from './components/Track'
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Modes />
         <Offline />
         <Install />
+        <Track />
       </main>
       <Colophon />
     </div>

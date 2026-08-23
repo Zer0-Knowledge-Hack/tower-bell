@@ -4,32 +4,32 @@ import { CopyCommand } from './CopyCommand'
 export function Install() {
   return (
     <section id="install" className="paper border-t border-rule">
-      <div className="mx-auto max-w-[1120px] px-5 py-16 sm:px-8 lg:py-24">
+      <div className="mx-auto max-w-[1120px] px-5 py-10 sm:px-8 sm:py-16 lg:py-24">
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <div>
             <p className="kicker mb-4">Install</p>
             <h2 className="display text-[clamp(1.9rem,3.4vw,3rem)]">
-              A tool, not an account.
+              Install it once. It updates itself.
             </h2>
             <p className="mt-5 max-w-[28rem] text-[17px]">
-              The binary updates itself. macOS, Linux, Windows — arm64 and x64.
-              There is a React Native app for the same two roles. This page is
-              not the product.
+              One command puts it on your machine. Then you choose shop or
+              walker. Works on Mac, Windows, and Linux. There is also a phone
+              app.
             </p>
           </div>
           <p className="font-mono text-[13px] text-mute lg:text-right">
-            pear install · then pick a mode
+            one command · then pick a side
           </p>
         </div>
-        <div className="mt-10 bg-[#111410] px-4 py-5 sm:px-6">
+        <div className="mt-10 min-w-0 bg-[#111410] px-3 py-4 sm:px-6 sm:py-5">
           <ol className="m-0 flex list-none flex-col gap-3 p-0">
-            <li>
+            <li className="min-w-0">
               <CopyCommand command={INSTALL_COMMAND} />
             </li>
-            <li>
+            <li className="min-w-0">
               <CopyCommand command="towerbell beacon" />
             </li>
-            <li>
+            <li className="min-w-0">
               <CopyCommand command="towerbell scan" />
             </li>
           </ol>

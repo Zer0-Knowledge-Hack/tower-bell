@@ -21,7 +21,7 @@ const cmd = command(
   flag('--storage <dir>', 'custom storage directory'),
   flag('--no-updates', 'disable OTA updates for this run'),
   flag('--fake', 'use mock data instead of real P2P'),
-  arg('<mode>', 'Mode: scan or beacon')
+  arg('[mode]', 'Mode: scan or beacon')
 )
 
 cmd.parse(Bare.argv.slice(isDev ? 2 : 1))
@@ -112,6 +112,10 @@ try {
     console.log('\n  Options:')
     console.log('    --fake    Use test data (no P2P network)')
     console.log('    --help    Show this help\n')
+    // Nothing to run: tear down the updater worker so the process exits
+    // instead of hanging with the help text on screen.
+    await app.close()
+    Bare.exit(0)
   }
 } catch (err) {
   console.error('[app:error]', err)

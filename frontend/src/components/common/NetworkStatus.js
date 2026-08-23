@@ -10,7 +10,12 @@ export function NetworkStatus({ p2pStatus, peers }) {
     p2pStatus === 'connected' || p2pStatus === 'scanning' || p2pStatus === 'broadcasting'
   return (
     <View style={styles.wrap}>
-      <Row ok={active} label={p2pStatus === 'broadcasting' ? 'BEACON' : 'SWARM'} c={c} styles={styles} />
+      <Row
+        ok={active}
+        label={p2pStatus === 'broadcasting' ? 'BEACON' : 'SWARM'}
+        c={c}
+        styles={styles}
+      />
       <Row ok={peers > 0} label={`${peers} NEAR`} c={c} styles={styles} />
     </View>
   )

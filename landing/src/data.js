@@ -11,7 +11,7 @@ export const SHOPS = [
     category: 'cafeteria',
     status: 'open',
     message: '2x1 en medialunas hasta las 18',
-    hours: '08:00–20:00',
+    hours: '08:00–20:00'
   },
   {
     id: 'kiosco',
@@ -19,7 +19,7 @@ export const SHOPS = [
     category: 'kiosk',
     status: 'open',
     message: 'Facturas y recarga SUBE',
-    hours: '07:00–22:00',
+    hours: '07:00–22:00'
   },
   {
     id: 'farmacia',
@@ -27,6 +27,6 @@ export const SHOPS = [
     category: 'pharmacy',
     status: 'open',
     message: 'Guardia hasta las 21',
-    hours: '08:00–21:00',
-  },
+    hours: '08:00–21:00'
+  }
 ]

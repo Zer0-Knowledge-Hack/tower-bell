@@ -36,20 +36,20 @@ Discover shops without the internet. **Towerbell.**
 
 ## Per slide (if you want cues)
 
-| Slide | You say |
-| --- | --- |
-| 1 Title | We are Zero-Knolage. This is Towerbell. |
-| 2 Internet | Today, no signal means no street. |
-| 3 Account | And the street is locked behind someone else’s login. |
-| 4 Luck | Open or closed, promo or not — you guess. |
-| 5 Idea | We connect the shop’s phone to the traveler’s phone. No cloud. |
-| 6 How | Find. Tell. See. That is the whole protocol. |
-| 7 Contrast | Blind / gated apps / Towerbell. We are the third column. |
-| 8 Demo | What you install is a CLI: scan and beacon. The phone UI is the same story. |
-| 9 Stack | Pear, Bare, Hyperswarm, Hyperbee. Their tools, our product. |
-| 10 Team | Five people, one team: UI, voice, business, security, swarm. |
-| 11 Install | Read the command. This is the gate. Seed it. |
-| 12 Close | Discover shops without the internet. Stop. |
+| Slide      | You say                                                                     |
+| ---------- | --------------------------------------------------------------------------- |
+| 1 Title    | We are Zero-Knolage. This is Towerbell.                                     |
+| 2 Internet | Today, no signal means no street.                                           |
+| 3 Account  | And the street is locked behind someone else’s login.                       |
+| 4 Luck     | Open or closed, promo or not — you guess.                                   |
+| 5 Idea     | We connect the shop’s phone to the traveler’s phone. No cloud.              |
+| 6 How      | Find. Tell. See. That is the whole protocol.                                |
+| 7 Contrast | Blind / gated apps / Towerbell. We are the third column.                    |
+| 8 Demo     | What you install is a CLI: scan and beacon. The phone UI is the same story. |
+| 9 Stack    | Pear, Bare, Hyperswarm, Hyperbee. Their tools, our product.                 |
+| 10 Team    | Five people, one team: UI, voice, business, security, swarm.                |
+| 11 Install | Read the command. This is the gate. Seed it.                                |
+| 12 Close   | Discover shops without the internet. Stop.                                  |
 
 ---
 

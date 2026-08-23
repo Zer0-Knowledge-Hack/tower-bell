@@ -6,10 +6,10 @@ Team: **Zero-Knolage**. Built from [`hello-pear-bare`](https://github.com/holepu
 
 Two surfaces, one contract (`scan()` / `beacon()`, topic `towerbell-discovery-v1`):
 
-| Surface | What it is | What judges should use |
-| --- | --- | --- |
-| Pear CLI + 8-bit TUI | Real Hyperswarm. This is the track binary. | `pear install` below |
-| Expo / React Native | Phone UI for the video. Same contract, mock swarm (Expo cannot load Hyperswarm). | `http://localhost:8081` |
+| Surface              | What it is                                                                       | What judges should use  |
+| -------------------- | -------------------------------------------------------------------------------- | ----------------------- |
+| Pear CLI + 8-bit TUI | Real Hyperswarm. This is the track binary.                                       | `pear install` below    |
+| Expo / React Native  | Phone UI for the video. Same contract, mock swarm (Expo cannot load Hyperswarm). | `http://localhost:8081` |
 
 ## Install (Pears Track — this is the entry)
 

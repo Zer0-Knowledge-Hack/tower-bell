@@ -4,19 +4,10 @@ const owl = require('../../../assets/owl-tower.jpg')
 
 export function BrandLogo({ size = 72, framed = true }) {
   return (
-    <View
-      style={[
-        styles.wrap,
-        { width: size, height: size },
-        !framed && styles.flat
-      ]}
-    >
+    <View style={[styles.wrap, { width: size, height: size }, !framed && styles.flat]}>
       <Image
         source={owl}
-        style={[
-          styles.image,
-          Platform.OS === 'web' ? { imageRendering: 'pixelated' } : null
-        ]}
+        style={[styles.image, Platform.OS === 'web' ? { imageRendering: 'pixelated' } : null]}
       />
     </View>
   )

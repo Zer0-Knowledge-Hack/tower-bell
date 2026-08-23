@@ -20,7 +20,7 @@
   "scripts": {
     "format": "prettier . --write",
     "test": "brittle-bare test/index.js",
-    "lint": "prettier . --check && lunte",
+    "lint": "prettier . --check && lunte backend bin.mjs app.js scripts test workers",
     "start": "bare bin.mjs --no-updates",
     "scan": "bare bin.mjs --no-updates scan",
     "beacon": "bare bin.mjs --no-updates beacon",

@@ -16,8 +16,7 @@ export function loadPixelFonts() {
   const link = document.createElement('link')
   link.id = 'towerbell-pixel-fonts'
   link.rel = 'stylesheet'
-  link.href =
-    'https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap'
+  link.href = 'https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap'
   document.head.appendChild(link)
 }
 

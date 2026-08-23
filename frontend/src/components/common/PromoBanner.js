@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
-import { useThemeColors } from '../../utils/useThemeColors';
-import { Icon } from './Icon';
+import { useEffect, useRef, useState } from 'react'
+import { Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native'
+import { useThemeColors } from '../../utils/useThemeColors'
+import { Icon } from './Icon'
 
 const BANNERS = [
   {
@@ -10,7 +10,7 @@ const BANNERS = [
     title: '2x1 coffee until 6PM',
     body: 'Open Cafe Rivadavia on the map and save the promo.',
     cta: 'Open map',
-    tone: 'navy',
+    tone: 'navy'
   },
   {
     id: 'b2',
@@ -18,7 +18,7 @@ const BANNERS = [
     title: 'No internet? Still discover.',
     body: 'Towerbell finds shops over local P2P — keep Bluetooth on.',
     cta: 'How it works',
-    tone: 'sky',
+    tone: 'sky'
   },
   {
     id: 'b3',
@@ -26,46 +26,46 @@ const BANNERS = [
     title: 'Broadcast your kiosk',
     body: 'Switch identity in Settings and go live in one tap.',
     cta: 'Go live',
-    tone: 'gold',
-  },
-];
+    tone: 'gold'
+  }
+]
 
 export function PromoBanner({ onPressCta }) {
-  const c = useThemeColors();
-  const { width } = useWindowDimensions();
-  const cardW = Math.min(width - 48, 360);
-  const [index, setIndex] = useState(0);
-  const scrollRef = useRef(null);
-  const styles = makeStyles(c);
+  const c = useThemeColors()
+  const { width } = useWindowDimensions()
+  const cardW = Math.min(width - 48, 360)
+  const [index, setIndex] = useState(0)
+  const scrollRef = useRef(null)
+  const styles = makeStyles(c)
 
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prev) => {
-        const next = (prev + 1) % BANNERS.length;
-        scrollRef.current?.scrollTo({ x: next * (cardW + 12), animated: true });
-        return next;
-      });
-    }, 4200);
-    return () => clearInterval(timer);
-  }, [cardW]);
+        const next = (prev + 1) % BANNERS.length
+        scrollRef.current?.scrollTo({ x: next * (cardW + 12), animated: true })
+        return next
+      })
+    }, 4200)
+    return () => clearInterval(timer)
+  }, [cardW])
 
   return (
     <View style={styles.wrap}>
       <View style={styles.head}>
-        <Icon name="megaphone" size={14} color={c.sky} />
+        <Icon name='megaphone' size={14} color={c.sky} />
         <Text style={styles.headText}>Highlights</Text>
       </View>
       <ScrollView
         ref={scrollRef}
         horizontal
         pagingEnabled={false}
-        decelerationRate="fast"
+        decelerationRate='fast'
         snapToInterval={cardW + 12}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ gap: 12 }}
         onMomentumScrollEnd={(e) => {
-          const i = Math.round(e.nativeEvent.contentOffset.x / (cardW + 12));
-          setIndex(Math.max(0, Math.min(BANNERS.length - 1, i)));
+          const i = Math.round(e.nativeEvent.contentOffset.x / (cardW + 12))
+          setIndex(Math.max(0, Math.min(BANNERS.length - 1, i)))
         }}
       >
         {BANNERS.map((item) => (
@@ -79,7 +79,7 @@ export function PromoBanner({ onPressCta }) {
             <Text style={styles.body}>{item.body}</Text>
             <View style={styles.cta}>
               <Text style={styles.ctaText}>{item.cta}</Text>
-              <Icon name="arrow-up-right" size={14} color="#FFFFFF" />
+              <Icon name='arrow-up-right' size={14} color='#FFFFFF' />
             </View>
           </Pressable>
         ))}
@@ -90,13 +90,13 @@ export function PromoBanner({ onPressCta }) {
         ))}
       </View>
     </View>
-  );
+  )
 }
 
 function toneStyle(tone, c) {
-  if (tone === 'sky') return { backgroundColor: c.sky };
-  if (tone === 'gold') return { backgroundColor: c.gold };
-  return { backgroundColor: c.header };
+  if (tone === 'sky') return { backgroundColor: c.sky }
+  if (tone === 'gold') return { backgroundColor: c.gold }
+  return { backgroundColor: c.header }
 }
 
 function makeStyles(c) {
@@ -108,7 +108,7 @@ function makeStyles(c) {
       borderRadius: 18,
       padding: 16,
       minHeight: 132,
-      justifyContent: 'space-between',
+      justifyContent: 'space-between'
     },
     kicker: { color: 'rgba(255,255,255,0.75)', fontSize: 10, fontWeight: '800', letterSpacing: 1 },
     title: { color: '#FFFFFF', fontSize: 18, fontWeight: '800', marginTop: 6 },
@@ -122,11 +122,11 @@ function makeStyles(c) {
       backgroundColor: 'rgba(0,0,0,0.18)',
       paddingHorizontal: 10,
       paddingVertical: 6,
-      borderRadius: 999,
+      borderRadius: 999
     },
     ctaText: { color: '#FFFFFF', fontWeight: '800', fontSize: 12 },
     dots: { flexDirection: 'row', gap: 6, justifyContent: 'center' },
     dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: c.border },
-    dotOn: { backgroundColor: c.sky, width: 16 },
-  });
+    dotOn: { backgroundColor: c.sky, width: 16 }
+  })
 }

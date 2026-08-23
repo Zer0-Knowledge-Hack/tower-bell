@@ -2,10 +2,10 @@
 
 Towerbell has two distribution stories. Do not mix them up.
 
-| Channel | What it is | Who uses it |
-| --- | --- | --- |
-| **Pear** (`pear install` + `pear seed`) | Real track binary + OTA | Judges / Pears Track hard gate |
-| **GitHub Release** | Version tag + notes (and optional assets) | Teammates, README, hackathon visitors |
+| Channel                                 | What it is                                | Who uses it                           |
+| --------------------------------------- | ----------------------------------------- | ------------------------------------- |
+| **Pear** (`pear install` + `pear seed`) | Real track binary + OTA                   | Judges / Pears Track hard gate        |
+| **GitHub Release**                      | Version tag + notes (and optional assets) | Teammates, README, hackathon visitors |
 
 ## Cut a GitHub Release
 

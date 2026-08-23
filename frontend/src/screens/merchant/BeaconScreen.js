@@ -53,11 +53,7 @@ export function BeaconScreen() {
           title='BEACON'
           subtitle='What travelers receive nearby'
           onSettings={() => navigation.navigate('Settings')}
-          right={
-            <Text style={styles.air}>
-              {beacon.broadcasting ? 'ON AIR' : 'IDLE'}
-            </Text>
-          }
+          right={<Text style={styles.air}>{beacon.broadcasting ? 'ON AIR' : 'IDLE'}</Text>}
         />
         <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps='handled'>
           <View style={[styles.card, beacon.broadcasting && styles.cardOn]}>

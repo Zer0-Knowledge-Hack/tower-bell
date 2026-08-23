@@ -62,22 +62,22 @@ export function SettingsScreen() {
 
         <Text style={styles.section}>SYSTEM</Text>
         <NavRow
-          icon="compass"
-          label="About / pitch for judges"
+          icon='compass'
+          label='About / pitch for judges'
           onPress={() => navigation.navigate('About')}
           c={c}
           styles={styles}
         />
         <NavRow
-          icon="bell"
-          label="Notifications"
+          icon='bell'
+          label='Notifications'
           onPress={() => navigation.navigate('Notifications')}
           c={c}
           styles={styles}
         />
         <NavRow
-          icon="shield"
-          label="Phone permissions"
+          icon='shield'
+          label='Phone permissions'
           onPress={() => navigation.navigate('Permissions')}
           c={c}
           styles={styles}

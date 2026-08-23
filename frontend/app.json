@@ -70,7 +70,9 @@
         "android.permission.FOREGROUND_SERVICE_LOCATION",
         "android.permission.WAKE_LOCK",
         "android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
-        "android.permission.VIBRATE"
+        "android.permission.VIBRATE",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED"
       ]
     },
     "web": {
@@ -112,6 +114,12 @@
           "savePhotosPermission": "Save files received from nearby peers."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "7ba5731a-84fe-4ece-8be8-dfff32f8348b"
+      }
+    },
+    "owner": "cisn3ronauta"
   }
 }

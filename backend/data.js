@@ -1,13 +1,13 @@
-import Hyperbee from 'hyperbee'
-import b4a from 'b4a'
+const Hyperbee = require('hyperbee')
+const b4a = require('b4a')
 
-export class ManejadorDatos {
-  constructor(corestore) {
+class DataManager {
+  constructor (corestore) {
     this.store = corestore
-    this.dbs = new Map() // key (hex) -> Hyperbee
+    this.dbs = new Map()
   }
 
-  async getLocalDb(name = 'local-beacon') {
+  async getLocalDb (name = 'local-beacon') {
     const core = this.store.get({ name })
     await core.ready()
     const db = new Hyperbee(core, {
@@ -18,11 +18,9 @@ export class ManejadorDatos {
     return { core, db }
   }
 
-  async getRemoteDb(key) {
+  async getRemoteDb (key) {
     const keyHex = b4a.toString(key, 'hex')
-    if (this.dbs.has(keyHex)) {
-      return this.dbs.get(keyHex)
-    }
+    if (this.dbs.has(keyHex)) return this.dbs.get(keyHex)
 
     const core = this.store.get({ key })
     await core.ready()
@@ -30,18 +28,20 @@ export class ManejadorDatos {
       keyEncoding: 'utf-8',
       valueEncoding: 'json'
     })
-    
+
     const bundle = { core, db }
     this.dbs.set(keyHex, bundle)
     return bundle
   }
 
-  async actualizarRegistro(db, registro) {
-    await db.put('registro', registro)
+  async updateRecord (db, record) {
+    await db.put('record', record)
   }
 
-  async leerRegistro(db) {
-    const node = await db.get('registro')
+  async readRecord (db) {
+    const node = await db.get('record')
     return node ? node.value : null
   }
 }
+
+module.exports = { DataManager }

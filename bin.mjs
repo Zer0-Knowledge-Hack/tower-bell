@@ -7,7 +7,9 @@ import path from 'bare-path'
 import fs from 'bare-fs'
 import pkg from './package.json'
 import App from './app.js'
-import { escanear, transmitir } from './backend/mock.mjs'
+import { scan, beacon } from './backend/index.js'
+import { startTravelerPanel } from './frontend/traveler.mjs'
+import { startBeaconPanel } from './frontend/trade.mjs'
 
 const appName = pkg.productName || pkg.name
 const isDev = path.basename(Bare.argv[0]) === (isWindows ? 'bare.exe' : 'bare')
@@ -18,7 +20,8 @@ const cmd = command(
   flag('--version|-v', 'Print the current version'),
   flag('--storage <dir>', 'custom storage directory'),
   flag('--no-updates', 'disable OTA updates for this run'),
-  arg('<modo>', 'Modo de inicio: scan o beacon')
+  flag('--fake', 'use mock data instead of real P2P'),
+  arg('<mode>', 'Mode: scan or beacon')
 )
 
 cmd.parse(Bare.argv.slice(isDev ? 2 : 1))
@@ -32,14 +35,13 @@ const updates = cmd.flags.updates
 const storage = cmd.flags.storage || (isDev ? null : path.join(persistent(), appName))
 const dir = storage || path.join(os.tmpdir(), 'pear', appName)
 
-console.log(`Updates: ${updates === false ? 'disabled' : 'enabled'}`)
-
+// Load upgrade URL from .env if it exists
 let upgradeUrl = pkg.upgrade
 try {
   const envPath = path.join(process.cwd(), '.env')
   const envContent = fs.readFileSync(envPath, 'utf8')
   for (const line of envContent.split('\n')) {
-    const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/)
+    const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?$/)
     if (match) {
       const key = match[1]
       let value = match[2] || ''
@@ -50,7 +52,7 @@ try {
     }
   }
 } catch (e) {
-
+  // No .env file
 }
 
 const app = new App({
@@ -78,41 +80,38 @@ process.on('SIGTERM', () => app.exit(143))
 
 try {
   await app.ready()
-  console.log('\nCLI ready. Press Ctrl+C to stop.\n')
 
-  const modo = cmd.args.modo || (Array.isArray(cmd.args) ? cmd.args[0] : null)
-  if (modo === 'scan') {
-    console.log('Iniciando modo viajero (Scan)...')
-    const red = escanear()
-    red.on('estado', ({ modo, conectado, error }) => {
-      console.log(`[Red] Modo: ${modo} | Conectado: ${conectado} ${error ? '| Error: ' + error.message : ''}`)
-    })
-    red.on('local-encontrado', (registro) => {
-      console.log('\n=======================================')
-      console.log(`🏪 ${registro.nombre}`)
-      console.log(`   Categoría: ${registro.categoria} | Estado: ${registro.estado}`)
-      console.log(`   Mensaje: ${registro.mensaje}`)
-      console.log(`   Horario: ${registro.horario}`)
-      console.log('=======================================\n')
-    })
-  } else if (modo === 'beacon') {
-    console.log('Iniciando modo comercio (Beacon)...')
-    const miRegistro = {
-      nombre: "Café Rivadavia",
-      categoria: "cafeteria",
-      estado: "abierto",
-      mensaje: "2x1 en medialunas hasta las 18",
-      horario: "08:00-20:00",
-      actualizado: new Date().toISOString()
+  // Select backend: real or mock based on --fake
+  let backendScan = scan
+  let backendBeacon = beacon
+  if (cmd.flags.fake) {
+    const mock = await import('./backend/mock.js')
+    backendScan = mock.scan
+    backendBeacon = mock.beacon
+  }
+
+  const mode = cmd.args.mode || (Array.isArray(cmd.args) ? cmd.args[0] : null)
+
+  if (mode === 'scan') {
+    startTravelerPanel(backendScan)
+  } else if (mode === 'beacon') {
+    const myRecord = {
+      name: "Café Rivadavia",
+      category: "cafeteria",
+      status: "open",
+      message: "2 for 1 croissants until 6PM",
+      hours: "08:00-20:00",
+      updated: new Date().toISOString()
     }
-    const beacon = transmitir(miRegistro)
-    beacon.on('visitante', ({ total }) => {
-      console.log(`📡 ¡Alguien ha leído tu transmisión! Total visitantes: ${total}`)
-    })
-    console.log('Transmitiendo localmente...')
+    startBeaconPanel(backendBeacon, myRecord)
   } else {
-    console.log('Por favor, especifica un modo: "scan" o "beacon".')
-    console.log('Ejemplo: pnpm start scan')
+    console.log('\n  Usage: towerbell <scan|beacon> [options]\n')
+    console.log('  Commands:')
+    console.log('    scan      Traveler mode — discovers nearby peers')
+    console.log('    beacon    Trade mode — broadcasts your record')
+    console.log('\n  Options:')
+    console.log('    --fake    Use test data (no P2P network)')
+    console.log('    --help    Show this help\n')
   }
 
 } catch (err) {

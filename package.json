@@ -1,8 +1,10 @@
 {
-  "name": "hello-pear-bare",
-  "version": "0.0.0-rc.0",
-  "description": "Pear Runtime CLI boilerplate using Bare with OTA updater support.",
+  "name": "towerbell",
+  "productName": "towerbell",
+  "version": "1.0.0",
+  "description": "Hyperlocal P2P Discovery — no internet, no servers, no accounts.",
   "private": true,
+  "upgrade": "pear://9on7du4dmnmty8qsdjxoyrw6rz9dio5wzj6wqux9j6jjn545i49y",
   "bin": "bin.mjs",
   "scripts": {
     "format": "prettier . --write",
@@ -10,12 +12,12 @@
     "lint": "prettier . --check && lunte",
     "start": "bare bin.mjs --no-updates",
     "make": "node scripts/make.js",
-    "make:darwin-arm64": "bare-build --name hello-pear-bare --standalone --host darwin-arm64 --out ./out/darwin-arm64 bin.mjs",
-    "make:darwin-x64": "bare-build --name hello-pear-bare --standalone --host darwin-x64 --out ./out/darwin-x64 bin.mjs",
-    "make:linux-arm64": "bare-build --name hello-pear-bare --standalone --host linux-arm64 --out ./out/linux-arm64 bin.mjs",
-    "make:linux-x64": "bare-build --name hello-pear-bare --standalone --host linux-x64 --out ./out/linux-x64 bin.mjs",
-    "make:win32-arm64": "bare-build --name hello-pear-bare --standalone --host win32-arm64 --out ./out/win32-arm64 bin.mjs",
-    "make:win32-x64": "bare-build --name hello-pear-bare --standalone --host win32-x64 --out ./out/win32-x64 bin.mjs"
+    "make:darwin-arm64": "bare-build --name towerbell --standalone --host darwin-arm64 --out ./out/darwin-arm64 bin.mjs",
+    "make:darwin-x64": "bare-build --name towerbell --standalone --host darwin-x64 --out ./out/darwin-x64 bin.mjs",
+    "make:linux-arm64": "bare-build --name towerbell --standalone --host linux-arm64 --out ./out/linux-arm64 bin.mjs",
+    "make:linux-x64": "bare-build --name towerbell --standalone --host linux-x64 --out ./out/linux-x64 bin.mjs",
+    "make:win32-arm64": "bare-build --name towerbell --standalone --host win32-arm64 --out ./out/win32-arm64 bin.mjs",
+    "make:win32-x64": "bare-build --name towerbell --standalone --host win32-x64 --out ./out/win32-x64 bin.mjs"
   },
   "dependencies": {
     "b4a": "^1.8.1",

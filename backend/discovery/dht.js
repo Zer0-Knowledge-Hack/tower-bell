@@ -1,24 +1,22 @@
-import Hyperswarm from 'hyperswarm'
-import b4a from 'b4a'
-import FramedStream from 'framed-stream'
-import EventEmitter from 'bare-events'
+const Hyperswarm = require('hyperswarm')
+const b4a = require('b4a')
+const FramedStream = require('framed-stream')
+const EventEmitter = require('bare-events')
 
-// Un tópico de 32 bytes constante para que todos los nodos se encuentren
+// Global 32-byte topic for all Towerbell nodes to discover each other
 const TOPIC = b4a.alloc(32).fill('towerbell-discovery-v1')
 
-export class DiscoveryDHT extends EventEmitter {
-  constructor(store) {
+class DiscoveryDHT extends EventEmitter {
+  constructor (store) {
     super()
     this.store = store
     this.swarm = new Hyperswarm()
-    
+
     this.swarm.on('connection', (conn, info) => {
-      // Replicar todo el corestore por defecto a través de la conexión
       this.store.replicate(conn)
 
-      // Establecer un canal secundario (framing) para intercambiar mensajes
       const frames = new FramedStream(conn)
-      
+
       frames.on('data', (msg) => {
         try {
           const parsed = JSON.parse(b4a.toString(msg, 'utf-8'))
@@ -27,47 +25,42 @@ export class DiscoveryDHT extends EventEmitter {
             this.emit('peer-beacon', { publicKey, conn })
           }
         } catch (e) {
-          // ignorar mensajes mal formados
+          // ignore malformed messages
         }
       })
 
-      conn.on('error', () => {}) // ignorar errores de red
-      
-      // Adjuntar frames a la conexión para usarlo después
+      conn.on('error', () => {})
       conn.frames = frames
     })
   }
 
-  async iniciar() {
+  async start () {
     const discovery = this.swarm.join(TOPIC, { client: true, server: true })
     await discovery.flushed()
-    this.emit('listo')
+    this.emit('ready')
   }
 
-  // Anunciar nuestra propia clave pública a los peers conectados
-  anunciar(publicKey) {
+  announce (publicKey) {
     const msg = JSON.stringify({
       type: 'BEACON_ANNOUNCE',
       key: b4a.toString(publicKey, 'hex')
     })
     const buffer = b4a.from(msg, 'utf-8')
-    
-    // Enviar a todos los peers ya conectados
+
     for (const conn of this.swarm.connections) {
-      if (conn.frames) {
-        conn.frames.write(buffer)
-      }
+      if (conn.frames) conn.frames.write(buffer)
     }
 
-    // Y cada vez que alguien nuevo se conecte, le enviamos el anuncio
     this.swarm.on('connection', (conn) => {
-       setTimeout(() => {
-         if (conn.frames) conn.frames.write(buffer)
-       }, 500)
+      setTimeout(() => {
+        if (conn.frames) conn.frames.write(buffer)
+      }, 500)
     })
   }
 
-  async detener() {
+  async stop () {
     await this.swarm.destroy()
   }
 }
+
+module.exports = { DiscoveryDHT }

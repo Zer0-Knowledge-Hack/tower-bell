@@ -18,8 +18,8 @@ import { useAppStore } from './src/store/app.store'
 import { useThemeColors } from './src/utils/useThemeColors'
 import { loadPixelFonts, pixelBody, pixelTitle } from './src/utils/pixel'
 
-const DESKTOP_BREAK = 900
-const FRAME_BREAK = 560
+/** Phone frame size for judges on desktop (approx 9:19.5). */
+const PHONE_W = 390
 
 export default function App() {
   const hydrate = useAppStore((s) => s.hydrate)
@@ -27,8 +27,8 @@ export default function App() {
   const c = useThemeColors()
   const { width, height } = useWindowDimensions()
   const isWeb = Platform.OS === 'web'
-  const desktop = isWeb && width >= DESKTOP_BREAK
-  const framed = isWeb && width >= FRAME_BREAK
+  // Judges open this from a PC: always use phone-in-desktop chrome on web.
+  const desktopChrome = isWeb
   const styles = useMemo(() => makeStyles(c, height), [c, height])
 
   useEffect(() => {
@@ -72,55 +72,69 @@ export default function App() {
     </View>
   )
 
-  return (
-    <SafeAreaProvider>
-      <View style={[styles.shell, framed && styles.shellWeb]}>
-        <StatusBar style='light' />
-        {desktop ? (
-          <View style={styles.desktopRow}>
-            <DesktopAside styles={styles} />
-            <View style={styles.deviceColumn}>
-              <Text style={styles.deviceLabel}>PHONE FRAME · USE THE APP INSIDE</Text>
-              <View style={[styles.phone, styles.phoneWeb, styles.phoneDesktop]}>
-                <SafeAreaView style={styles.safeFill} edges={['top']}>
-                  <View style={styles.navHost}>{appBody}</View>
-                  <ToastHost />
-                </SafeAreaView>
-              </View>
-              <Text style={styles.deviceHint}>Mouse + scroll work. Tabs at the bottom.</Text>
-            </View>
-          </View>
-        ) : (
-          <SafeAreaView style={[styles.safe, framed && styles.safeFramed]} edges={['top']}>
-            {framed ? <Text style={styles.deviceLabel}>TOWERBELL DEMO</Text> : null}
-            <View style={[styles.phone, framed && styles.phoneWeb]}>
-              <View style={styles.navHost}>{appBody}</View>
+  if (!desktopChrome) {
+    return (
+      <SafeAreaProvider>
+        <View style={styles.shell}>
+          <SafeAreaView style={styles.safeNative} edges={['top']}>
+            <StatusBar style='light' />
+            <View style={styles.phoneNative}>
+              {appBody}
               <ToastHost />
             </View>
           </SafeAreaView>
-        )}
+        </View>
+      </SafeAreaProvider>
+    )
+  }
+
+  // Wide: aside left + phone center. Narrow web: aside above phone (still framed).
+  const sideBySide = width >= 860
+
+  return (
+    <SafeAreaProvider>
+      <View style={[styles.shell, styles.shellWeb]}>
+        <StatusBar style='light' />
+        <View style={[styles.desktopRow, !sideBySide && styles.desktopStack]}>
+          <DesktopAside styles={styles} compact={!sideBySide} />
+          <View style={styles.deviceColumn}>
+            <Text style={styles.deviceLabel}>JUDGE DEMO · PHONE FRAME</Text>
+            <View style={styles.phoneFrame}>
+              <SafeAreaView style={styles.safeFill} edges={['top']}>
+                <View style={styles.navHost}>{appBody}</View>
+                <ToastHost />
+              </SafeAreaView>
+            </View>
+            <Text style={styles.deviceHint}>
+              Click SCAN or BEACON on the left — or the cards inside the phone.
+            </Text>
+          </View>
+        </View>
       </View>
     </SafeAreaProvider>
   )
 }
 
-function DesktopAside({ styles }) {
+function DesktopAside({ styles, compact }) {
   const pickRole = useAppStore((s) => s.pickRole)
+  const picked = useAppStore((s) => !!s.db?.pickedRole)
+  const role = useAppStore((s) => s.db?.user?.role)
 
   return (
-    <View style={styles.aside} accessibilityRole='complementary'>
-      <BrandLogo size={72} />
+    <View style={[styles.aside, compact && styles.asideCompact]} accessibilityRole='complementary'>
+      <BrandLogo size={compact ? 56 : 72} />
       <Text style={styles.asideBrand}>TOWERBELL</Text>
       <Text style={styles.asideTeam}>ZERO-KNOLAGE · WEB DEMO</Text>
       <Text style={styles.asideLead}>
-        Click a mode here or inside the phone. Same scan / beacon contract as the Pear CLI — mock
-        swarm on web.
+        Desktop shell for judges. The frame is the Expo phone UI (mock swarm). Real P2P is pear
+        install.
       </Text>
 
       <Pressable
         style={({ pressed }) => [
           styles.asideCard,
           styles.asideCardBtn,
+          role === 'visitor' && picked && styles.asideCardActive,
           pressed && styles.asideCardPressed
         ]}
         onPress={() => pickRole('visitor')}
@@ -129,13 +143,15 @@ function DesktopAside({ styles }) {
       >
         <Text style={styles.asideCardTitle}>▶ SCAN</Text>
         <Text style={styles.asideCardBody}>
-          Traveler mode. Wait a few seconds for Café Rivadavia and nearby shops.
+          Traveler. Wait a few seconds for Café Rivadavia and nearby shops.
         </Text>
       </Pressable>
+
       <Pressable
         style={({ pressed }) => [
           styles.asideCard,
           styles.asideCardBtn,
+          role === 'merchant' && picked && styles.asideCardActive,
           pressed && styles.asideCardPressed
         ]}
         onPress={() => pickRole('merchant')}
@@ -144,7 +160,7 @@ function DesktopAside({ styles }) {
       >
         <Text style={styles.asideCardTitle}>▶ BEACON</Text>
         <Text style={styles.asideCardBody}>
-          Shop mode. Start broadcasting your name, hours and promo.
+          Shop. Start broadcasting name, hours and today’s promo.
         </Text>
       </Pressable>
 
@@ -156,13 +172,17 @@ function DesktopAside({ styles }) {
       >
         <Text style={styles.asideBtnText}>← BACK TO LANDING</Text>
       </Pressable>
-      <Text style={styles.asideFoot}>Real P2P: pear install (not this page).</Text>
+      <Text style={styles.asideFoot}>
+        {picked
+          ? `Mode on: ${role === 'merchant' ? 'BEACON' : 'SCAN'}`
+          : 'Pick a mode to enter the app.'}
+      </Text>
     </View>
   )
 }
 
 function makeStyles(c, height) {
-  const frameH = Math.min(Math.max(height - 96, 560), 820)
+  const phoneH = Math.min(Math.max(Math.floor(height - 100), 560), Math.floor(PHONE_W * (19.5 / 9)))
   return StyleSheet.create({
     shell: {
       flex: 1,
@@ -173,14 +193,16 @@ function makeStyles(c, height) {
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: c.shell,
-      backgroundImage:
-        Platform.OS === 'web'
-          ? 'linear-gradient(rgba(28,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(28,255,255,0.05) 1px, transparent 1px)'
-          : undefined,
-      backgroundSize: Platform.OS === 'web' ? '32px 32px, 32px 32px' : undefined
+      ...(Platform.OS === 'web'
+        ? {
+            backgroundImage:
+              'linear-gradient(rgba(28,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(28,255,255,0.05) 1px, transparent 1px)',
+            backgroundSize: '32px 32px, 32px 32px'
+          }
+        : null)
     },
-    safe: { flex: 1, backgroundColor: c.deep, width: '100%' },
-    safeFramed: { maxWidth: 480, alignItems: 'center', paddingVertical: 16 },
+    safeNative: { flex: 1, backgroundColor: c.deep, width: '100%' },
+    phoneNative: { flex: 1, backgroundColor: c.bg, width: '100%' },
     safeFill: {
       flex: 1,
       backgroundColor: c.bg,
@@ -194,27 +216,6 @@ function makeStyles(c, height) {
       minHeight: 0,
       ...(Platform.OS === 'web' ? { height: '100%', display: 'flex' } : null)
     },
-    phone: { flex: 1, backgroundColor: c.bg, width: '100%', minHeight: 0 },
-    phoneWeb: {
-      maxWidth: 430,
-      width: '100%',
-      alignSelf: 'center',
-      overflow: 'hidden',
-      borderWidth: 2,
-      borderColor: c.border,
-      backgroundColor: c.bg,
-      minHeight: 0
-    },
-    phoneDesktop: {
-      height: frameH,
-      maxHeight: frameH,
-      flexGrow: 0,
-      flexShrink: 0,
-      borderWidth: 3,
-      ...(Platform.OS === 'web'
-        ? { display: 'flex', flexDirection: 'column', boxShadow: '8px 8px 0 rgba(92,225,255,0.22)' }
-        : null)
-    },
     desktopRow: {
       flex: 1,
       width: '100%',
@@ -222,30 +223,57 @@ function makeStyles(c, height) {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      gap: 40,
-      paddingHorizontal: 32,
-      paddingVertical: 24
+      gap: 36,
+      paddingHorizontal: 28,
+      paddingVertical: 20
     },
-    deviceColumn: { alignItems: 'center', gap: 10 },
+    desktopStack: {
+      flexDirection: 'column',
+      justifyContent: 'flex-start',
+      overflow: 'auto'
+    },
+    deviceColumn: { alignItems: 'center', gap: 10, flexShrink: 0 },
     deviceLabel: {
       color: c.gold,
       fontFamily: pixelTitle,
       fontSize: 8,
       letterSpacing: 1.5,
-      marginBottom: 4,
       textAlign: 'center'
     },
     deviceHint: {
       color: c.muted,
       fontFamily: pixelBody,
       fontSize: 16,
-      textAlign: 'center'
+      textAlign: 'center',
+      maxWidth: PHONE_W
+    },
+    phoneFrame: {
+      width: PHONE_W,
+      height: phoneH,
+      maxWidth: '100%',
+      backgroundColor: c.bg,
+      borderWidth: 3,
+      borderColor: c.border,
+      overflow: 'hidden',
+      ...(Platform.OS === 'web'
+        ? {
+            display: 'flex',
+            flexDirection: 'column',
+            boxShadow: '8px 8px 0 rgba(92,225,255,0.22)'
+          }
+        : null)
     },
     aside: {
-      width: 320,
+      width: 300,
       maxWidth: '100%',
       gap: 12,
-      padding: 8
+      padding: 8,
+      flexShrink: 1
+    },
+    asideCompact: {
+      width: '100%',
+      maxWidth: 520,
+      paddingBottom: 8
     },
     asideBrand: {
       color: c.sky,
@@ -275,12 +303,14 @@ function makeStyles(c, height) {
       padding: 12,
       gap: 6
     },
-    asideCardBtn: {
-      cursor: 'pointer'
-    },
+    asideCardBtn: { cursor: 'pointer' },
     asideCardPressed: {
       backgroundColor: c.greenDark,
       borderColor: c.sky
+    },
+    asideCardActive: {
+      borderColor: c.ok || c.success || '#3DFF9A',
+      backgroundColor: c.greenDark
     },
     asideCardTitle: {
       color: c.sky,

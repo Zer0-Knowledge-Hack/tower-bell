@@ -272,14 +272,21 @@ export const useAppStore = create((set, get) => ({
 
   async setRole(role) {
     const { db } = get()
+    if (!db) return
     const names = { visitor: 'Traveler', merchant: 'Shop', admin: 'Admin' }
-    await get().persist({
+    const next = {
       ...db,
       pickedRole: true,
       permissionsReady: true,
       user: { ...db.user, role, name: names[role] || db.user.name }
+    }
+    // Sync store first so web UI leaves RoleSelect immediately.
+    set({
+      db: next,
+      selectedMerchant: null,
+      peers: role === 'visitor' ? get().peers : []
     })
-    set({ selectedMerchant: null, peers: role === 'visitor' ? get().peers : [] })
+    await storage.save(next)
   },
 
   async pickRole(role) {

@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { DefaultTheme, DarkTheme, NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useMemo } from 'react'
+import { View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Icon } from '../components/common/Icon'
 import {
@@ -84,7 +85,7 @@ function RoleTabs() {
 
 export function AppNavigator() {
   const ready = useAppStore((s) => s.ready)
-  const picked = useAppStore((s) => s.db?.pickedRole)
+  const picked = useAppStore((s) => !!s.db?.pickedRole)
   const role = useAppStore((s) => s.db?.user?.role || 'visitor')
   const darkMode = useAppStore((s) => !!s.db?.darkMode)
   const c = useThemeColors()
@@ -106,27 +107,32 @@ export function AppNavigator() {
 
   if (!ready) return null
 
-  // Remount when pickedRole/role changes. Swapping Stack.Screen trees in place
-  // leaves the old route mounted on web until a full remount (e.g. resize).
-  const navKey = picked ? `main-${role}` : 'role-select'
+  // Do NOT swap Stack.Screen children in place — on web the old route stays
+  // mounted until a remount (e.g. resizing). Gate the whole tree instead.
+  if (!picked) {
+    return (
+      <View style={{ flex: 1, minHeight: 0, height: '100%' }}>
+        <RoleSelectScreen />
+      </View>
+    )
+  }
 
   return (
-    <NavigationContainer key={navKey} theme={theme}>
-      <Stack.Navigator
-        screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.bg, flex: 1 } }}
-      >
-        {!picked ? (
-          <Stack.Screen name='RoleSelect' component={RoleSelectScreen} />
-        ) : (
-          <>
-            <Stack.Screen name='Main' component={RoleTabs} />
-            <Stack.Screen name='Settings' component={SettingsScreen} />
-            <Stack.Screen name='Permissions' component={PermissionsScreen} />
-            <Stack.Screen name='Notifications' component={NotificationsScreen} />
-            <Stack.Screen name='About' component={AboutScreen} />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View style={{ flex: 1, minHeight: 0, height: '100%' }}>
+      <NavigationContainer key={`main-${role}`} theme={theme}>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: c.bg, flex: 1 }
+          }}
+        >
+          <Stack.Screen name='Main' component={RoleTabs} />
+          <Stack.Screen name='Settings' component={SettingsScreen} />
+          <Stack.Screen name='Permissions' component={PermissionsScreen} />
+          <Stack.Screen name='Notifications' component={NotificationsScreen} />
+          <Stack.Screen name='About' component={AboutScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </View>
   )
 }

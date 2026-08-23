@@ -1,0 +1,14 @@
+{
+  "beacon": {
+    "name": { "required": true, "min": 2, "max": 40, "label": "Name" },
+    "category": { "required": true, "min": 2, "max": 24, "label": "Category" },
+    "status": { "required": true, "min": 2, "max": 24, "label": "Status" },
+    "message": { "required": true, "min": 4, "max": 80, "label": "Message" },
+    "hours": { "required": true, "pattern": "^([01]\\d|2[0-3]):[0-5]\\d-([01]\\d|2[0-3]):[0-5]\\d$", "label": "Hours", "mensaje": "Use HH:MM-HH:MM" }
+  },
+  "admin": {
+    "name": { "required": true, "min": 2, "max": 40, "label": "Name" },
+    "category": { "required": true, "min": 2, "max": 24, "label": "Category" },
+    "message": { "required": true, "min": 4, "max": 80, "label": "Message" }
+  }
+}

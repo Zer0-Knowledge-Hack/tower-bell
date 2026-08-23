@@ -2,7 +2,9 @@ import { StatusBar } from 'expo-status-bar'
 import { useEffect, useMemo } from 'react'
 import {
   ActivityIndicator,
+  Linking,
   Platform,
+  Pressable,
   StyleSheet,
   Text,
   View,
@@ -16,58 +18,261 @@ import { useAppStore } from './src/store/app.store'
 import { useThemeColors } from './src/utils/useThemeColors'
 import { loadPixelFonts, pixelBody, pixelTitle } from './src/utils/pixel'
 
+const DESKTOP_BREAK = 900
+const FRAME_BREAK = 560
+
 export default function App() {
   const hydrate = useAppStore((s) => s.hydrate)
   const ready = useAppStore((s) => s.ready)
   const c = useThemeColors()
-  const { width } = useWindowDimensions()
-  const framed = Platform.OS === 'web' && width > 520
-  const styles = useMemo(() => makeStyles(c), [c])
+  const { width, height } = useWindowDimensions()
+  const isWeb = Platform.OS === 'web'
+  const desktop = isWeb && width >= DESKTOP_BREAK
+  const framed = isWeb && width >= FRAME_BREAK
+  const styles = useMemo(() => makeStyles(c, height), [c, height])
 
   useEffect(() => {
     loadPixelFonts()
     hydrate()
   }, [hydrate])
 
+  useEffect(() => {
+    if (!isWeb || typeof document === 'undefined') return undefined
+    const root = document.getElementById('root')
+    const prev = {
+      htmlH: document.documentElement.style.height,
+      bodyH: document.body.style.height,
+      bodyM: document.body.style.margin,
+      bodyO: document.body.style.overflow,
+      rootH: root?.style.height
+    }
+    document.documentElement.style.height = '100%'
+    document.body.style.height = '100%'
+    document.body.style.margin = '0'
+    document.body.style.overflow = 'hidden'
+    if (root) root.style.height = '100%'
+    return () => {
+      document.documentElement.style.height = prev.htmlH
+      document.body.style.height = prev.bodyH
+      document.body.style.margin = prev.bodyM
+      document.body.style.overflow = prev.bodyO
+      if (root) root.style.height = prev.rootH
+    }
+  }, [isWeb])
+
+  const appBody = ready ? (
+    <AppNavigator />
+  ) : (
+    <View style={styles.boot}>
+      <BrandLogo size={112} />
+      <Text style={styles.bootTitle}>TOWERBELL</Text>
+      <Text style={styles.bootLead}>OWL TOWER · SCAN / BEACON</Text>
+      <ActivityIndicator color={c.sky} style={{ marginTop: 16 }} />
+      <Text style={styles.bootLoading}>boot sequence...</Text>
+    </View>
+  )
+
   return (
     <SafeAreaProvider>
       <View style={[styles.shell, framed && styles.shellWeb]}>
-        <SafeAreaView style={styles.safe} edges={['top']}>
-          <StatusBar style='light' />
-          <View style={[styles.phone, framed && styles.phoneWeb]}>
-            {ready ? (
-              <AppNavigator />
-            ) : (
-              <View style={styles.boot}>
-                <BrandLogo size={112} />
-                <Text style={styles.bootTitle}>TOWERBELL</Text>
-                <Text style={styles.bootLead}>OWL TOWER · SCAN / BEACON</Text>
-                <ActivityIndicator color={c.sky} style={{ marginTop: 16 }} />
-                <Text style={styles.bootLoading}>boot sequence...</Text>
+        <StatusBar style='light' />
+        {desktop ? (
+          <View style={styles.desktopRow}>
+            <DesktopAside styles={styles} />
+            <View style={styles.deviceColumn}>
+              <Text style={styles.deviceLabel}>PHONE FRAME · USE THE APP INSIDE</Text>
+              <View style={[styles.phone, styles.phoneWeb, styles.phoneDesktop]}>
+                <SafeAreaView style={styles.safeFill} edges={['top']}>
+                  {appBody}
+                  <ToastHost />
+                </SafeAreaView>
               </View>
-            )}
-            <ToastHost />
+              <Text style={styles.deviceHint}>Mouse + scroll work. Tabs at the bottom.</Text>
+            </View>
           </View>
-        </SafeAreaView>
+        ) : (
+          <SafeAreaView style={[styles.safe, framed && styles.safeFramed]} edges={['top']}>
+            {framed ? <Text style={styles.deviceLabel}>TOWERBELL DEMO</Text> : null}
+            <View style={[styles.phone, framed && styles.phoneWeb]}>
+              {appBody}
+              <ToastHost />
+            </View>
+          </SafeAreaView>
+        )}
       </View>
     </SafeAreaProvider>
   )
 }
 
-function makeStyles(c) {
+function DesktopAside({ styles }) {
+  return (
+    <View style={styles.aside} accessibilityRole='complementary'>
+      <BrandLogo size={72} />
+      <Text style={styles.asideBrand}>TOWERBELL</Text>
+      <Text style={styles.asideTeam}>ZERO-KNOLAGE · WEB DEMO</Text>
+      <Text style={styles.asideLead}>
+        This is the Expo phone UI in a desktop frame. Same scan / beacon contract as the Pear CLI —
+        mock swarm on web.
+      </Text>
+
+      <View style={styles.asideCard}>
+        <Text style={styles.asideCardTitle}>1 · SCAN</Text>
+        <Text style={styles.asideCardBody}>
+          Traveler mode. Wait a few seconds for Café Rivadavia and nearby shops.
+        </Text>
+      </View>
+      <View style={styles.asideCard}>
+        <Text style={styles.asideCardTitle}>2 · BEACON</Text>
+        <Text style={styles.asideCardBody}>
+          Shop mode. Gear → Switch identity → Shop, then start broadcasting.
+        </Text>
+      </View>
+
+      <Pressable
+        style={styles.asideBtn}
+        onPress={() => Linking.openURL('/')}
+        accessibilityRole='link'
+        accessibilityLabel='Back to landing'
+      >
+        <Text style={styles.asideBtnText}>← BACK TO LANDING</Text>
+      </Pressable>
+      <Text style={styles.asideFoot}>Real P2P: pear install (not this page).</Text>
+    </View>
+  )
+}
+
+function makeStyles(c, height) {
+  const frameH = Math.min(Math.max(height - 96, 560), 820)
   return StyleSheet.create({
-    shell: { flex: 1, backgroundColor: c.deep },
-    shellWeb: { alignItems: 'center', backgroundColor: c.shell },
-    safe: { flex: 1, backgroundColor: c.deep, width: '100%', maxWidth: 480 },
+    shell: {
+      flex: 1,
+      backgroundColor: c.deep,
+      ...(Platform.OS === 'web' ? { height: '100%' } : null)
+    },
+    shellWeb: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: c.shell,
+      backgroundImage:
+        Platform.OS === 'web'
+          ? 'linear-gradient(rgba(28,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(28,255,255,0.05) 1px, transparent 1px)'
+          : undefined,
+      backgroundSize: Platform.OS === 'web' ? '32px 32px, 32px 32px' : undefined
+    },
+    safe: { flex: 1, backgroundColor: c.deep, width: '100%' },
+    safeFramed: { maxWidth: 480, alignItems: 'center', paddingVertical: 16 },
+    safeFill: { flex: 1, backgroundColor: c.bg, width: '100%' },
     phone: { flex: 1, backgroundColor: c.bg, width: '100%' },
     phoneWeb: {
       maxWidth: 430,
       width: '100%',
       alignSelf: 'center',
       overflow: 'hidden',
-      borderLeftWidth: 2,
-      borderRightWidth: 2,
-      borderColor: c.border
+      borderWidth: 2,
+      borderColor: c.border,
+      backgroundColor: c.bg
+    },
+    phoneDesktop: {
+      height: frameH,
+      maxHeight: frameH,
+      flexGrow: 0,
+      flexShrink: 0,
+      borderWidth: 3,
+      boxShadow: Platform.OS === 'web' ? '8px 8px 0 rgba(92,225,255,0.22)' : undefined
+    },
+    desktopRow: {
+      flex: 1,
+      width: '100%',
+      maxWidth: 1100,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 40,
+      paddingHorizontal: 32,
+      paddingVertical: 24
+    },
+    deviceColumn: { alignItems: 'center', gap: 10 },
+    deviceLabel: {
+      color: c.gold,
+      fontFamily: pixelTitle,
+      fontSize: 8,
+      letterSpacing: 1.5,
+      marginBottom: 4,
+      textAlign: 'center'
+    },
+    deviceHint: {
+      color: c.muted,
+      fontFamily: pixelBody,
+      fontSize: 16,
+      textAlign: 'center'
+    },
+    aside: {
+      width: 320,
+      maxWidth: '100%',
+      gap: 12,
+      padding: 8
+    },
+    asideBrand: {
+      color: c.sky,
+      fontFamily: pixelTitle,
+      fontSize: 12,
+      letterSpacing: 2,
+      marginTop: 8
+    },
+    asideTeam: {
+      color: c.gold,
+      fontFamily: pixelBody,
+      fontSize: 18,
+      letterSpacing: 2
+    },
+    asideLead: {
+      color: c.ink,
+      fontFamily: pixelBody,
+      fontSize: 18,
+      lineHeight: 22,
+      marginTop: 4,
+      marginBottom: 8
+    },
+    asideCard: {
+      borderWidth: 2,
+      borderColor: c.border,
+      backgroundColor: c.panel,
+      padding: 12,
+      gap: 6
+    },
+    asideCardTitle: {
+      color: c.sky,
+      fontFamily: pixelTitle,
+      fontSize: 9,
+      letterSpacing: 1
+    },
+    asideCardBody: {
+      color: c.muted,
+      fontFamily: pixelBody,
+      fontSize: 17,
+      lineHeight: 20
+    },
+    asideBtn: {
+      marginTop: 8,
+      borderWidth: 2,
+      borderColor: c.sky,
+      backgroundColor: c.sky,
+      paddingVertical: 12,
+      paddingHorizontal: 14,
+      alignItems: 'center',
+      cursor: 'pointer'
+    },
+    asideBtnText: {
+      color: c.deep,
+      fontFamily: pixelTitle,
+      fontSize: 9,
+      letterSpacing: 1
+    },
+    asideFoot: {
+      color: c.muted,
+      fontFamily: pixelBody,
+      fontSize: 15,
+      marginTop: 4
     },
     boot: {
       flex: 1,

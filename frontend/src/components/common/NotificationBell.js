@@ -1,11 +1,15 @@
 import { useNavigation } from '@react-navigation/native'
+import { useMemo } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { useAppStore } from '../../store/app.store'
-import { colors } from '../../utils/colors'
+import { pixelTitle } from '../../utils/pixel'
+import { useThemeColors } from '../../utils/useThemeColors'
 import { Icon } from './Icon'
 
 export function NotificationBell() {
   const navigation = useNavigation()
+  const c = useThemeColors()
+  const styles = useMemo(() => makeStyles(c), [c])
   const unread = useAppStore((s) => (s.db?.notifications || []).filter((n) => !n.read).length)
 
   return (
@@ -15,7 +19,7 @@ export function NotificationBell() {
       style={styles.btn}
       accessibilityLabel='Notifications'
     >
-      <Icon name='bell' size={18} color={colors.white} />
+      <Icon name='bell' size={18} color={c.headerText} />
       {unread > 0 ? (
         <View style={styles.badge}>
           <Text style={styles.badgeText}>{unread > 9 ? '9+' : unread}</Text>
@@ -25,26 +29,37 @@ export function NotificationBell() {
   )
 }
 
-const styles = StyleSheet.create({
-  btn: {
-    width: 34,
-    height: 34,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.14)'
-  },
-  badge: {
-    position: 'absolute',
-    top: 2,
-    right: 2,
-    minWidth: 14,
-    height: 14,
-    borderRadius: 7,
-    backgroundColor: '#F0A43A',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 3
-  },
-  badgeText: { color: colors.deep, fontSize: 9, fontWeight: '800' }
-})
+function makeStyles(c) {
+  return StyleSheet.create({
+    btn: {
+      width: 34,
+      height: 34,
+      borderRadius: 0,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 2,
+      borderColor: c.border,
+      backgroundColor: c.panel,
+      cursor: 'pointer'
+    },
+    badge: {
+      position: 'absolute',
+      top: -4,
+      right: -4,
+      minWidth: 16,
+      height: 16,
+      borderRadius: 0,
+      borderWidth: 2,
+      borderColor: c.deep,
+      backgroundColor: c.gold,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingHorizontal: 2
+    },
+    badgeText: {
+      color: c.onAccent || c.deep,
+      fontSize: 8,
+      fontFamily: pixelTitle
+    }
+  })
+}

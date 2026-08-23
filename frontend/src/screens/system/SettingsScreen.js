@@ -5,6 +5,7 @@ import { HeaderBar } from '../../components/common/HeaderBar'
 import { Icon } from '../../components/common/Icon'
 import { useAppStore } from '../../store/app.store'
 import { can, ROLE_LABELS } from '../../utils/acl'
+import { pixelBody, pixelTitle } from '../../utils/pixel'
 import { useThemeColors } from '../../utils/useThemeColors'
 
 const roles = ['visitor', 'merchant', 'admin']
@@ -18,27 +19,23 @@ export function SettingsScreen() {
   const setDarkMode = useAppStore((s) => s.setDarkMode)
   const reset = useAppStore((s) => s.reset)
   const role = db?.user?.role || 'visitor'
-  const darkMode = !!db?.darkMode
+  const darkMode = db?.darkMode !== false
 
   return (
     <View style={styles.screen}>
-      <HeaderBar
-        title='Settings'
-        subtitle={`Active identity: ${ROLE_LABELS[role]}`}
-        showBell={false}
-      />
+      <HeaderBar title='SETTINGS' subtitle={`Active: ${ROLE_LABELS[role]}`} showBell={false} />
       <ScrollView contentContainerStyle={styles.body}>
         <Pressable style={styles.back} onPress={() => navigation.goBack()}>
           <Icon name='arrow-left' size={16} color={c.ink} />
-          <Text style={styles.backText}>Back</Text>
+          <Text style={styles.backText}>BACK</Text>
         </Pressable>
 
         <Text style={styles.section}>APPEARANCE</Text>
         <Pressable style={styles.nav} onPress={() => setDarkMode(!darkMode)}>
           <Icon name={darkMode ? 'moon' : 'sun'} size={18} color={c.sky} />
           <View style={{ flex: 1 }}>
-            <Text style={styles.navText}>{darkMode ? 'Dark mode' : 'Light mode'}</Text>
-            <Text style={styles.hint}>Tap to switch. The map theme updates too.</Text>
+            <Text style={styles.navText}>{darkMode ? 'DARK MODE' : 'LIGHT MODE'}</Text>
+            <Text style={styles.hint}>Tap to switch palette. Map tiles follow too.</Text>
           </View>
           <View style={[styles.switch, darkMode && styles.switchOn]}>
             <View style={[styles.knob, darkMode && styles.knobOn]} />
@@ -53,10 +50,10 @@ export function SettingsScreen() {
             style={[styles.row, role === item && styles.rowOn]}
             onPress={() => setRole(item)}
           >
-            <Text style={[styles.rowText, role === item && { color: c.headerText }]}>
-              {ROLE_LABELS[item]}
+            <Text style={[styles.rowText, role === item && styles.rowTextOn]}>
+              {ROLE_LABELS[item].toUpperCase()}
             </Text>
-            {role === item ? <Icon name='check-circle' size={18} color={c.headerText} /> : null}
+            {role === item ? <Icon name='check-circle' size={18} color={c.sky} /> : null}
           </Pressable>
         ))}
 
@@ -88,7 +85,7 @@ export function SettingsScreen() {
 
         <Pressable style={styles.reset} onPress={reset}>
           <Icon name='trash' size={16} color={c.rose} />
-          <Text style={styles.resetText}>Reset</Text>
+          <Text style={styles.resetText}>RESET</Text>
         </Pressable>
       </ScrollView>
     </View>
@@ -99,7 +96,7 @@ function NavRow({ icon, label, onPress, c, styles }) {
   return (
     <Pressable style={styles.nav} onPress={onPress}>
       <Icon name={icon} size={18} color={c.sky} />
-      <Text style={styles.navText}>{label}</Text>
+      <Text style={styles.navText}>{label.toUpperCase()}</Text>
     </Pressable>
   )
 }
@@ -108,56 +105,76 @@ function makeStyles(c) {
   return StyleSheet.create({
     screen: { flex: 1, backgroundColor: c.bg },
     body: { padding: 16, gap: 10, paddingBottom: 36 },
-    back: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-    backText: { color: c.ink, fontWeight: '700' },
-    section: { color: c.muted, fontSize: 11, fontWeight: '800', letterSpacing: 1, marginTop: 8 },
-    hint: { color: c.muted, fontSize: 12, lineHeight: 17 },
+    back: { flexDirection: 'row', alignItems: 'center', gap: 8, cursor: 'pointer' },
+    backText: { color: c.ink, fontFamily: pixelTitle, fontSize: 9, letterSpacing: 1 },
+    section: {
+      color: c.gold,
+      fontSize: 9,
+      fontFamily: pixelTitle,
+      letterSpacing: 1,
+      marginTop: 8
+    },
+    hint: { color: c.muted, fontSize: 16, lineHeight: 20, fontFamily: pixelBody },
     row: {
       backgroundColor: c.panel,
-      borderWidth: 1,
+      borderWidth: 2,
       borderColor: c.border,
-      borderRadius: 12,
+      borderRadius: 0,
       padding: 14,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignItems: 'center'
+      alignItems: 'center',
+      cursor: 'pointer'
     },
-    rowOn: { backgroundColor: c.header, borderColor: c.header },
-    rowText: { color: c.ink, fontWeight: '800' },
+    rowOn: {
+      backgroundColor: c.highlight,
+      borderColor: c.highlightBorder || c.sky
+    },
+    rowText: { color: c.ink, fontFamily: pixelTitle, fontSize: 9 },
+    rowTextOn: { color: c.sky },
     nav: {
       backgroundColor: c.panel,
-      borderWidth: 1,
+      borderWidth: 2,
       borderColor: c.border,
-      borderRadius: 12,
+      borderRadius: 0,
       padding: 14,
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 10
+      gap: 10,
+      cursor: 'pointer'
     },
-    navText: { color: c.ink, fontWeight: '700' },
+    navText: { color: c.ink, fontFamily: pixelTitle, fontSize: 8, letterSpacing: 0.4, flex: 1 },
     switch: {
-      width: 46,
-      height: 28,
-      borderRadius: 14,
-      backgroundColor: c.border,
-      padding: 3,
+      width: 44,
+      height: 24,
+      borderRadius: 0,
+      borderWidth: 2,
+      borderColor: c.border,
+      backgroundColor: c.panelAlt,
+      padding: 2,
       justifyContent: 'center'
     },
-    switchOn: { backgroundColor: c.sky },
-    knob: { width: 22, height: 22, borderRadius: 11, backgroundColor: c.panel },
-    knobOn: { alignSelf: 'flex-end', backgroundColor: '#fff' },
+    switchOn: { backgroundColor: c.sky, borderColor: c.sky },
+    knob: {
+      width: 16,
+      height: 16,
+      borderRadius: 0,
+      backgroundColor: c.muted
+    },
+    knobOn: { alignSelf: 'flex-end', backgroundColor: c.onAccent || c.deep },
     reset: {
       marginTop: 12,
-      borderWidth: 1,
+      borderWidth: 2,
       borderColor: c.rose,
-      borderRadius: 12,
+      borderRadius: 0,
       minHeight: 48,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       gap: 8,
-      backgroundColor: c.panel
+      backgroundColor: c.panel,
+      cursor: 'pointer'
     },
-    resetText: { color: c.rose, fontWeight: '800' }
+    resetText: { color: c.rose, fontFamily: pixelTitle, fontSize: 9, letterSpacing: 1 }
   })
 }

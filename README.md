@@ -82,6 +82,15 @@ Paste this into the form field “Explain what you built and how it works” (he
 
 - [docs/submit/what-we-built.txt](docs/submit/what-we-built.txt) — plain text for the **Details** field.
 
+## Releases
+
+Version history and how to cut a GitHub Release (separate from Pear OTA):
+
+- [CHANGELOG.md](CHANGELOG.md)
+- [docs/RELEASES.md](docs/RELEASES.md)
+
+Install for judges stays on Pear: `pear install` + keep `pear seed` running.
+
 ## Repo
 
 https://github.com/Zer0-Knowledge-Hack/tower-bell

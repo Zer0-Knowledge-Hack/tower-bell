@@ -79,6 +79,9 @@
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
+    "experiments": {
+      "baseUrl": "/demo"
+    },
     "plugins": [
       "expo-font",
       [

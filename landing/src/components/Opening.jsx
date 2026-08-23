@@ -1,4 +1,4 @@
-import { INSTALL_COMMAND, SHOPS } from '../data'
+import { DEMO_URL, INSTALL_COMMAND, SHOPS } from '../data'
 import { CopyCommand } from './CopyCommand'
 import { ScanDevice } from './ScanDevice'
 
@@ -17,6 +17,17 @@ export function Opening() {
           </p>
           <p className='mt-4 max-w-[36rem] text-[16px] text-mute'>
             A kiosco types its name and today’s deal. Anyone nearby sees it.
+          </p>
+          <div className='mt-8 flex flex-wrap items-center gap-3'>
+            <a href={DEMO_URL} className='btn-pixel'>
+              Try the demo
+            </a>
+            <a href='#install' className='btn-pixel is-ghost'>
+              Install CLI
+            </a>
+          </div>
+          <p className='mt-3 max-w-[36rem] font-mono text-[14px] text-mute'>
+            Demo = Expo phone UI (mock swarm). Real P2P = pear install below.
           </p>
           <div className='mt-8 max-w-[36rem] min-w-0'>
             <CopyCommand command={INSTALL_COMMAND} />

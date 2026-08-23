@@ -38,7 +38,8 @@ Without a seeder, `pear install` cannot fetch the app. OTA: bump `version` in `p
 
 ## Phone UI demo (Expo)
 
-Record this in a browser (phone frame) or Expo Go. Mock peers appear in a few seconds.
+Judges / visitors: open the landing and click **Try the demo** → `/demo/`
+(Expo web, mock swarm). Or run live Metro locally:
 
 ```powershell
 cd frontend
@@ -47,6 +48,13 @@ pnpm start -- --web --port 8081
 ```
 
 Open **http://localhost:8081**
+
+Rebuild the static demo into the landing:
+
+```powershell
+cd frontend
+pnpm run export:web
+```
 
 Shot list (~90 seconds):
 

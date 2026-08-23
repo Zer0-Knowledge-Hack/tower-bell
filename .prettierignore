@@ -8,3 +8,5 @@ deployment
 *.jpg
 *.png
 *.webp
+landing/public/demo
+

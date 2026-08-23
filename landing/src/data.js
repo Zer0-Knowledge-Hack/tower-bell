@@ -4,6 +4,9 @@ export const INSTALL_COMMAND = `pear install ${PEAR_LINK}`
 
 export const REPO_URL = 'https://github.com/Zer0-Knowledge-Hack/tower-bell'
 
+/** Expo / React Native web demo (static export under landing/public/demo). */
+export const DEMO_URL = '/demo/'
+
 export const SHOPS = [
   {
     id: 'rivadavia',

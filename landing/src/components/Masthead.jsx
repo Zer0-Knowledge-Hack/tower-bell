@@ -1,6 +1,8 @@
+import { DEMO_URL } from '../data'
 import { Logo } from './Logo'
 
 const links = [
+  { href: DEMO_URL, label: 'Demo' },
   { href: '#how', label: 'How it works' },
   { href: '#beacon', label: 'For shops' },
   { href: '#scan', label: 'For walkers' },
@@ -21,11 +23,18 @@ export function Masthead() {
             </span>
           </span>
         </a>
-        <nav aria-label='Sections' className='min-w-0 md:max-w-[28rem]'>
+        <nav aria-label='Sections' className='min-w-0 md:max-w-[32rem]'>
           <ul className='flex flex-wrap gap-x-4 gap-y-1.5 text-[12px] text-mute sm:text-[13px] md:justify-end'>
             {links.map((link) => (
               <li key={link.href}>
-                <a href={link.href} className='underline-offset-4 hover:text-navy hover:underline'>
+                <a
+                  href={link.href}
+                  className={
+                    link.href === DEMO_URL
+                      ? 'font-display text-[9px] tracking-[0.12em] text-sky uppercase underline-offset-4 hover:underline'
+                      : 'underline-offset-4 hover:text-navy hover:underline'
+                  }
+                >
                   {link.label}
                 </a>
               </li>

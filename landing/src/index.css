@@ -268,6 +268,42 @@
     background: rgba(92, 225, 255, 0.12);
   }
 
+  .btn-pixel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 2px solid var(--color-sky);
+    background: var(--color-sky);
+    color: #020617;
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 12px 16px;
+    line-height: 1.4;
+    box-shadow: 4px 4px 0 rgba(92, 225, 255, 0.25);
+  }
+
+  .btn-pixel:hover {
+    background: var(--color-amber);
+    border-color: var(--color-amber);
+    color: #020617;
+  }
+
+  .btn-pixel.is-ghost {
+    background: transparent;
+    color: var(--color-sky);
+    box-shadow: 4px 4px 0 rgba(92, 225, 255, 0.12);
+  }
+
+  .btn-pixel.is-ghost:hover {
+    background: rgba(92, 225, 255, 0.12);
+    border-color: var(--color-sky);
+    color: var(--color-sky);
+  }
+
   .peer {
     border-left: 3px solid var(--color-sky);
     padding: 10px 0 10px 12px;

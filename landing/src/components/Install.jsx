@@ -1,4 +1,4 @@
-import { INSTALL_COMMAND } from '../data'
+import { DEMO_URL, INSTALL_COMMAND } from '../data'
 import { CopyCommand } from './CopyCommand'
 
 export function Install() {
@@ -13,7 +13,14 @@ export function Install() {
             </h2>
             <p className='mt-5 max-w-[28rem] text-[17px]'>
               One command puts it on your machine. Then you choose shop or walker. Works on Mac,
-              Windows, and Linux. There is also a phone app.
+              Windows, and Linux. Want the phone UI first?{' '}
+              <a
+                href={DEMO_URL}
+                className='text-navy underline decoration-sky/70 underline-offset-4 hover:decoration-navy'
+              >
+                Open the web demo
+              </a>
+              .
             </p>
           </div>
           <p className='font-mono text-[13px] text-mute lg:text-right'>

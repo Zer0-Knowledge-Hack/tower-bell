@@ -1,69 +1,71 @@
-import { useNavigation } from '@react-navigation/native';
-import { useEffect, useMemo, useState } from 'react';
-import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { CATEGORY_META } from '../../backend';
-import { HeaderBar } from '../components/common/HeaderBar';
-import { Icon } from '../components/common/Icon';
-import { LoadingBlock } from '../components/common/LoadingBlock';
-import { NetworkStatus } from '../components/common/NetworkStatus';
-import { RoleGuard } from '../components/common/RoleGuard';
-import { LocalMap } from '../components/discover/LocalMap';
-import { MerchantCard } from '../components/discover/MerchantCard';
-import { MerchantDetailModal } from '../components/discover/MerchantDetailModal';
-import { RadarView } from '../components/discover/RadarView';
-import { useAppStore, visibleMerchants } from '../store/app.store';
-import { useThemeColors } from '../utils/useThemeColors';
+import { useNavigation } from '@react-navigation/native'
+import { useEffect, useMemo, useState } from 'react'
+import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { CATEGORY_META } from '../../backend'
+import { HeaderBar } from '../components/common/HeaderBar'
+import { Icon } from '../components/common/Icon'
+import { LoadingBlock } from '../components/common/LoadingBlock'
+import { NetworkStatus } from '../components/common/NetworkStatus'
+import { RoleGuard } from '../components/common/RoleGuard'
+import { LocalMap } from '../components/discover/LocalMap'
+import { MerchantCard } from '../components/discover/MerchantCard'
+import { MerchantDetailModal } from '../components/discover/MerchantDetailModal'
+import { RadarView } from '../components/discover/RadarView'
+import { useAppStore, visibleMerchants } from '../store/app.store'
+import { useThemeColors } from '../utils/useThemeColors'
 
-const filters = ['All', 'cafeteria', 'restaurant', 'kiosk', 'pharmacy', 'bookstore'];
+const filters = ['All', 'cafeteria', 'restaurant', 'kiosk', 'pharmacy', 'bookstore']
 const views = [
   { id: 'map', label: 'Map', icon: 'map' },
   { id: 'radar', label: 'Radar', icon: 'radar' },
-  { id: 'list', label: 'List', icon: 'list' },
-];
+  { id: 'list', label: 'List', icon: 'list' }
+]
 
 export function DiscoverScreen() {
-  const navigation = useNavigation();
-  const c = useThemeColors();
-  const ready = useAppStore((s) => s.ready);
-  const db = useAppStore((s) => s.db);
-  const peers = useAppStore((s) => s.peers);
-  const p2pStatus = useAppStore((s) => s.p2pStatus);
-  const filter = useAppStore((s) => s.filter);
-  const selected = useAppStore((s) => s.selectedMerchant);
-  const startScan = useAppStore((s) => s.startScan);
-  const setFilter = useAppStore((s) => s.setFilter);
-  const setDiscoverView = useAppStore((s) => s.setDiscoverView);
-  const selectMerchant = useAppStore((s) => s.selectMerchant);
-  const connectPeer = useAppStore((s) => s.connectPeer);
-  const saveToWallet = useAppStore((s) => s.saveToWallet);
-  const [bootLoading, setBootLoading] = useState(true);
+  const navigation = useNavigation()
+  const c = useThemeColors()
+  const ready = useAppStore((s) => s.ready)
+  const db = useAppStore((s) => s.db)
+  const peers = useAppStore((s) => s.peers)
+  const p2pStatus = useAppStore((s) => s.p2pStatus)
+  const filter = useAppStore((s) => s.filter)
+  const selected = useAppStore((s) => s.selectedMerchant)
+  const startScan = useAppStore((s) => s.startScan)
+  const setFilter = useAppStore((s) => s.setFilter)
+  const setDiscoverView = useAppStore((s) => s.setDiscoverView)
+  const selectMerchant = useAppStore((s) => s.selectMerchant)
+  const connectPeer = useAppStore((s) => s.connectPeer)
+  const saveToWallet = useAppStore((s) => s.saveToWallet)
+  const [bootLoading, setBootLoading] = useState(true)
 
-  const view = db?.discoverView || 'map';
-
-  useEffect(() => {
-    if (ready) startScan();
-  }, [ready, startScan]);
+  const view = db?.discoverView || 'map'
 
   useEffect(() => {
-    const t = setTimeout(() => setBootLoading(false), 900);
-    return () => clearTimeout(t);
-  }, []);
+    if (ready) startScan()
+  }, [ready, startScan])
 
-  const merchants = useMemo(() => visibleMerchants(), [peers, db, filter]);
-  const scanning = p2pStatus === 'scanning';
-  const live = p2pStatus !== 'idle';
-  const styles = useMemo(() => makeStyles(c), [c]);
+  useEffect(() => {
+    const t = setTimeout(() => setBootLoading(false), 900)
+    return () => clearTimeout(t)
+  }, [])
+
+  const merchants = useMemo(() => visibleMerchants(), [peers, db, filter])
+  const scanning = p2pStatus === 'scanning'
+  const live = p2pStatus !== 'idle'
+  const styles = useMemo(() => makeStyles(c), [c])
 
   return (
-    <RoleGuard feature="discover">
+    <RoleGuard feature='discover'>
       <View style={styles.screen}>
         <HeaderBar
-          title="Nearby"
-          subtitle="Free local map · no Google Maps"
+          title='Nearby'
+          subtitle='Free local map · no Google Maps'
           onSettings={() => navigation.navigate('Settings')}
           right={
             <View style={styles.live}>
-              <View style={[styles.ping, { backgroundColor: live ? c.sky : 'rgba(255,255,255,0.45)' }]} />
+              <View
+                style={[styles.ping, { backgroundColor: live ? c.sky : 'rgba(255,255,255,0.45)' }]}
+              />
               <Text style={styles.liveText}>
                 {live ? 'LIVE' : 'PAUSED'} · {merchants.length}
               </Text>
@@ -72,13 +74,15 @@ export function DiscoverScreen() {
         />
         <ScrollView
           contentContainerStyle={styles.body}
-          refreshControl={<RefreshControl refreshing={scanning} onRefresh={startScan} tintColor={c.sky} />}
+          refreshControl={
+            <RefreshControl refreshing={scanning} onRefresh={startScan} tintColor={c.sky} />
+          }
         >
           <NetworkStatus network={db?.network} p2pStatus={p2pStatus} peers={merchants.length} />
 
           <View style={styles.viewRow}>
             {views.map((item) => {
-              const on = view === item.id;
+              const on = view === item.id
               return (
                 <Pressable
                   key={item.id}
@@ -88,18 +92,25 @@ export function DiscoverScreen() {
                   <Icon name={item.icon} size={14} color={on ? c.headerText : c.muted} />
                   <Text style={[styles.viewText, on && styles.viewTextOn]}>{item.label}</Text>
                 </Pressable>
-              );
+              )
             })}
           </View>
 
           {bootLoading ? (
-            <LoadingBlock label="Preparing local discovery..." />
+            <LoadingBlock label='Preparing local discovery...' />
           ) : (
             <>
               {view === 'map' ? (
-                <LocalMap merchants={merchants} selectedId={selected?.id} onSelect={selectMerchant} height={340} />
+                <LocalMap
+                  merchants={merchants}
+                  selectedId={selected?.id}
+                  onSelect={selectMerchant}
+                  height={340}
+                />
               ) : null}
-              {view === 'radar' ? <RadarView merchants={merchants} onSelect={selectMerchant} /> : null}
+              {view === 'radar' ? (
+                <RadarView merchants={merchants} onSelect={selectMerchant} />
+              ) : null}
 
               <Text style={styles.hint}>
                 {view === 'map'
@@ -107,7 +118,11 @@ export function DiscoverScreen() {
                   : 'Tap a point or a card to see the message.'}
               </Text>
 
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filters}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.filters}
+              >
                 {filters.map((item) => (
                   <Pressable
                     key={item}
@@ -122,7 +137,7 @@ export function DiscoverScreen() {
               </ScrollView>
 
               {scanning && !merchants.length ? (
-                <LoadingBlock compact label="Searching for nearby beacons..." />
+                <LoadingBlock compact label='Searching for nearby beacons...' />
               ) : !merchants.length ? (
                 <View style={styles.emptyBox}>
                   <Text style={styles.emptyTitle}>Nobody is broadcasting yet</Text>
@@ -146,7 +161,7 @@ export function DiscoverScreen() {
         />
       </View>
     </RoleGuard>
-  );
+  )
 }
 
 function makeStyles(c) {
@@ -167,7 +182,7 @@ function makeStyles(c) {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      gap: 6,
+      gap: 6
     },
     viewBtnOn: { backgroundColor: c.header, borderColor: c.header },
     viewText: { color: c.muted, fontWeight: '800', fontSize: 12 },
@@ -180,7 +195,7 @@ function makeStyles(c) {
       backgroundColor: c.panel,
       borderRadius: 999,
       paddingHorizontal: 12,
-      paddingVertical: 8,
+      paddingVertical: 8
     },
     chipOn: { borderColor: c.sky, backgroundColor: c.greenDark },
     chipText: { color: c.muted, fontWeight: '700', fontSize: 12 },
@@ -190,9 +205,9 @@ function makeStyles(c) {
       borderRadius: 14,
       padding: 18,
       borderWidth: 1,
-      borderColor: c.border,
+      borderColor: c.border
     },
     emptyTitle: { color: c.navy, fontWeight: '800', textAlign: 'center', marginBottom: 6 },
-    empty: { color: c.muted, textAlign: 'center', lineHeight: 20 },
-  });
+    empty: { color: c.muted, textAlign: 'center', lineHeight: 20 }
+  })
 }

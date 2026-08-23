@@ -1,7 +1,9 @@
 # TOWERBELL — Sistema de Trabajo
+
 ### Hackathon Pear Track (Tether) · Buenos Aires
+
 **Ventana oficial:** Sábado 12:00 ARG → Domingo 12:00 ARG · **Judging:** Domingo 13:00 ARG
-**Ventana real de Towerbell:** Sábado 12:00 → Sábado 23:30. *El domingo es colchón, no jornada.*
+**Ventana real de Towerbell:** Sábado 12:00 → Sábado 23:30. _El domingo es colchón, no jornada._
 
 ---
 
@@ -11,6 +13,7 @@
 **Una línea:** Descubrimiento hiperlocal de comercios sin internet — los locales transmiten su información por Bluetooth/WiFi y los transeúntes la reciben en su terminal, peer-to-peer, sin servidores ni Google Maps.
 
 **El pitch de 30 segundos para el juez:**
+
 > "Un local prende Towerbell y empieza a anunciar: qué vende, qué promo tiene hoy, si está abierto. Cualquier persona caminando con Towerbell instalado ve ese local aparecer en su panel cuando pasa cerca. Sin internet, sin cuenta, sin base de datos central. Apagás el wifi y sigue funcionando."
 
 **Por qué gana:** cumple el requisito duro (`pear install` + OTA), toma la dirección bonus (BLE-Swarm), y tiene una demo que se ve en vivo apagando el wifi.
@@ -28,15 +31,15 @@
 
 Esto no es opinión, es aritmética: si algo se rompe a las 10:00 del domingo, no hay margen. Si se rompe a las 22:00 del sábado, hay toda la noche. **Terminar temprano no es ambición, es gestión de riesgo.**
 
-| Prioridad | Qué | Cuándo debe estar listo |
-|---|---|---|
-| **P0** | Deploy con `pear stage/seed/release` funcionando | **Hoy 17:00** |
-| **P0** | OTA demostrable de punta a punta | **Hoy 19:00** |
-| **P1** | Descubrimiento de peers + sync de datos | Hoy 20:30 |
-| **P2** | TUI (panel del viajero + panel del local) | Hoy 22:00 |
-| **P3** | BLE puro sin internet | Hoy 20:00 (si no anda, se descarta ahí mismo) |
-| **P0** | Video demo + README + link seeded | **Hoy 23:30** |
-| — | Domingo | **Solo colchón y seeding. Cero código nuevo.** |
+| Prioridad | Qué                                              | Cuándo debe estar listo                        |
+| --------- | ------------------------------------------------ | ---------------------------------------------- |
+| **P0**    | Deploy con `pear stage/seed/release` funcionando | **Hoy 17:00**                                  |
+| **P0**    | OTA demostrable de punta a punta                 | **Hoy 19:00**                                  |
+| **P1**    | Descubrimiento de peers + sync de datos          | Hoy 20:30                                      |
+| **P2**    | TUI (panel del viajero + panel del local)        | Hoy 22:00                                      |
+| **P3**    | BLE puro sin internet                            | Hoy 20:00 (si no anda, se descarta ahí mismo)  |
+| **P0**    | Video demo + README + link seeded                | **Hoy 23:30**                                  |
+| —         | Domingo                                          | **Solo colchón y seeding. Cero código nuevo.** |
 
 ---
 
@@ -61,13 +64,13 @@ El proyecto se parte en **dos equipos que trabajan en paralelo desde las 13:30**
 
 Todo lo que pasa por debajo de la pantalla.
 
-| Área | Qué incluye |
-|---|---|
-| **Pear Ops** | `pear touch`, `stage`, `seed`, `release`, binarios con `pnpm run make`, mantener el link vivo. Es el único que toca el pipeline de deploy. |
-| **OTA** | Integración de `pear-runtime` en el worker thread, verificar que el update llega a una copia instalada. |
-| **Descubrimiento** | Hyperswarm / mDNS / BLE detrás de una misma interfaz. |
-| **Datos** | Hyperbee, replicación entre peers, esquema del registro de local. |
-| **Modo beacon** | El proceso del comercio que anuncia y sirve sus datos. |
+| Área               | Qué incluye                                                                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Pear Ops**       | `pear touch`, `stage`, `seed`, `release`, binarios con `pnpm run make`, mantener el link vivo. Es el único que toca el pipeline de deploy. |
+| **OTA**            | Integración de `pear-runtime` en el worker thread, verificar que el update llega a una copia instalada.                                    |
+| **Descubrimiento** | Hyperswarm / mDNS / BLE detrás de una misma interfaz.                                                                                      |
+| **Datos**          | Hyperbee, replicación entre peers, esquema del registro de local.                                                                          |
+| **Modo beacon**    | El proceso del comercio que anuncia y sirve sus datos.                                                                                     |
 
 **Entregable del backend:** un módulo que expone `descubrir()`, `publicar(registro)` y emite eventos cuando aparece o desaparece un peer. Nada de esto imprime en pantalla.
 
@@ -77,13 +80,13 @@ Todo lo que pasa por debajo de la pantalla.
 
 Todo lo que el usuario ve en la terminal.
 
-| Área | Qué incluye |
-|---|---|
-| **Panel del viajero** | Lista de locales cercanos, ordenados por señal. Estado de conexión. Qué modo de descubrimiento está activo. |
-| **Panel del comerciante** | Formulario para cargar nombre, categoría, mensaje del día. Indicador de "estás transmitiendo". |
-| **Estados vacíos** | "Buscando locales cerca…", "Ningún local cerca", "Sin conexión — modo BLE". **Estos son los que más se ven en el video.** |
-| **Router de comandos** | `towerbell scan` / `towerbell beacon` / `towerbell --help`. |
-| **Identidad visual** | Colores ANSI, banner, cómo se ve Towerbell. |
+| Área                      | Qué incluye                                                                                                               |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **Panel del viajero**     | Lista de locales cercanos, ordenados por señal. Estado de conexión. Qué modo de descubrimiento está activo.               |
+| **Panel del comerciante** | Formulario para cargar nombre, categoría, mensaje del día. Indicador de "estás transmitiendo".                            |
+| **Estados vacíos**        | "Buscando locales cerca…", "Ningún local cerca", "Sin conexión — modo BLE". **Estos son los que más se ven en el video.** |
+| **Router de comandos**    | `towerbell scan` / `towerbell beacon` / `towerbell --help`.                                                               |
+| **Identidad visual**      | Colores ANSI, banner, cómo se ve Towerbell.                                                                               |
 
 **Entregable del frontend:** un TUI que funciona **contra datos mock** desde el minuto uno y no se entera de si abajo hay BLE, mDNS o un JSON falso.
 
@@ -96,15 +99,15 @@ Esto es lo que permite que ambos equipos trabajen en paralelo. **Se define antes
 
 // Modo viajero
 const red = towerbell.escanear()
-red.on('local-encontrado', (registro) => {})   // ver esquema §4
+red.on('local-encontrado', (registro) => {}) // ver esquema §4
 red.on('local-perdido', (id) => {})
-red.on('estado', ({ modo, conectado }) => {})  // modo: 'dht' | 'mdns' | 'ble'
-red.listar()                                    // → [registro]
+red.on('estado', ({ modo, conectado }) => {}) // modo: 'dht' | 'mdns' | 'ble'
+red.listar() // → [registro]
 
 // Modo comercio
 const beacon = towerbell.transmitir(registro)
 beacon.actualizar(registro)
-beacon.on('visitante', ({ total }) => {})       // cuántos peers me leyeron
+beacon.on('visitante', ({ total }) => {}) // cuántos peers me leyeron
 beacon.detener()
 ```
 
@@ -114,8 +117,8 @@ Si el backend no entrega el mock a las 13:30, el frontend lo escribe él mismo e
 
 ### 3.4 Transversal
 
-| Rol | Owner | Responsabilidad |
-|---|---|---|
+| Rol             | Owner | Responsabilidad                                                                                           |
+| --------------- | ----- | --------------------------------------------------------------------------------------------------------- |
 | **Demo & Docs** | _____ | README, guión del video, grabación, submission. **Empieza a las 15:00.** Puede ser el mismo que frontend. |
 
 **Regla:** Pear Ops (backend) nunca se bloquea. El deploy tiene que poder hacerse aunque el TUI esté a medio terminar — por eso el HITO 1 se valida con la vertical slice fea, no con la versión linda.
@@ -215,19 +218,19 @@ Se implementa como una interfaz común con tres backends intercambiables. Se ent
 
 Dos carriles en paralelo. **Backend** y **Frontend** avanzan sin bloquearse gracias al contrato de §3.3. Los 🚩 hitos son puntos de sincronización obligatorios: ahí para todo el mundo.
 
-| Hora | 🔧 BACKEND | 🎨 FRONTEND |
-|---|---|---|
-| **12:00–13:00** | *Setup conjunto* — Pear CLI, clone, `.npmrc` con `node-linker=hoisted` **antes** del primer `pnpm install`, `pear touch`, link en `package.json`, `pnpm start` andando en todas las máquinas | *Setup conjunto* — igual, más elegir librería de TUI y validar que corre en Bare (no todo lo de Node anda) |
-| **13:00–13:30** | 🚩 **CONTRATO** — se congela la interfaz de §3.3 y el esquema de datos. Los dos owners lo firman. Media hora, ni un minuto más. | |
-| **13:30–15:00** | Vertical slice: beacon que anuncia JSON hardcodeado + scanner que lo lista. Feo, sin Hyperbee. **Entregar `backend/mock.js` a las 13:45.** | Router de comandos (`scan`/`beacon`). Esqueleto del panel del viajero **contra el mock**. Banner e identidad. |
-| **15:00–17:00** | 🚩 **HITO 1: DEPLOY.** `pear stage` + `seed` + `release`. Alguien de otro equipo instala y le funciona. Valida el bundle con pnpm. | Panel del viajero funcional: lista, orden por señal, estados vacíos. Sigue sobre el mock. |
-| **17:00–19:00** | 🚩 **HITO 2: OTA.** Se publica un cambio y se verifica que llega solo a una copia instalada. **Se graba en el momento.** Ya somos entregables. | Panel del comerciante: formulario de carga, indicador de "transmitiendo". |
-| **19:00–19:30** | 🚩 **CORTE + COMIDA.** Retro de 15 min. ¿Qué se recorta? ¿El frontend ya puede enchufarse al backend real? | |
-| **19:30–20:30** | Hyperbee reemplaza el JSON. Replicación real entre dos máquinas. En paralelo: BLE — **20:00 es la hora de corte.** | 🚩 **INTEGRACIÓN.** Se cambia el import de `mock.js` a `backend/index.js`. Acá aparecen los bugs reales — es el bloque más peligroso del día. |
-| **20:30–22:00** | Soporte a la integración. Fix de lo que rompió. **Cero features nuevas.** | Pulido visual con datos reales. Se prioriza lo que se ve en el video sobre lo que tiene features. |
-| **22:00–22:30** | 🔒 **CONGELAMIENTO.** Binarios con `pnpm run make`. Prueba en máquina limpia. Último `pear stage/release`. | 🔒 Congelado. Pasa a apoyar el video. |
-| **22:30–23:30** | Verificar que el link instala desde una máquina virgen. | Video grabado y subido. README. Repo público. **Formulario enviado.** |
-| **23:30–00:00** | 🚩 **VERIFICACIÓN CRUZADA.** Dos personas distintas repiten la instalación desde cero. Se designa máquina de seeding y su respaldo. | |
+| Hora            | 🔧 BACKEND                                                                                                                                                                                   | 🎨 FRONTEND                                                                                                                                   |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **12:00–13:00** | _Setup conjunto_ — Pear CLI, clone, `.npmrc` con `node-linker=hoisted` **antes** del primer `pnpm install`, `pear touch`, link en `package.json`, `pnpm start` andando en todas las máquinas | _Setup conjunto_ — igual, más elegir librería de TUI y validar que corre en Bare (no todo lo de Node anda)                                    |
+| **13:00–13:30** | 🚩 **CONTRATO** — se congela la interfaz de §3.3 y el esquema de datos. Los dos owners lo firman. Media hora, ni un minuto más.                                                              |                                                                                                                                               |
+| **13:30–15:00** | Vertical slice: beacon que anuncia JSON hardcodeado + scanner que lo lista. Feo, sin Hyperbee. **Entregar `backend/mock.js` a las 13:45.**                                                   | Router de comandos (`scan`/`beacon`). Esqueleto del panel del viajero **contra el mock**. Banner e identidad.                                 |
+| **15:00–17:00** | 🚩 **HITO 1: DEPLOY.** `pear stage` + `seed` + `release`. Alguien de otro equipo instala y le funciona. Valida el bundle con pnpm.                                                           | Panel del viajero funcional: lista, orden por señal, estados vacíos. Sigue sobre el mock.                                                     |
+| **17:00–19:00** | 🚩 **HITO 2: OTA.** Se publica un cambio y se verifica que llega solo a una copia instalada. **Se graba en el momento.** Ya somos entregables.                                               | Panel del comerciante: formulario de carga, indicador de "transmitiendo".                                                                     |
+| **19:00–19:30** | 🚩 **CORTE + COMIDA.** Retro de 15 min. ¿Qué se recorta? ¿El frontend ya puede enchufarse al backend real?                                                                                   |                                                                                                                                               |
+| **19:30–20:30** | Hyperbee reemplaza el JSON. Replicación real entre dos máquinas. En paralelo: BLE — **20:00 es la hora de corte.**                                                                           | 🚩 **INTEGRACIÓN.** Se cambia el import de `mock.js` a `backend/index.js`. Acá aparecen los bugs reales — es el bloque más peligroso del día. |
+| **20:30–22:00** | Soporte a la integración. Fix de lo que rompió. **Cero features nuevas.**                                                                                                                    | Pulido visual con datos reales. Se prioriza lo que se ve en el video sobre lo que tiene features.                                             |
+| **22:00–22:30** | 🔒 **CONGELAMIENTO.** Binarios con `pnpm run make`. Prueba en máquina limpia. Último `pear stage/release`.                                                                                   | 🔒 Congelado. Pasa a apoyar el video.                                                                                                         |
+| **22:30–23:30** | Verificar que el link instala desde una máquina virgen.                                                                                                                                      | Video grabado y subido. README. Repo público. **Formulario enviado.**                                                                         |
+| **23:30–00:00** | 🚩 **VERIFICACIÓN CRUZADA.** Dos personas distintas repiten la instalación desde cero. Se designa máquina de seeding y su respaldo.                                                          |                                                                                                                                               |
 
 ### El bloque de las 19:30 es el que hay que cuidar
 
@@ -240,11 +243,11 @@ La integración es donde mueren los proyectos con arquitectura paralela. Mitigac
 
 ### DOMINGO — sin código
 
-| Hora | Qué |
-|---|---|
-| Mañana | Dormir. La máquina de seeding queda prendida. |
-| 10:00 | Chequeo: ¿el link sigue instalable? ¿el video sigue accesible? |
-| 12:00 | Cierre oficial del hackathon. Ya estábamos entregados. |
+| Hora        | Qué                                                                                      |
+| ----------- | ---------------------------------------------------------------------------------------- |
+| Mañana      | Dormir. La máquina de seeding queda prendida.                                            |
+| 10:00       | Chequeo: ¿el link sigue instalable? ¿el video sigue accesible?                           |
+| 12:00       | Cierre oficial del hackathon. Ya estábamos entregados.                                   |
 | 13:00–17:00 | **Judging.** Seeding activo, alguien disponible en Telegram, chequeo del link cada hora. |
 
 **Si algo se rompe el domingo**, tenemos toda la mañana para arreglarlo con la cabeza descansada — que es exactamente el punto de haber terminado hoy.
@@ -262,18 +265,21 @@ La integración es donde mueren los proyectos con arquitectura paralela. Mitigac
 ## 6. Definición de "Terminado"
 
 ### Backend
+
 - [ ] Respeta la interfaz del contrato §3.3 sin cambios no acordados
 - [ ] Funciona con el flag `--fake` y con datos reales
 - [ ] No imprime nada en pantalla (eso es del frontend)
 - [ ] Corre en el binario compilado, no solo con `pnpm start`
 
 ### Frontend
+
 - [ ] Funciona contra `mock.js` **y** contra el backend real
 - [ ] Los estados vacíos y de error se ven bien (son los que más aparecen en el video)
 - [ ] No importa nada de `backend/` que no sea `backend/index.js`
 - [ ] Corre en el binario compilado, no solo con `pnpm start`
 
 ### Cualquiera de los dos
+
 - [ ] Otra persona del equipo la probó en su máquina
 - [ ] Está mergeada a `main`
 - [ ] Si cambió comportamiento visible: está anotada para el README
@@ -302,14 +308,15 @@ La integración es donde mueren los proyectos con arquitectura paralela. Mitigac
 
 ## 8. Comunicación
 
-| Qué | Dónde | Cuándo |
-|---|---|---|
-| Estado del equipo | En voz alta, todos juntos | Al cierre de cada bloque: 13:00, 15:00, 17:00, 19:00, 20:30, 22:00 |
-| Bloqueos | Se dice **inmediatamente**, no se guarda | Al minuto de estar trabado |
-| Dudas de Pear/Bare | Telegram del hackathon → mentores | **Hoy** — el sábado es el día de mejor cobertura de mentores, y es nuestro único día |
-| Dudas técnicas profundas | Sala Pear Development en Keet | Cuando el mentor lo derive |
+| Qué                      | Dónde                                    | Cuándo                                                                               |
+| ------------------------ | ---------------------------------------- | ------------------------------------------------------------------------------------ |
+| Estado del equipo        | En voz alta, todos juntos                | Al cierre de cada bloque: 13:00, 15:00, 17:00, 19:00, 20:30, 22:00                   |
+| Bloqueos                 | Se dice **inmediatamente**, no se guarda | Al minuto de estar trabado                                                           |
+| Dudas de Pear/Bare       | Telegram del hackathon → mentores        | **Hoy** — el sábado es el día de mejor cobertura de mentores, y es nuestro único día |
+| Dudas técnicas profundas | Sala Pear Development en Keet            | Cuando el mentor lo derive                                                           |
 
 **Standup de bloque — tres preguntas, un minuto por persona:**
+
 1. ¿Qué cerré?
 2. ¿Qué me traba?
 3. ¿Llegamos al próximo hito o recortamos?
@@ -320,19 +327,19 @@ La integración es donde mueren los proyectos con arquitectura paralela. Mitigac
 
 ## 9. Riesgos y planes B
 
-| Riesgo | Probabilidad | Plan B |
-|---|---|---|
-| BLE no funciona (módulos experimentales, permisos de OS) | **Alta** | mDNS sobre WiFi local. La demo igual se hace "sin internet", solo que con router en vez de bluetooth. |
-| `INVALID_URL` al arrancar | Alta | Es el placeholder del template. Correr `pear touch` y pegar el link real en `package.json`. |
-| Los updates parecen muertos | Media | Si usamos la variante daemon, el error va a `<storage>/updates.log`, no a la terminal. Mirar ahí primero. |
-| La IA alucina APIs de Node que no existen en Bare | **Alta** | Verificar todo contra `docs.pears.com/reference/`. Bare ≠ Node. `bare-fs`, no `fs`. |
-| pnpm rompe el bundle de `pear stage` (symlinks/store global) | **Alta** | `.npmrc` con `node-linker=hoisted` desde el minuto cero. Si igual falla: borrar `node_modules` + lockfile y reinstalar; último recurso, `npm install` plano solo para el stage final. **Se valida en el HITO 1 (15:00–17:00), no después.** |
-| El link deja de estar seeded durante judging | Media | Máquina designada + segunda máquina de respaldo seedeando. Se chequea cada hora durante el judging. |
-| El binario no corre en máquina limpia | Media | Probar en una máquina que nunca tuvo Node/Pear en el bloque de congelamiento (22:00). |
-| **La integración front↔back falla a las 19:30** | **Alta** | Contrato congelado a las 13:30 + flag `--fake` en el backend para aislar si el problema es el contrato o el swarm. Plan B: se entrega con mock y se documenta. |
-| El frontend queda bloqueado esperando al backend | Media | `backend/mock.js` entregado a las 13:45. Si no llega, el frontend lo escribe él mismo en 15 min. |
-| Conflictos de merge por editar los mismos archivos | Media | Regla de propiedad de carpetas (§4). Nadie edita la carpeta del otro equipo. |
-| Nos pasamos de scope | **Muy alta** | Este documento. Los hitos con 🚩 no se mueven. |
+| Riesgo                                                       | Probabilidad | Plan B                                                                                                                                                                                                                                      |
+| ------------------------------------------------------------ | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| BLE no funciona (módulos experimentales, permisos de OS)     | **Alta**     | mDNS sobre WiFi local. La demo igual se hace "sin internet", solo que con router en vez de bluetooth.                                                                                                                                       |
+| `INVALID_URL` al arrancar                                    | Alta         | Es el placeholder del template. Correr `pear touch` y pegar el link real en `package.json`.                                                                                                                                                 |
+| Los updates parecen muertos                                  | Media        | Si usamos la variante daemon, el error va a `<storage>/updates.log`, no a la terminal. Mirar ahí primero.                                                                                                                                   |
+| La IA alucina APIs de Node que no existen en Bare            | **Alta**     | Verificar todo contra `docs.pears.com/reference/`. Bare ≠ Node. `bare-fs`, no `fs`.                                                                                                                                                         |
+| pnpm rompe el bundle de `pear stage` (symlinks/store global) | **Alta**     | `.npmrc` con `node-linker=hoisted` desde el minuto cero. Si igual falla: borrar `node_modules` + lockfile y reinstalar; último recurso, `npm install` plano solo para el stage final. **Se valida en el HITO 1 (15:00–17:00), no después.** |
+| El link deja de estar seeded durante judging                 | Media        | Máquina designada + segunda máquina de respaldo seedeando. Se chequea cada hora durante el judging.                                                                                                                                         |
+| El binario no corre en máquina limpia                        | Media        | Probar en una máquina que nunca tuvo Node/Pear en el bloque de congelamiento (22:00).                                                                                                                                                       |
+| **La integración front↔back falla a las 19:30**              | **Alta**     | Contrato congelado a las 13:30 + flag `--fake` en el backend para aislar si el problema es el contrato o el swarm. Plan B: se entrega con mock y se documenta.                                                                              |
+| El frontend queda bloqueado esperando al backend             | Media        | `backend/mock.js` entregado a las 13:45. Si no llega, el frontend lo escribe él mismo en 15 min.                                                                                                                                            |
+| Conflictos de merge por editar los mismos archivos           | Media        | Regla de propiedad de carpetas (§4). Nadie edita la carpeta del otro equipo.                                                                                                                                                                |
+| Nos pasamos de scope                                         | **Muy alta** | Este documento. Los hitos con 🚩 no se mueven.                                                                                                                                                                                              |
 
 ---
 
@@ -366,11 +373,13 @@ Máximo 3 minutos. **El clip del OTA se graba a las 19:00, cuando pasa** — no 
 ## 12. Enlaces operativos
 
 **Instalación y arranque**
+
 - Instalar Pear CLI: https://install.pears.com
 - Template: https://github.com/holepunchto/hello-pear-bare
 - Guía del template: https://docs.pears.com/getting-started/from-a-template/start-from-hello-pear-bare/
 
 **Lo que más vamos a consultar**
+
 - Referencia general: https://docs.pears.com/reference/
 - CLI: https://docs.pears.com/reference/pear/cli/
 - OTA / pear-runtime: https://docs.pears.com/reference/pear/runtime/
@@ -380,12 +389,14 @@ Máximo 3 minutos. **El clip del OTA se graba a las 19:00, cuando pasa** — no 
 - Troubleshooting: https://docs.pears.com/how-to/troubleshooting/
 
 **Descubrimiento**
+
 - ble-swarm: https://github.com/mafintosh/ble-swarm
 - bare-mdns-discovery: https://docs.pears.com/reference/bare/modules/bare-mdns-discovery/
 - bare-bluetooth-android: https://docs.pears.com/reference/bare/modules/bare-bluetooth-android/
 - bare-bluetooth-apple: https://docs.pears.com/reference/bare/modules/bare-bluetooth-apple/
 
 **Referencia de arquitectura**
+
 - `swap`, el ejemplo del track: https://github.com/holepunchto/swap
 
 ---

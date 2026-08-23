@@ -20,7 +20,9 @@ export function startTravelerPanel(backendFn) {
     if (connected) {
       console.log(`  ${GREEN('●')} ${BOLD(mode.toUpperCase())} Network connected ${timestamp()}`)
     } else {
-      console.log(`  ${RED('●')} ${mode.toUpperCase()} Network disconnected ${error ? '— ' + error.message : ''} ${timestamp()}`)
+      console.log(
+        `  ${RED('●')} ${mode.toUpperCase()} Network disconnected ${error ? '— ' + error.message : ''} ${timestamp()}`
+      )
     }
     console.log(separatorLine())
     renderPeers(peers)

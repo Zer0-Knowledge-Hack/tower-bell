@@ -1,19 +1,19 @@
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
-import { colors } from '../../utils/colors';
-import { Icon } from '../common/Icon';
-import { StatusBadge } from '../common/StatusBadge';
+import { Modal, Pressable, StyleSheet, Text, View } from 'react-native'
+import { colors } from '../../utils/colors'
+import { Icon } from '../common/Icon'
+import { StatusBadge } from '../common/StatusBadge'
 
 export function MerchantDetailModal({ merchant, onClose, onConnect, onSave }) {
-  if (!merchant) return null;
-  const schedule = merchant.schedule || {};
-  const peer = String(merchant.peerId || merchant.id);
+  if (!merchant) return null
+  const schedule = merchant.schedule || {}
+  const peer = String(merchant.peerId || merchant.id)
   return (
-    <Modal visible transparent animationType="slide" onRequestClose={onClose}>
+    <Modal visible transparent animationType='slide' onRequestClose={onClose}>
       <Pressable style={styles.overlay} onPress={onClose}>
         <Pressable style={styles.sheet} onPress={() => {}}>
           <View style={styles.head}>
             <Pressable onPress={onClose} hitSlop={8}>
-              <Icon name="arrow-left" size={20} color={colors.text} />
+              <Icon name='arrow-left' size={20} color={colors.text} />
             </Pressable>
             <View style={styles.icon}>
               <Icon name={merchant.icon || 'store'} size={18} color={colors.navy} />
@@ -28,7 +28,9 @@ export function MerchantDetailModal({ merchant, onClose, onConnect, onSave }) {
           </View>
 
           <Text style={styles.section}>MESSAGE</Text>
-          <Text style={styles.promo}>{merchant.message || merchant.promotion || 'No promo yet'}</Text>
+          <Text style={styles.promo}>
+            {merchant.message || merchant.promotion || 'No promo yet'}
+          </Text>
 
           <Text style={styles.section}>HOURS</Text>
           <Text style={styles.line}>{merchant.hours || schedule.monFri || '—'}</Text>
@@ -45,7 +47,7 @@ export function MerchantDetailModal({ merchant, onClose, onConnect, onSave }) {
                   key={n}
                   style={[
                     styles.bar,
-                    { height: 6 + n * 3, opacity: n <= (merchant.signal || 3) ? 1 : 0.25 },
+                    { height: 6 + n * 3, opacity: n <= (merchant.signal || 3) ? 1 : 0.25 }
                   ]}
                 />
               ))}
@@ -56,8 +58,8 @@ export function MerchantDetailModal({ merchant, onClose, onConnect, onSave }) {
             <Pressable
               style={styles.primary}
               onPress={() => {
-                onConnect(merchant);
-                onClose();
+                onConnect(merchant)
+                onClose()
               }}
             >
               <Text style={styles.primaryText}>Connect</Text>
@@ -65,8 +67,8 @@ export function MerchantDetailModal({ merchant, onClose, onConnect, onSave }) {
             <Pressable
               style={styles.secondary}
               onPress={() => {
-                onSave(merchant);
-                onClose();
+                onSave(merchant)
+                onClose()
               }}
             >
               <Text style={styles.secondaryText}>Save to Wallet</Text>
@@ -75,7 +77,7 @@ export function MerchantDetailModal({ merchant, onClose, onConnect, onSave }) {
         </Pressable>
       </Pressable>
     </Modal>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -85,7 +87,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 22,
     borderTopRightRadius: 22,
     padding: 20,
-    gap: 8,
+    gap: 8
   },
   head: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 8 },
   icon: {
@@ -94,7 +96,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: colors.greenDark,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   name: { color: colors.text, fontSize: 18, fontWeight: '800' },
   meta: { color: colors.muted, fontSize: 12, marginTop: 2 },
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     minHeight: 48,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   primaryText: { color: colors.white, fontWeight: '800' },
   secondary: {
@@ -118,10 +120,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     minHeight: 48,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   secondaryText: { color: colors.navy, fontWeight: '800' },
   signalRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 10 },
   bars: { flexDirection: 'row', alignItems: 'flex-end', gap: 3 },
-  bar: { width: 5, backgroundColor: colors.sky, borderRadius: 1 },
-});
+  bar: { width: 5, backgroundColor: colors.sky, borderRadius: 1 }
+})

@@ -1,11 +1,11 @@
-import { Platform } from 'react-native';
+import { Platform } from 'react-native'
 
-let Notifications = null;
+let Notifications = null
 
 async function loadNotifications() {
-  if (Notifications) return Notifications;
+  if (Notifications) return Notifications
   try {
-    Notifications = await import('expo-notifications');
+    Notifications = await import('expo-notifications')
     if (Platform.OS !== 'web') {
       Notifications.setNotificationHandler({
         handleNotification: async () => ({
@@ -13,49 +13,49 @@ async function loadNotifications() {
           shouldShowBanner: true,
           shouldShowList: true,
           shouldPlaySound: true,
-          shouldSetBadge: true,
-        }),
-      });
+          shouldSetBadge: true
+        })
+      })
     }
   } catch {
-    Notifications = null;
+    Notifications = null
   }
-  return Notifications;
+  return Notifications
 }
 
 export async function ensureNotificationChannel() {
-  const mod = await loadNotifications();
-  if (!mod || Platform.OS !== 'android') return;
+  const mod = await loadNotifications()
+  if (!mod || Platform.OS !== 'android') return
   await mod.setNotificationChannelAsync('towerbell', {
     name: 'Towerbell',
     importance: mod.AndroidImportance.HIGH,
     vibrationPattern: [0, 180, 100, 180],
-    lightColor: '#0D47A1',
-  });
+    lightColor: '#0D47A1'
+  })
 }
 
 export async function notifyLocal({ title, body, data = {} }) {
-  const mod = await loadNotifications();
-  if (!mod) return false;
+  const mod = await loadNotifications()
+  if (!mod) return false
 
   if (Platform.OS === 'web') {
     if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
       // eslint-disable-next-line no-new
-      new Notification(title, { body, icon: '/favicon.png' });
-      return true;
+      new Notification(title, { body, icon: '/favicon.png' })
+      return true
     }
-    return false;
+    return false
   }
 
-  await ensureNotificationChannel();
+  await ensureNotificationChannel()
   await mod.scheduleNotificationAsync({
     content: {
       title,
       body,
       data,
-      sound: true,
+      sound: true
     },
-    trigger: null,
-  });
-  return true;
+    trigger: null
+  })
+  return true
 }

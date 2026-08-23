@@ -1,38 +1,38 @@
-import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { HeaderBar } from '../components/common/HeaderBar';
-import { RoleGuard } from '../components/common/RoleGuard';
-import { Icon } from '../components/common/Icon';
-import { useAppStore } from '../store/app.store';
-import { colors } from '../utils/colors';
+import { useNavigation } from '@react-navigation/native'
+import { useState } from 'react'
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { HeaderBar } from '../components/common/HeaderBar'
+import { RoleGuard } from '../components/common/RoleGuard'
+import { Icon } from '../components/common/Icon'
+import { useAppStore } from '../store/app.store'
+import { colors } from '../utils/colors'
 
 export function ChatScreen() {
-  const navigation = useNavigation();
-  const db = useAppStore((s) => s.db);
-  const createTopic = useAppStore((s) => s.createTopic);
-  const joinTopic = useAppStore((s) => s.joinTopic);
-  const sendChat = useAppStore((s) => s.sendChat);
-  const setActiveTopic = useAppStore((s) => s.setActiveTopic);
-  const [name, setName] = useState('');
-  const [draft, setDraft] = useState('');
-  const chat = db?.chat || { topics: [], messages: {}, activeTopicId: null };
-  const active = (chat.topics || []).find((t) => t.id === chat.activeTopicId);
-  const messages = (active && chat.messages[active.id]) || [];
+  const navigation = useNavigation()
+  const db = useAppStore((s) => s.db)
+  const createTopic = useAppStore((s) => s.createTopic)
+  const joinTopic = useAppStore((s) => s.joinTopic)
+  const sendChat = useAppStore((s) => s.sendChat)
+  const setActiveTopic = useAppStore((s) => s.setActiveTopic)
+  const [name, setName] = useState('')
+  const [draft, setDraft] = useState('')
+  const chat = db?.chat || { topics: [], messages: {}, activeTopicId: null }
+  const active = (chat.topics || []).find((t) => t.id === chat.activeTopicId)
+  const messages = (active && chat.messages[active.id]) || []
 
   return (
-    <RoleGuard feature="chat">
+    <RoleGuard feature='chat'>
       <View style={styles.screen}>
         <HeaderBar
-          title="Nearby chat"
-          subtitle="Create a topic and talk offline"
+          title='Nearby chat'
+          subtitle='Create a topic and talk offline'
           onSettings={() => navigation.navigate('Settings')}
         />
-        <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled">
+        <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps='handled'>
           <View style={styles.row}>
             <TextInput
               style={styles.input}
-              placeholder="Topic name"
+              placeholder='Topic name'
               placeholderTextColor={colors.muted}
               value={name}
               onChangeText={setName}
@@ -40,8 +40,8 @@ export function ChatScreen() {
             <Pressable
               style={styles.btn}
               onPress={() => {
-                if (name.trim()) createTopic(name);
-                setName('');
+                if (name.trim()) createTopic(name)
+                setName('')
               }}
             >
               <Text style={styles.btnText}>Create</Text>
@@ -52,11 +52,11 @@ export function ChatScreen() {
               key={topic.id}
               style={[styles.topic, chat.activeTopicId === topic.id && styles.topicOn]}
               onPress={() => {
-                setActiveTopic(topic.id);
-                joinTopic(topic.id);
+                setActiveTopic(topic.id)
+                joinTopic(topic.id)
               }}
             >
-              <Icon name="users" size={16} color={colors.navy} />
+              <Icon name='users' size={16} color={colors.navy} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.topicName}>{topic.name}</Text>
                 <Text style={styles.meta}>{topic.members.length} peers</Text>
@@ -74,7 +74,7 @@ export function ChatScreen() {
               <View style={styles.row}>
                 <TextInput
                   style={styles.input}
-                  placeholder="Message the topic"
+                  placeholder='Message the topic'
                   placeholderTextColor={colors.muted}
                   value={draft}
                   onChangeText={setDraft}
@@ -82,21 +82,23 @@ export function ChatScreen() {
                 <Pressable
                   style={styles.btn}
                   onPress={() => {
-                    sendChat(draft);
-                    setDraft('');
+                    sendChat(draft)
+                    setDraft('')
                   }}
                 >
-                  <Icon name="send" size={16} color={colors.white} />
+                  <Icon name='send' size={16} color={colors.white} />
                 </Pressable>
               </View>
             </View>
           ) : (
-            <Text style={styles.empty}>Create or join a topic to talk with peers. No internet needed.</Text>
+            <Text style={styles.empty}>
+              Create or join a topic to talk with peers. No internet needed.
+            </Text>
           )}
         </ScrollView>
       </View>
     </RoleGuard>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -111,7 +113,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     minHeight: 46,
     paddingHorizontal: 12,
-    color: colors.ink,
+    color: colors.ink
   },
   btn: {
     backgroundColor: colors.navy,
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
     minWidth: 56,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 12
   },
   btnText: { color: colors.white, fontWeight: '800' },
   topic: {
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
     padding: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 10
   },
   topicOn: { borderColor: colors.navy, backgroundColor: colors.greenDark },
   topicName: { color: colors.ink, fontWeight: '800' },
@@ -141,9 +143,9 @@ const styles = StyleSheet.create({
     padding: 12,
     gap: 8,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.border
   },
   msg: { color: colors.ink, fontSize: 14, lineHeight: 20 },
   from: { color: colors.navy, fontWeight: '800' },
-  empty: { color: colors.muted, textAlign: 'center', paddingVertical: 16 },
-});
+  empty: { color: colors.muted, textAlign: 'center', paddingVertical: 16 }
+})

@@ -1,13 +1,13 @@
-import { useMemo } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useThemeColors } from '../../utils/useThemeColors';
-import { BrandLogo } from './BrandLogo';
-import { Icon } from './Icon';
-import { NotificationBell } from './NotificationBell';
+import { useMemo } from 'react'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { useThemeColors } from '../../utils/useThemeColors'
+import { BrandLogo } from './BrandLogo'
+import { Icon } from './Icon'
+import { NotificationBell } from './NotificationBell'
 
 export function HeaderBar({ title, subtitle, right, onSettings, showBell = true }) {
-  const c = useThemeColors();
-  const styles = useMemo(() => makeStyles(c), [c]);
+  const c = useThemeColors()
+  const styles = useMemo(() => makeStyles(c), [c])
 
   return (
     <View style={styles.wrap}>
@@ -23,12 +23,12 @@ export function HeaderBar({ title, subtitle, right, onSettings, showBell = true 
         {showBell ? <NotificationBell /> : null}
         {onSettings ? (
           <Pressable onPress={onSettings} hitSlop={10} style={styles.gear}>
-            <Icon name="cog" size={18} color={c.headerText} />
+            <Icon name='cog' size={18} color={c.headerText} />
           </Pressable>
         ) : null}
       </View>
     </View>
-  );
+  )
 }
 
 function makeStyles(c) {
@@ -40,7 +40,7 @@ function makeStyles(c) {
       paddingBottom: 14,
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between',
+      justifyContent: 'space-between'
     },
     left: { flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 },
     title: { color: c.headerText, fontSize: 18, fontWeight: '800', letterSpacing: 0.4 },
@@ -52,7 +52,7 @@ function makeStyles(c) {
       borderRadius: 8,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: 'rgba(255,255,255,0.14)',
-    },
-  });
+      backgroundColor: 'rgba(255,255,255,0.14)'
+    }
+  })
 }

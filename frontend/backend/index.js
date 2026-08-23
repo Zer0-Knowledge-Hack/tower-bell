@@ -4,5 +4,5 @@
  * with the same API as the real backend: scan() and beacon().
  * On Pear Mobile, swap this file to re-export the native backend.
  */
-export { beacon, scan } from './mock.js';
-export { CATEGORIES, CATEGORY_META, toUiRecord } from './schema.js';
+export { beacon, scan } from './mock.js'
+export { CATEGORIES, CATEGORY_META, toUiRecord } from './schema.js'

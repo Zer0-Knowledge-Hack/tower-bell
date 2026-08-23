@@ -16,7 +16,20 @@ const BG_CYAN = (text) => `${ESC}46m${ESC}30m${text}${RESET}`
 const BG_GREEN = (text) => `${ESC}42m${ESC}30m${text}${RESET}`
 const BG_YELLOW = (text) => `${ESC}43m${ESC}30m${text}${RESET}`
 
-export const colors = { BOLD, DIM, CYAN, GREEN, YELLOW, RED, MAGENTA, WHITE, BG_CYAN, BG_GREEN, BG_YELLOW, RESET }
+export const colors = {
+  BOLD,
+  DIM,
+  CYAN,
+  GREEN,
+  YELLOW,
+  RED,
+  MAGENTA,
+  WHITE,
+  BG_CYAN,
+  BG_GREEN,
+  BG_YELLOW,
+  RESET
+}
 
 export const BANNER = `
 ${CYAN('╔══════════════════════════════════════════════╗')}

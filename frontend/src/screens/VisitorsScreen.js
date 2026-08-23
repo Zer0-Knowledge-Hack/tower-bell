@@ -1,21 +1,21 @@
-import { useNavigation } from '@react-navigation/native';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { HeaderBar } from '../components/common/HeaderBar';
-import { RoleGuard } from '../components/common/RoleGuard';
-import { useAppStore } from '../store/app.store';
-import { colors } from '../utils/colors';
+import { useNavigation } from '@react-navigation/native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { HeaderBar } from '../components/common/HeaderBar'
+import { RoleGuard } from '../components/common/RoleGuard'
+import { useAppStore } from '../store/app.store'
+import { colors } from '../utils/colors'
 
 export function VisitorsScreen() {
-  const navigation = useNavigation();
-  const db = useAppStore((s) => s.db);
-  const beacon = db?.beacon || {};
+  const navigation = useNavigation()
+  const db = useAppStore((s) => s.db)
+  const beacon = db?.beacon || {}
 
   return (
-    <RoleGuard feature="visitors">
+    <RoleGuard feature='visitors'>
       <View style={styles.screen}>
         <HeaderBar
-          title="Visitors"
-          subtitle="Who came near your beacon"
+          title='Visitors'
+          subtitle='Who came near your beacon'
           onSettings={() => navigation.navigate('Settings')}
         />
         <ScrollView contentContainerStyle={styles.body}>
@@ -28,12 +28,13 @@ export function VisitorsScreen() {
             <Text style={styles.value}>{beacon.uniqueConnections || 0}</Text>
           </View>
           <Text style={styles.note}>
-            You only see your own shop. Travelers cannot open this screen. If nobody appears, make sure the beacon is on air.
+            You only see your own shop. Travelers cannot open this screen. If nobody appears, make
+            sure the beacon is on air.
           </Text>
         </ScrollView>
       </View>
     </RoleGuard>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -44,9 +45,9 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     padding: 16,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.border
   },
   label: { color: colors.muted, fontWeight: '700' },
   value: { color: colors.navy, fontSize: 32, fontWeight: '800', marginTop: 6 },
-  note: { color: colors.muted, lineHeight: 20 },
-});
+  note: { color: colors.muted, lineHeight: 20 }
+})

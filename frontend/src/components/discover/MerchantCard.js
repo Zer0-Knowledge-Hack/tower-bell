@@ -1,12 +1,12 @@
-import { useMemo } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useThemeColors } from '../../utils/useThemeColors';
-import { Icon } from '../common/Icon';
-import { StatusBadge } from '../common/StatusBadge';
+import { useMemo } from 'react'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { useThemeColors } from '../../utils/useThemeColors'
+import { Icon } from '../common/Icon'
+import { StatusBadge } from '../common/StatusBadge'
 
 export function MerchantCard({ merchant, onView }) {
-  const c = useThemeColors();
-  const styles = useMemo(() => makeStyles(c), [c]);
+  const c = useThemeColors()
+  const styles = useMemo(() => makeStyles(c), [c])
 
   return (
     <Pressable style={styles.card} onPress={() => onView(merchant)}>
@@ -29,7 +29,7 @@ export function MerchantCard({ merchant, onView }) {
         <Text style={styles.btnText}>View place</Text>
       </View>
     </Pressable>
-  );
+  )
 }
 
 function makeStyles(c) {
@@ -40,7 +40,7 @@ function makeStyles(c) {
       borderColor: c.border,
       borderRadius: 16,
       padding: 14,
-      gap: 10,
+      gap: 10
     },
     top: { flexDirection: 'row', alignItems: 'center', gap: 10 },
     icon: {
@@ -49,7 +49,7 @@ function makeStyles(c) {
       borderRadius: 12,
       backgroundColor: c.greenDark,
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
     name: { color: c.text, fontSize: 16, fontWeight: '800' },
     meta: { color: c.muted, fontSize: 12, marginTop: 2 },
@@ -59,8 +59,8 @@ function makeStyles(c) {
       backgroundColor: c.greenDark,
       borderRadius: 8,
       paddingHorizontal: 14,
-      paddingVertical: 8,
+      paddingVertical: 8
     },
-    btnText: { color: c.sky, fontWeight: '800', fontSize: 12 },
-  });
+    btnText: { color: c.sky, fontWeight: '800', fontSize: 12 }
+  })
 }

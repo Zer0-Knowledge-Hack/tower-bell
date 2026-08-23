@@ -2,12 +2,12 @@ export const seedDb = {
   network: {
     internet: false,
     localNetwork: true,
-    bluetooth: true,
+    bluetooth: true
   },
   user: {
     role: 'visitor',
     name: 'Traveler',
-    peerId: 'z32towerbelluser001',
+    peerId: 'z32towerbelluser001'
   },
   beacon: {
     id: 'z32milocalpropio',
@@ -18,12 +18,12 @@ export const seedDb = {
     hours: '08:00-21:00',
     broadcasting: false,
     peersSeen: 0,
-    uniqueConnections: 0,
+    uniqueConnections: 0
   },
   wallet: {
     balance: 0,
     transactions: [],
-    loyaltyCards: [],
+    loyaltyCards: []
   },
   registeredMerchants: [],
   logs: [],
@@ -35,10 +35,10 @@ export const seedDb = {
   chat: {
     topics: [],
     messages: {},
-    activeTopicId: null,
+    activeTopicId: null
   },
-  pickedRole: false,
-};
+  pickedRole: false
+}
 
 export const mockMerchants = [
   {
@@ -49,6 +49,6 @@ export const mockMerchants = [
     message: '2 for 1 until 6PM',
     hours: '08:00-20:00',
     distance: 40,
-    signal: 5,
-  },
-];
+    signal: 5
+  }
+]

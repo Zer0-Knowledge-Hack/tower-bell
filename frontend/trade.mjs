@@ -30,7 +30,9 @@ export function startBeaconPanel(backendFn, record) {
   const beacon = backendFn(record)
 
   beacon.on('visitor', ({ total }) => {
-    console.log(`  ${CYAN('👤')} New visitor! ${BOLD('Total:')} ${WHITE(String(total))} ${timestamp()}`)
+    console.log(
+      `  ${CYAN('👤')} New visitor! ${BOLD('Total:')} ${WHITE(String(total))} ${timestamp()}`
+    )
   })
 
   return beacon

@@ -6,8 +6,8 @@ export const CATEGORIES = [
   'bookstore',
   'clothing',
   'tech',
-  'other',
-];
+  'other'
+]
 
 export const CATEGORY_META = {
   cafeteria: { label: 'Cafeteria', icon: 'coffee' },
@@ -17,13 +17,13 @@ export const CATEGORY_META = {
   bookstore: { label: 'Bookstore', icon: 'book' },
   clothing: { label: 'Clothing', icon: 'store' },
   tech: { label: 'Tech', icon: 'wifi' },
-  other: { label: 'Other', icon: 'store' },
-};
+  other: { label: 'Other', icon: 'store' }
+}
 
 export function toUiRecord(record, extra = {}) {
-  const category = record.category || 'other';
-  const meta = CATEGORY_META[category] || CATEGORY_META.other;
-  const id = record.id || 'unknown-peer';
+  const category = record.category || 'other'
+  const meta = CATEGORY_META[category] || CATEGORY_META.other
+  const id = record.id || 'unknown-peer'
   return {
     id,
     name: record.name || 'Unnamed place',
@@ -38,6 +38,6 @@ export function toUiRecord(record, extra = {}) {
     signal: record.signal ?? extra.signal ?? 4,
     peerId: record.peerId || id,
     promotion: record.message || record.promotion || '',
-    ...extra,
-  };
+    ...extra
+  }
 }

@@ -1,17 +1,17 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { useAppStore } from '../../store/app.store';
-import { colors } from '../../utils/colors';
+import { StyleSheet, Text, View } from 'react-native'
+import { useAppStore } from '../../store/app.store'
+import { colors } from '../../utils/colors'
 
 export function ToastHost() {
-  const toast = useAppStore((s) => s.toast);
-  if (!toast) return null;
+  const toast = useAppStore((s) => s.toast)
+  if (!toast) return null
   return (
     <View style={styles.wrap}>
       <View style={styles.toast}>
         <Text style={styles.text}>{toast}</Text>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -21,14 +21,14 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 78,
     alignItems: 'center',
-    pointerEvents: 'none',
+    pointerEvents: 'none'
   },
   toast: {
     backgroundColor: colors.navy,
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 10,
-    maxWidth: '88%',
+    maxWidth: '88%'
   },
-  text: { color: colors.white, fontWeight: '700', fontSize: 13 },
-});
+  text: { color: colors.white, fontWeight: '700', fontSize: 13 }
+})

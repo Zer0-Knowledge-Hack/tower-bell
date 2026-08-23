@@ -26,18 +26,21 @@ class Scanner extends EventEmitter {
     super()
     this.peers = new Map()
     this.connected = false
-    
-    dht.start().then(() => {
-      this.connected = true
-      this.emit('status', { mode: 'dht', connected: true })
-    }).catch(err => {
-      this.emit('status', { mode: 'dht', connected: false, error: err })
-    })
+
+    dht
+      .start()
+      .then(() => {
+        this.connected = true
+        this.emit('status', { mode: 'dht', connected: true })
+      })
+      .catch((err) => {
+        this.emit('status', { mode: 'dht', connected: false, error: err })
+      })
 
     dht.on('peer-beacon', async ({ publicKey, conn }) => {
       const keyHex = b4a.toString(publicKey, 'hex')
       const { db } = await data.getRemoteDb(publicKey)
-      
+
       const onRecord = async () => {
         const record = await data.readRecord(db)
         if (record) {
@@ -64,32 +67,32 @@ class Beacon extends EventEmitter {
     this.record = initialRecord
     this.visitors = 0
     this.localDb = null
-    
+
     this._init()
   }
-  
+
   async _init() {
     this.localDb = await data.getLocalDb()
     await data.updateRecord(this.localDb.db, this.record)
-    
+
     await dht.start()
-    
+
     // Announce our hypercore key to the network
     dht.announce(this.localDb.core.key)
-    
+
     dht.swarm.on('connection', () => {
       this.visitors++
       this.emit('visitor', { total: this.visitors })
     })
   }
-  
+
   async update(record) {
     this.record = record
     if (this.localDb) {
       await data.updateRecord(this.localDb.db, record)
     }
   }
-  
+
   async stop() {
     await dht.stop()
   }

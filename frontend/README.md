@@ -17,12 +17,12 @@ npx expo start
 
 ## Colores (obligatorios)
 
-| Uso | Hex |
-|-----|-----|
-| Acento cielo | `#54ADF6` |
+| Uso                             | Hex       |
+| ------------------------------- | --------- |
+| Acento cielo                    | `#54ADF6` |
 | Primario navy (header, botones) | `#0D47A1` |
-| Fondo | `#EDF0F5` |
-| Texto | `#0A110F` |
+| Fondo                           | `#EDF0F5` |
+| Texto                           | `#0A110F` |
 
 Header navy, cards blancas, iconos SVG (sin emojis).
 
@@ -30,17 +30,18 @@ Header navy, cards blancas, iconos SVG (sin emojis).
 
 Al abrir se elige identidad. Cada rol monta **otro tab bar**. Un rol no ve pantallas, datos ni acciones del otro. El guard esta en `src/utils/acl.js`.
 
-| Rol | Ve | No ve |
-|-----|----|-------|
-| Visitante | Discover (radar + lista), Chat por topics, Wallet | Beacon, Admin, red global |
-| Comercio | Beacon (transmitir + promo), Visitantes de *su* local | Radar de otros, Admin, wallet del viajero |
-| Admin | Registro de comercios, logs, Network Debug | Editor de promo del local, wallet, chat de viajero |
+| Rol       | Ve                                                    | No ve                                              |
+| --------- | ----------------------------------------------------- | -------------------------------------------------- |
+| Visitante | Discover (radar + lista), Chat por topics, Wallet     | Beacon, Admin, red global                          |
+| Comercio  | Beacon (transmitir + promo), Visitantes de _su_ local | Radar de otros, Admin, wallet del viajero          |
+| Admin     | Registro de comercios, logs, Network Debug            | Editor de promo del local, wallet, chat de viajero |
 
 En Ajustes se puede cambiar identidad (solo para demo). Restaurar JSON vuelve a la pantalla de eleccion de rol.
 
 ## Funcionalidad
 
 ### Visitante — Discover
+
 - Escaneo mock de peers (pull to refresh o al entrar).
 - Radar con locales por distancia/senal.
 - Filtros: All, Cafes, Restaurants, Shops.
@@ -49,39 +50,45 @@ En Ajustes se puede cambiar identidad (solo para demo). Restaurar JSON vuelve a 
 - **Save to Wallet**: guarda tarjeta de lealtad y 10 puntos.
 
 ### Visitante — Chat P2P
+
 - Crear o unirse a un **topic** (ejercicio Connecting Peers).
 - Mensajes locales al topic, sin internet.
 - Esto es el patron Pear: topic = swarm/canal.
 
 ### Visitante — Wallet
+
 - Saldo mock, Top Up / Send / Receive.
 - Historial y tarjetas de lealtad persistidas en JSON.
 
 ### Comercio — Beacon
+
 - Formulario validado con `src/data/validaciones.json` (nombre, categoria, titulo, promo, vencimiento `HH:MM`, tope 1 KB).
 - **Start / Stop Broadcasting**: si transmite, el viajero lo ve en Discover (mismo dispositivo / mismo JSON).
 - Analytics: peers vistos y conexiones.
 
 ### Comercio — Visitantes
-- Solo metricas de *su* beacon. No lista otros locales.
+
+- Solo metricas de _su_ beacon. No lista otros locales.
 
 ### Admin
+
 - Registrar comercio (queda en JSON y aparece al visitante).
 - Manage: editar lista / borrar.
 - Logs de discovery.
 - Red: simular internet / mDNS / BLE y ver el JSON crudo.
 
 ### Permisos (pantalla Ajustes)
+
 Catalogo para el APK nativo (estilo Keet). Hoy se guardan ON/OFF en JSON. En el build real hay que pedirlos al SO:
 
-| Permiso | Para que |
-|---------|----------|
-| Notificaciones | Mensajes, llamadas, peer cerca |
-| Microfono | Llamadas de voz |
-| Camara | Videollamadas |
-| Dispositivos cercanos | BLE, auriculares, discovery |
-| Media | Subir / bajar archivos P2P |
-| Grabacion de pantalla | Screen share |
+| Permiso               | Para que                       |
+| --------------------- | ------------------------------ |
+| Notificaciones        | Mensajes, llamadas, peer cerca |
+| Microfono             | Llamadas de voz                |
+| Camara                | Videollamadas                  |
+| Dispositivos cercanos | BLE, auriculares, discovery    |
+| Media                 | Subir / bajar archivos P2P     |
+| Grabacion de pantalla | Screen share                   |
 
 Declarados tambien en `app.json` → `android.permissions`.
 
@@ -90,17 +97,17 @@ Declarados tambien en `app.json` → `android.permissions`.
 El UI **solo** importa `scan` y `beacon` desde `backend/`.
 
 ```js
-import { scan, beacon } from './backend';
+import { scan, beacon } from './backend'
 
-const network = scan();
-network.on('status', ({ connected, mode }) => {});
-network.on('peer-found', (registro) => {});
-network.list();
+const network = scan()
+network.on('status', ({ connected, mode }) => {})
+network.on('peer-found', (registro) => {})
+network.list()
 
-const myBeacon = beacon({ name, category, status, message, hours });
-myBeacon.on('visitor', ({ total }) => {});
-await myBeacon.update({ message: 'nueva promo' });
-await myBeacon.stop();
+const myBeacon = beacon({ name, category, status, message, hours })
+myBeacon.on('visitor', ({ total }) => {})
+await myBeacon.update({ message: 'nueva promo' })
+await myBeacon.stop()
 ```
 
 - `backend/mock.js` — web, Expo Go, demo sin red
@@ -109,7 +116,15 @@ await myBeacon.stop();
 Registro de red:
 
 ```json
-{ "id": "clave-publica", "name": "Cafe Rivadavia", "category": "cafeteria", "status": "open", "message": "2x1 hasta las 18h", "hours": "08:00-20:00", "updated": "2026-08-23T..." }
+{
+  "id": "clave-publica",
+  "name": "Cafe Rivadavia",
+  "category": "cafeteria",
+  "status": "open",
+  "message": "2x1 hasta las 18h",
+  "hours": "08:00-20:00",
+  "updated": "2026-08-23T..."
+}
 ```
 
 Categorias: cafeteria, restaurant, kiosk, pharmacy, bookstore, clothing, tech, other.

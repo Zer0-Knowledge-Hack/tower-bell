@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { BrandLogo } from '../components/common/BrandLogo';
-import { Icon } from '../components/common/Icon';
-import { useAppStore } from '../store/app.store';
-import { useThemeColors } from '../utils/useThemeColors';
+import { useMemo } from 'react'
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { BrandLogo } from '../components/common/BrandLogo'
+import { Icon } from '../components/common/Icon'
+import { useAppStore } from '../store/app.store'
+import { useThemeColors } from '../utils/useThemeColors'
 
 const cards = [
   {
@@ -11,21 +11,21 @@ const cards = [
     icon: 'compass',
     name: 'Traveler',
     kicker: 'Scanner mode',
-    text: 'Walk the neighborhood and see cafes, kiosks and pharmacies on the local map. No account needed.',
+    text: 'Walk the neighborhood and see cafes, kiosks and pharmacies on the local map. No account needed.'
   },
   {
     role: 'merchant',
     icon: 'signal',
     name: 'Shop',
     kicker: 'Beacon mode',
-    text: 'Broadcast your place. Nearby travelers see your name, hours and promo instantly.',
-  },
-];
+    text: 'Broadcast your place. Nearby travelers see your name, hours and promo instantly.'
+  }
+]
 
 export function RoleSelectScreen() {
-  const pickRole = useAppStore((s) => s.pickRole);
-  const c = useThemeColors();
-  const styles = useMemo(() => makeStyles(c), [c]);
+  const pickRole = useAppStore((s) => s.pickRole)
+  const c = useThemeColors()
+  const styles = useMemo(() => makeStyles(c), [c])
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.body}>
@@ -48,16 +48,16 @@ export function RoleSelectScreen() {
             <Text style={styles.name}>{card.name}</Text>
             <Text style={styles.text}>{card.text}</Text>
           </View>
-          <Icon name="arrow-up-right" size={18} color={c.sky} />
+          <Icon name='arrow-up-right' size={18} color={c.sky} />
         </Pressable>
       ))}
 
       <Pressable style={styles.admin} onPress={() => pickRole('admin')}>
-        <Icon name="shield" size={16} color={c.muted} />
+        <Icon name='shield' size={16} color={c.muted} />
         <Text style={styles.adminText}>Enter as admin (demo)</Text>
       </Pressable>
     </ScrollView>
-  );
+  )
 }
 
 function makeStyles(c) {
@@ -76,7 +76,7 @@ function makeStyles(c) {
       gap: 12,
       alignItems: 'center',
       borderWidth: 1,
-      borderColor: c.border,
+      borderColor: c.border
     },
     icon: {
       width: 48,
@@ -84,7 +84,7 @@ function makeStyles(c) {
       borderRadius: 14,
       backgroundColor: c.greenDark,
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
     kicker: { color: c.sky, fontWeight: '800', fontSize: 11, letterSpacing: 0.6 },
     name: { color: c.ink, fontWeight: '800', fontSize: 18, marginTop: 2 },
@@ -95,8 +95,8 @@ function makeStyles(c) {
       flexDirection: 'row',
       alignItems: 'center',
       gap: 8,
-      paddingVertical: 10,
+      paddingVertical: 10
     },
-    adminText: { color: c.muted, fontWeight: '700' },
-  });
+    adminText: { color: c.muted, fontWeight: '700' }
+  })
 }

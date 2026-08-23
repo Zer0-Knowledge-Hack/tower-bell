@@ -7,7 +7,7 @@ const EventEmitter = require('bare-events')
 const TOPIC = b4a.alloc(32).fill('towerbell-discovery-v1')
 
 class DiscoveryDHT extends EventEmitter {
-  constructor (store) {
+  constructor(store) {
     super()
     this.store = store
     this.swarm = new Hyperswarm()
@@ -34,13 +34,13 @@ class DiscoveryDHT extends EventEmitter {
     })
   }
 
-  async start () {
+  async start() {
     const discovery = this.swarm.join(TOPIC, { client: true, server: true })
     await discovery.flushed()
     this.emit('ready')
   }
 
-  announce (publicKey) {
+  announce(publicKey) {
     const msg = JSON.stringify({
       type: 'BEACON_ANNOUNCE',
       key: b4a.toString(publicKey, 'hex')
@@ -58,7 +58,7 @@ class DiscoveryDHT extends EventEmitter {
     })
   }
 
-  async stop () {
+  async stop() {
     await this.swarm.destroy()
   }
 }

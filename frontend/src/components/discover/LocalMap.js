@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
-import { LoadingBlock } from '../common/LoadingBlock';
-import { MAP_CENTER, merchantsForMap } from '../../utils/geo';
-import { useThemeColors } from '../../utils/useThemeColors';
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Platform, StyleSheet, View } from 'react-native'
+import { LoadingBlock } from '../common/LoadingBlock'
+import { MAP_CENTER, merchantsForMap } from '../../utils/geo'
+import { useThemeColors } from '../../utils/useThemeColors'
 
 function buildMapHtml({ merchants, dark, selectedId }) {
   const places = merchantsForMap(merchants).map((m) => ({
@@ -12,26 +12,26 @@ function buildMapHtml({ merchants, dark, selectedId }) {
     message: m.message || m.promotion || '',
     category: m.categoryLabel || m.category || '',
     lat: m.lat,
-    lng: m.lng,
-  }));
+    lng: m.lng
+  }))
 
   const tile = dark
     ? {
         url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-        attr: '&copy; OpenStreetMap &copy; CARTO',
+        attr: '&copy; OpenStreetMap &copy; CARTO'
       }
     : {
         url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-        attr: '&copy; OpenStreetMap &copy; CARTO',
-      };
+        attr: '&copy; OpenStreetMap &copy; CARTO'
+      }
 
   const payload = JSON.stringify({
     center: MAP_CENTER,
     places,
     tile,
     selectedId: selectedId || null,
-    dark,
-  });
+    dark
+  })
 
   return `<!DOCTYPE html>
 <html>
@@ -108,61 +108,61 @@ function buildMapHtml({ merchants, dark, selectedId }) {
     setTimeout(function () { map.invalidateSize(); }, 120);
   </script>
 </body>
-</html>`;
+</html>`
 }
 
 export function LocalMap({ merchants = [], selectedId, onSelect, height = 320 }) {
-  const c = useThemeColors();
-  const dark = c.mapTile === 'dark';
-  const [loading, setLoading] = useState(true);
-  const iframeRef = useRef(null);
+  const c = useThemeColors()
+  const dark = c.mapTile === 'dark'
+  const [loading, setLoading] = useState(true)
+  const iframeRef = useRef(null)
   const html = useMemo(
     () => buildMapHtml({ merchants, dark, selectedId }),
     [merchants, dark, selectedId]
-  );
+  )
 
   useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 700);
-    return () => clearTimeout(timer);
-  }, [html]);
+    setLoading(true)
+    const timer = setTimeout(() => setLoading(false), 700)
+    return () => clearTimeout(timer)
+  }, [html])
 
   useEffect(() => {
-    if (Platform.OS !== 'web') return undefined;
+    if (Platform.OS !== 'web') return undefined
     const onMessage = (event) => {
       try {
-        const raw = typeof event.data === 'string' ? event.data : '';
-        if (!raw || raw[0] !== '{') return;
-        const msg = JSON.parse(raw);
+        const raw = typeof event.data === 'string' ? event.data : ''
+        if (!raw || raw[0] !== '{') return
+        const msg = JSON.parse(raw)
         if (msg.type === 'select' && onSelect) {
-          const found = merchants.find((m) => m.id === msg.id);
-          if (found) onSelect(found);
+          const found = merchants.find((m) => m.id === msg.id)
+          if (found) onSelect(found)
         }
       } catch {
         // ignore foreign messages
       }
-    };
-    window.addEventListener('message', onMessage);
-    return () => window.removeEventListener('message', onMessage);
-  }, [merchants, onSelect]);
+    }
+    window.addEventListener('message', onMessage)
+    return () => window.removeEventListener('message', onMessage)
+  }, [merchants, onSelect])
 
   const onNativeMessage = (event) => {
     try {
-      const msg = JSON.parse(event.nativeEvent.data);
+      const msg = JSON.parse(event.nativeEvent.data)
       if (msg.type === 'select' && onSelect) {
-        const found = merchants.find((m) => m.id === msg.id);
-        if (found) onSelect(found);
+        const found = merchants.find((m) => m.id === msg.id)
+        if (found) onSelect(found)
       }
     } catch {
       // ignore
     }
-  };
+  }
 
   return (
     <View style={[styles.shell, { height, borderColor: c.border, backgroundColor: c.panel }]}>
       {loading ? (
         <View style={styles.loader}>
-          <LoadingBlock compact label="Loading local map (OpenStreetMap)..." />
+          <LoadingBlock compact label='Loading local map (OpenStreetMap)...' />
         </View>
       ) : null}
 
@@ -170,23 +170,23 @@ export function LocalMap({ merchants = [], selectedId, onSelect, height = 320 })
         // eslint-disable-next-line react/no-unknown-property
         <iframe
           ref={iframeRef}
-          title="Towerbell local map"
+          title='Towerbell local map'
           srcDoc={html}
           style={styles.frame}
-          sandbox="allow-scripts allow-same-origin"
+          sandbox='allow-scripts allow-same-origin'
         />
       ) : (
         <NativeMap html={html} onMessage={onNativeMessage} />
       )}
     </View>
-  );
+  )
 }
 
 function NativeMap({ html, onMessage }) {
   try {
     // Lazy require so web bundle never hard-fails if webview is missing.
     // eslint-disable-next-line global-require
-    const { WebView } = require('react-native-webview');
+    const { WebView } = require('react-native-webview')
     return (
       <WebView
         originWhitelist={['*']}
@@ -195,16 +195,16 @@ function NativeMap({ html, onMessage }) {
         style={styles.frame}
         javaScriptEnabled
         domStorageEnabled
-        mixedContentMode="always"
+        mixedContentMode='always'
         setSupportMultipleWindows={false}
       />
-    );
+    )
   } catch {
     return (
       <View style={styles.frame}>
-        <LoadingBlock label="Install react-native-webview for the native map" />
+        <LoadingBlock label='Install react-native-webview for the native map' />
       </View>
-    );
+    )
   }
 }
 
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 18,
     overflow: 'hidden',
-    borderWidth: 1,
+    borderWidth: 1
   },
   frame: { flex: 1, width: '100%', height: '100%', borderWidth: 0 },
   loader: {
@@ -221,6 +221,6 @@ const styles = StyleSheet.create({
     zIndex: 2,
     justifyContent: 'center',
     padding: 16,
-    backgroundColor: 'rgba(11,18,32,0.35)',
-  },
-});
+    backgroundColor: 'rgba(11,18,32,0.35)'
+  }
+})

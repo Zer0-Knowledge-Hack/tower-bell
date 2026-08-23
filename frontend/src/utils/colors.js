@@ -22,8 +22,8 @@ export const lightColors = {
   success: '#1F8A4C',
   mapTile: 'light',
   shell: '#9AA7B8',
-  overlay: 'rgba(7,21,54,0.55)',
-};
+  overlay: 'rgba(7,21,54,0.55)'
+}
 
 export const darkColors = {
   sky: '#54ADF6',
@@ -49,17 +49,17 @@ export const darkColors = {
   success: '#3DDC84',
   mapTile: 'dark',
   shell: '#050B18',
-  overlay: 'rgba(0,0,0,0.65)',
-};
+  overlay: 'rgba(0,0,0,0.65)'
+}
 
 /** Default light palette for static StyleSheets / boot splash */
-export const colors = lightColors;
+export const colors = lightColors
 
 export const statusColor = {
   open: '#1F8A4C',
   busy: '#0D47A1',
-  closed: '#C62828',
-};
+  closed: '#C62828'
+}
 
 export const categoryIcons = {
   cafeteria: 'coffee',
@@ -69,9 +69,9 @@ export const categoryIcons = {
   bookstore: 'book',
   clothing: 'store',
   tech: 'wifi',
-  other: 'store',
-};
+  other: 'store'
+}
 
 export function palette(darkMode) {
-  return darkMode ? darkColors : lightColors;
+  return darkMode ? darkColors : lightColors
 }

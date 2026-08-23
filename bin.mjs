@@ -96,11 +96,11 @@ try {
     startTravelerPanel(backendScan)
   } else if (mode === 'beacon') {
     const myRecord = {
-      name: "Café Rivadavia",
-      category: "cafeteria",
-      status: "open",
-      message: "2 for 1 croissants until 6PM",
-      hours: "08:00-20:00",
+      name: 'Café Rivadavia',
+      category: 'cafeteria',
+      status: 'open',
+      message: '2 for 1 croissants until 6PM',
+      hours: '08:00-20:00',
       updated: new Date().toISOString()
     }
     startBeaconPanel(backendBeacon, myRecord)
@@ -113,7 +113,6 @@ try {
     console.log('    --fake    Use test data (no P2P network)')
     console.log('    --help    Show this help\n')
   }
-
 } catch (err) {
   console.error('[app:error]', err)
   await app.close().finally(() => Bare.exit(1))

@@ -1,12 +1,12 @@
 import { useNavigation } from '@react-navigation/native'
 import { useState } from 'react'
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { BrandLogo } from '../components/common/BrandLogo'
-import { HeaderBar } from '../components/common/HeaderBar'
-import { Icon } from '../components/common/Icon'
-import { useAppStore } from '../store/app.store'
-import { colors } from '../utils/colors'
-import { PEAR_NOTES, PEAR_PERMISSIONS } from '../utils/permissions'
+import { BrandLogo } from '../../components/common/BrandLogo'
+import { HeaderBar } from '../../components/common/HeaderBar'
+import { Icon } from '../../components/common/Icon'
+import { useAppStore } from '../../store/app.store'
+import { colors } from '../../utils/colors'
+import { PEAR_NOTES, PEAR_PERMISSIONS } from '../../utils/permissions'
 
 export function PermissionsScreen() {
   const navigation = useNavigation()

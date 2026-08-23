@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { BrandLogo } from '../components/common/BrandLogo'
-import { Icon } from '../components/common/Icon'
-import { useAppStore } from '../store/app.store'
-import { useThemeColors } from '../utils/useThemeColors'
+import { BrandLogo } from '../../components/common/BrandLogo'
+import { Icon } from '../../components/common/Icon'
+import { useAppStore } from '../../store/app.store'
+import { useThemeColors } from '../../utils/useThemeColors'
 
 const cards = [
   {

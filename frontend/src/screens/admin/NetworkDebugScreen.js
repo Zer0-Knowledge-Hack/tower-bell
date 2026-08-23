@@ -1,10 +1,10 @@
 import { useNavigation } from '@react-navigation/native'
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { HeaderBar } from '../components/common/HeaderBar'
-import { RoleGuard } from '../components/common/RoleGuard'
-import { storage } from '../api/storage.service'
-import { useAppStore } from '../store/app.store'
-import { colors } from '../utils/colors'
+import { HeaderBar } from '../../components/common/HeaderBar'
+import { RoleGuard } from '../../components/common/RoleGuard'
+import { storage } from '../../api/storage.service'
+import { useAppStore } from '../../store/app.store'
+import { colors } from '../../utils/colors'
 
 export function NetworkDebugScreen() {
   const navigation = useNavigation()

@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import { BrandLogo } from '../components/common/BrandLogo'
-import { Icon } from '../components/common/Icon'
-import { useAppStore } from '../store/app.store'
-import { pixelBody, pixelTitle } from '../utils/pixel'
-import { useThemeColors } from '../utils/useThemeColors'
+import { BrandLogo } from '../../components/common/BrandLogo'
+import { Icon } from '../../components/common/Icon'
+import { useAppStore } from '../../store/app.store'
+import { pixelBody, pixelTitle } from '../../utils/pixel'
+import { useThemeColors } from '../../utils/useThemeColors'
 
 const cards = [
   {
@@ -61,7 +61,7 @@ export function RoleSelectScreen() {
       ))}
 
       <Image
-        source={require('../../assets/owl-team.jpg')}
+        source={require('../../../assets/owl-team.jpg')}
         style={styles.teamArt}
         resizeMode='contain'
       />

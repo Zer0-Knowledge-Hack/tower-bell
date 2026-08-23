@@ -1,13 +1,13 @@
 import { useNavigation } from '@react-navigation/native'
 import { useMemo, useState } from 'react'
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import { CATEGORIES, CATEGORY_META } from '../../backend'
-import { HeaderBar } from '../components/common/HeaderBar'
-import { Icon } from '../components/common/Icon'
-import { RoleGuard } from '../components/common/RoleGuard'
-import { useAppStore } from '../store/app.store'
-import { pixelBody, pixelTitle } from '../utils/pixel'
-import { useThemeColors } from '../utils/useThemeColors'
+import { CATEGORIES, CATEGORY_META } from '../../../backend'
+import { HeaderBar } from '../../components/common/HeaderBar'
+import { Icon } from '../../components/common/Icon'
+import { RoleGuard } from '../../components/common/RoleGuard'
+import { useAppStore } from '../../store/app.store'
+import { pixelBody, pixelTitle } from '../../utils/pixel'
+import { useThemeColors } from '../../utils/useThemeColors'
 
 export function BeaconScreen() {
   const navigation = useNavigation()

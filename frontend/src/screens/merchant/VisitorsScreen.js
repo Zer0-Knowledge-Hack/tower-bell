@@ -1,11 +1,11 @@
 import { useNavigation } from '@react-navigation/native'
 import { useMemo } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import { HeaderBar } from '../components/common/HeaderBar'
-import { RoleGuard } from '../components/common/RoleGuard'
-import { useAppStore } from '../store/app.store'
-import { pixelBody } from '../utils/pixel'
-import { useThemeColors } from '../utils/useThemeColors'
+import { HeaderBar } from '../../components/common/HeaderBar'
+import { RoleGuard } from '../../components/common/RoleGuard'
+import { useAppStore } from '../../store/app.store'
+import { pixelBody } from '../../utils/pixel'
+import { useThemeColors } from '../../utils/useThemeColors'
 
 export function VisitorsScreen() {
   const navigation = useNavigation()

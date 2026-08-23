@@ -4,15 +4,18 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useMemo } from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Icon } from '../components/common/Icon'
-import { AdminDashboardScreen } from '../screens/AdminDashboardScreen'
-import { BeaconScreen } from '../screens/BeaconScreen'
-import { DiscoverScreen } from '../screens/DiscoverScreen'
-import { NetworkDebugScreen } from '../screens/NetworkDebugScreen'
-import { NotificationsScreen } from '../screens/NotificationsScreen'
-import { PermissionsScreen } from '../screens/PermissionsScreen'
-import { RoleSelectScreen } from '../screens/RoleSelectScreen'
-import { SettingsScreen } from '../screens/SettingsScreen'
-import { VisitorsScreen } from '../screens/VisitorsScreen'
+import {
+  AboutScreen,
+  AdminDashboardScreen,
+  BeaconScreen,
+  DiscoverScreen,
+  NetworkDebugScreen,
+  NotificationsScreen,
+  PermissionsScreen,
+  RoleSelectScreen,
+  SettingsScreen,
+  VisitorsScreen
+} from '../screens'
 import { useAppStore } from '../store/app.store'
 import { useThemeColors } from '../utils/useThemeColors'
 
@@ -101,9 +104,7 @@ export function AppNavigator() {
     [c, darkMode]
   )
 
-  if (!ready) {
-    return null
-  }
+  if (!ready) return null
 
   return (
     <NavigationContainer theme={theme}>
@@ -118,6 +119,7 @@ export function AppNavigator() {
             <Stack.Screen name='Settings' component={SettingsScreen} />
             <Stack.Screen name='Permissions' component={PermissionsScreen} />
             <Stack.Screen name='Notifications' component={NotificationsScreen} />
+            <Stack.Screen name='About' component={AboutScreen} />
           </>
         )}
       </Stack.Navigator>

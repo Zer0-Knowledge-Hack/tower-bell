@@ -4,6 +4,8 @@
 
 The Pear CLI in the repo root is the real P2P binary. See the root [README](../README.md).
 
+More notes: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/DEMO.md](docs/DEMO.md), [docs/JUDGING.md](docs/JUDGING.md).
+
 ## Run (web — best for recording)
 
 ```powershell

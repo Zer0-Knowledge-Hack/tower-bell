@@ -1,1 +1,1 @@
-export { startBeaconPanel } from './cli/trade.mjs';
+export { startBeaconPanel } from './cli/trade.mjs'

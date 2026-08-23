@@ -1,16 +1,31 @@
 {
   "name": "towerbell",
   "productName": "towerbell",
-  "version": "1.0.0",
-  "description": "Hyperlocal P2P Discovery — no internet, no servers, no accounts.",
+  "version": "1.0.1",
+  "description": "Hyperlocal P2P shop discovery: scan nearby beacons or broadcast your shop. No internet, no servers, no accounts.",
+  "homepage": "https://tower-bell.vercel.app",
+  "keywords": [
+    "p2p",
+    "hyperswarm",
+    "pear",
+    "holepunch",
+    "hyperlocal",
+    "bare",
+    "towerbell",
+    "zero-knolage"
+  ],
   "private": true,
-  "upgrade": "pear://9on7du4dmnmty8qsdjxoyrw6rz9dio5wzj6wqux9j6jjn545i49y",
+  "upgrade": "pear://xtj3nobayrtccxp68dnngayheeor3bc8kt8j4q19b3d5znrj1yqy",
   "bin": "bin.mjs",
   "scripts": {
     "format": "prettier . --write",
     "test": "brittle-bare test/index.js",
-    "lint": "prettier . --check && lunte",
+    "lint": "prettier . --check && lunte backend bin.mjs app.js scripts test workers",
     "start": "bare bin.mjs --no-updates",
+    "scan": "bare bin.mjs --no-updates scan",
+    "beacon": "bare bin.mjs --no-updates beacon",
+    "scan:fake": "bare bin.mjs --no-updates --fake scan",
+    "beacon:fake": "bare bin.mjs --no-updates --fake beacon",
     "make": "node scripts/make.js",
     "make:darwin-arm64": "bare-build --name towerbell --standalone --host darwin-arm64 --out ./out/darwin-arm64 bin.mjs",
     "make:darwin-x64": "bare-build --name towerbell --standalone --host darwin-x64 --out ./out/darwin-x64 bin.mjs",
@@ -46,11 +61,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/holepunchto/hello-pear-bare.git"
+    "url": "https://github.com/Zer0-Knowledge-Hack/tower-bell.git"
   },
-  "author": "Holepunch Inc",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/holepunchto/hello-pear-bare/issues"
-  }
+  "author": "Zero-Knolage",
+  "license": "Apache-2.0"
 }

@@ -49,12 +49,15 @@ class MockBeacon extends EventEmitter {
     }, 5000)
   }
 
-  actualizar(record) {
+  async update(record) {
     this.record = record
   }
 
-  detener() {
-    if (this.timer) clearInterval(this.timer)
+  async stop() {
+    if (this.timer) {
+      clearInterval(this.timer)
+      this.timer = null
+    }
   }
 }
 

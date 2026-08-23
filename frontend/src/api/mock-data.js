@@ -28,10 +28,10 @@ export const seedDb = {
   registeredMerchants: [],
   logs: [],
   permissions: {},
-  permissionsReady: false,
+  permissionsReady: true,
   notifications: [],
-  darkMode: false,
-  discoverView: 'map',
+  darkMode: true,
+  discoverView: 'radar',
   chat: {
     topics: [],
     messages: {},

@@ -1,8 +1,11 @@
-export const PEAR_LINK = 'pear://9on7du4dmnmty8qsdjxoyrw6rz9dio5wzj6wqux9j6jjn545i49y'
+export const PEAR_LINK = 'pear://xtj3nobayrtccxp68dnngayheeor3bc8kt8j4q19b3d5znrj1yqy'
 
 export const INSTALL_COMMAND = `pear install ${PEAR_LINK}`
 
 export const REPO_URL = 'https://github.com/Zer0-Knowledge-Hack/tower-bell'
+
+/** Expo / React Native web demo (static export). Use index.html — bare /demo/ hits Vite SPA fallback. */
+export const DEMO_URL = '/demo/index.html'
 
 export const SHOPS = [
   {
@@ -11,7 +14,7 @@ export const SHOPS = [
     category: 'cafeteria',
     status: 'open',
     message: '2x1 en medialunas hasta las 18',
-    hours: '08:00–20:00',
+    hours: '08:00–20:00'
   },
   {
     id: 'kiosco',
@@ -19,7 +22,7 @@ export const SHOPS = [
     category: 'kiosk',
     status: 'open',
     message: 'Facturas y recarga SUBE',
-    hours: '07:00–22:00',
+    hours: '07:00–22:00'
   },
   {
     id: 'farmacia',
@@ -27,6 +30,6 @@ export const SHOPS = [
     category: 'pharmacy',
     status: 'open',
     message: 'Guardia hasta las 21',
-    hours: '08:00–21:00',
-  },
+    hours: '08:00–21:00'
+  }
 ]

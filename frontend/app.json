@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0D47A1"
+      "backgroundColor": "#050814"
     },
     "ios": {
       "supportsTablet": true,
@@ -37,7 +37,7 @@
     "android": {
       "package": "app.towerbell.local",
       "adaptiveIcon": {
-        "backgroundColor": "#0D47A1",
+        "backgroundColor": "#050814",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
@@ -79,6 +79,9 @@
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
+    "experiments": {
+      "baseUrl": "/demo"
+    },
     "plugins": [
       "expo-font",
       [
@@ -92,7 +95,7 @@
         "expo-notifications",
         {
           "icon": "./assets/icon.png",
-          "color": "#0D47A1"
+          "color": "#5CE1FF"
         }
       ],
       [

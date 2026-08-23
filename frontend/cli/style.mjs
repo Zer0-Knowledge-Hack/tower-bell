@@ -1,9 +1,8 @@
-// frontend/style.mjs — ANSI Colors, formatting and visual identity
+// frontend/style.mjs — 8-bit HUD identity (Zero-Knolage / owl tower)
 
 const ESC = '\x1b['
 const RESET = `${ESC}0m`
 
-// Colors
 const BOLD = (text) => `${ESC}1m${text}${RESET}`
 const DIM = (text) => `${ESC}2m${text}${RESET}`
 const CYAN = (text) => `${ESC}36m${text}${RESET}`
@@ -32,22 +31,24 @@ export const colors = {
 }
 
 export const BANNER = `
-${CYAN('╔══════════════════════════════════════════════╗')}
-${CYAN('║')}  ${BOLD(YELLOW('🔔  T O W E R B E L L'))}                      ${CYAN('║')}
-${CYAN('║')}  ${DIM('Hyperlocal P2P Discovery')}                   ${CYAN('║')}
-${CYAN('║')}  ${DIM('No internet · No servers · No accounts')}       ${CYAN('║')}
-${CYAN('╚══════════════════════════════════════════════╝')}
+${CYAN('  +----------------------------------------------+')}
+${CYAN('  |')}  ${BOLD(CYAN('TOWERBELL'))}  ${DIM('owl tower · 8-bit')}           ${CYAN('|')}
+${CYAN('  |')}     ${YELLOW(' /\\_/\\')}                                 ${CYAN('|')}
+${CYAN('  |')}    ${YELLOW('( o o )')}  ${WHITE('scan / beacon')}               ${CYAN('|')}
+${CYAN('  |')}     ${YELLOW(' >^<')}   ${DIM('no servers · no accounts')}      ${CYAN('|')}
+${CYAN('  |')}  ${DIM('ZERO-KNOLAGE')}                             ${CYAN('|')}
+${CYAN('  +----------------------------------------------+')}
 `
 
 export const CATEGORIES = {
-  cafeteria: '☕',
-  restaurant: '🍽️',
-  kiosk: '🏪',
-  pharmacy: '💊',
-  bookstore: '📚',
-  clothing: '👕',
-  tech: '💻',
-  other: '📍'
+  cafeteria: '[cafe]',
+  restaurant: '[food]',
+  kiosk: '[kiosk]',
+  pharmacy: '[rx]',
+  bookstore: '[book]',
+  clothing: '[wear]',
+  tech: '[tech]',
+  other: '[shop]'
 }
 
 export function categoryIcon(cat) {
@@ -61,7 +62,7 @@ export function statusBadge(status) {
 }
 
 export function separatorLine() {
-  return DIM('─'.repeat(48))
+  return CYAN('  ' + '-'.repeat(48))
 }
 
 export function timestamp() {

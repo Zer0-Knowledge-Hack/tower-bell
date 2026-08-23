@@ -9,8 +9,8 @@ import { Track } from './components/Track'
 
 export default function App() {
   return (
-    <div className="paper min-h-dvh">
-      <a className="skip" href="#opening">
+    <div className='paper min-h-dvh'>
+      <a className='skip' href='#opening'>
         Skip to content
       </a>
       <Masthead />

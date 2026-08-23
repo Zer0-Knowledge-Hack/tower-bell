@@ -11,18 +11,22 @@ class DiscoveryDHT extends EventEmitter {
     super()
     this.store = store
     this.swarm = new Hyperswarm()
+    this._announcePayload = null
 
-    this.swarm.on('connection', (conn, info) => {
-      this.store.replicate(conn)
-
+    this.swarm.on('connection', (conn) => {
       const frames = new FramedStream(conn)
+      conn.frames = frames
 
       frames.on('data', (msg) => {
         try {
           const parsed = JSON.parse(b4a.toString(msg, 'utf-8'))
           if (parsed.type === 'BEACON_ANNOUNCE' && parsed.key) {
             const publicKey = b4a.from(parsed.key, 'hex')
-            this.emit('peer-beacon', { publicKey, conn })
+            this.emit('peer-beacon', {
+              publicKey,
+              conn,
+              record: parsed.record || null
+            })
           }
         } catch (e) {
           // ignore malformed messages
@@ -30,7 +34,8 @@ class DiscoveryDHT extends EventEmitter {
       })
 
       conn.on('error', () => {})
-      conn.frames = frames
+
+      if (this._announcePayload) frames.write(this._announcePayload)
     })
   }
 
@@ -40,22 +45,17 @@ class DiscoveryDHT extends EventEmitter {
     this.emit('ready')
   }
 
-  announce(publicKey) {
+  announce(publicKey, record) {
     const msg = JSON.stringify({
       type: 'BEACON_ANNOUNCE',
-      key: b4a.toString(publicKey, 'hex')
+      key: b4a.toString(publicKey, 'hex'),
+      record: record || null
     })
-    const buffer = b4a.from(msg, 'utf-8')
+    this._announcePayload = b4a.from(msg, 'utf-8')
 
     for (const conn of this.swarm.connections) {
-      if (conn.frames) conn.frames.write(buffer)
+      if (conn.frames) conn.frames.write(this._announcePayload)
     }
-
-    this.swarm.on('connection', (conn) => {
-      setTimeout(() => {
-        if (conn.frames) conn.frames.write(buffer)
-      }, 500)
-    })
   }
 
   async stop() {

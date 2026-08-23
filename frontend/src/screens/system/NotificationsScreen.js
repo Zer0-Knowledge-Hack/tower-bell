@@ -1,12 +1,16 @@
 import { useNavigation } from '@react-navigation/native'
+import { useMemo } from 'react'
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { HeaderBar } from '../../components/common/HeaderBar'
 import { Icon } from '../../components/common/Icon'
 import { useAppStore } from '../../store/app.store'
-import { colors } from '../../utils/colors'
+import { pixelBody, pixelTitle } from '../../utils/pixel'
+import { useThemeColors } from '../../utils/useThemeColors'
 
 export function NotificationsScreen() {
   const navigation = useNavigation()
+  const c = useThemeColors()
+  const styles = useMemo(() => makeStyles(c), [c])
   const db = useAppStore((s) => s.db)
   const markNotificationsRead = useAppStore((s) => s.markNotificationsRead)
   const clearNotifications = useAppStore((s) => s.clearNotifications)
@@ -14,40 +18,37 @@ export function NotificationsScreen() {
 
   return (
     <View style={styles.screen}>
-      <HeaderBar title='Notifications' subtitle='Peer and beacon alerts' showBell={false} />
+      <HeaderBar title='NOTIFICATIONS' subtitle='Peer and beacon alerts' showBell={false} />
       <ScrollView contentContainerStyle={styles.body}>
         <Pressable style={styles.back} onPress={() => navigation.goBack()}>
-          <Icon name='arrow-left' size={16} color={colors.ink} />
-          <Text style={styles.backText}>Back</Text>
+          <Icon name='arrow-left' size={16} color={c.ink} />
+          <Text style={styles.backText}>BACK</Text>
         </Pressable>
 
         <View style={styles.actions}>
           <Pressable style={styles.action} onPress={markNotificationsRead}>
-            <Text style={styles.actionText}>Mark as read</Text>
+            <Text style={styles.actionText}>MARK READ</Text>
           </Pressable>
-          <Pressable style={styles.action} onPress={clearNotifications}>
-            <Text style={[styles.actionText, { color: colors.rose }]}>Clear all</Text>
+          <Pressable style={[styles.action, styles.actionDanger]} onPress={clearNotifications}>
+            <Text style={[styles.actionText, { color: c.rose }]}>CLEAR</Text>
           </Pressable>
         </View>
 
         {!items.length ? (
           <View style={styles.empty}>
-            <Icon name='bell' size={28} color={colors.sky} />
-            <Text style={styles.emptyTitle}>No alerts yet</Text>
+            <Icon name='bell' size={28} color={c.sky} />
+            <Text style={styles.emptyTitle}>NO ALERTS YET</Text>
             <Text style={styles.emptyText}>
-              When a place appears nearby or someone visits your beacon, you will see it here and in
-              the bell.
+              When a place appears nearby or someone visits your beacon, it shows here and on the
+              bell.
             </Text>
           </View>
         ) : (
           items.map((item) => (
             <View key={item.id} style={[styles.card, !item.read && styles.cardUnread]}>
+              {!item.read ? <View style={styles.unreadPip} /> : null}
               <View style={styles.icon}>
-                <Icon
-                  name={item.kind === 'visitor' ? 'users' : 'radar'}
-                  size={16}
-                  color={colors.navy}
-                />
+                <Icon name={item.kind === 'visitor' ? 'users' : 'radar'} size={16} color={c.sky} />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.title}>{item.title}</Text>
@@ -62,51 +63,106 @@ export function NotificationsScreen() {
   )
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.bg },
-  body: { padding: 16, gap: 10, paddingBottom: 36 },
-  back: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  backText: { color: colors.ink, fontWeight: '700' },
-  actions: { flexDirection: 'row', gap: 8 },
-  action: {
-    backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 8
-  },
-  actionText: { color: colors.navy, fontWeight: '800', fontSize: 12 },
-  empty: {
-    backgroundColor: colors.white,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: 24,
-    alignItems: 'center',
-    gap: 8
-  },
-  emptyTitle: { color: colors.navy, fontWeight: '800', fontSize: 16 },
-  emptyText: { color: colors.muted, textAlign: 'center', lineHeight: 20 },
-  card: {
-    backgroundColor: colors.white,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: 12,
-    flexDirection: 'row',
-    gap: 10
-  },
-  cardUnread: { borderColor: colors.sky, backgroundColor: '#F4F9FF' },
-  icon: {
-    width: 34,
-    height: 34,
-    borderRadius: 10,
-    backgroundColor: colors.greenDark,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  title: { color: colors.ink, fontWeight: '800' },
-  bodyText: { color: colors.muted, marginTop: 2, fontSize: 13, lineHeight: 18 },
-  meta: { color: colors.muted, fontSize: 11, marginTop: 6 }
-})
+function makeStyles(c) {
+  return StyleSheet.create({
+    screen: { flex: 1, backgroundColor: c.bg },
+    body: { padding: 16, gap: 10, paddingBottom: 36 },
+    back: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+    backText: {
+      color: c.ink,
+      fontFamily: pixelTitle,
+      fontSize: 9,
+      letterSpacing: 1
+    },
+    actions: { flexDirection: 'row', gap: 8 },
+    action: {
+      backgroundColor: c.panel,
+      borderWidth: 2,
+      borderColor: c.border,
+      borderRadius: 0,
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      cursor: 'pointer'
+    },
+    actionDanger: { borderColor: c.rose },
+    actionText: {
+      color: c.sky,
+      fontFamily: pixelTitle,
+      fontSize: 8,
+      letterSpacing: 0.5
+    },
+    empty: {
+      backgroundColor: c.panel,
+      borderRadius: 0,
+      borderWidth: 2,
+      borderColor: c.border,
+      padding: 24,
+      alignItems: 'center',
+      gap: 8
+    },
+    emptyTitle: {
+      color: c.sky,
+      fontFamily: pixelTitle,
+      fontSize: 10,
+      letterSpacing: 1
+    },
+    emptyText: {
+      color: c.muted,
+      textAlign: 'center',
+      lineHeight: 20,
+      fontFamily: pixelBody,
+      fontSize: 17
+    },
+    card: {
+      backgroundColor: c.panel,
+      borderRadius: 0,
+      borderWidth: 2,
+      borderColor: c.border,
+      padding: 12,
+      flexDirection: 'row',
+      gap: 10,
+      alignItems: 'flex-start'
+    },
+    cardUnread: {
+      borderColor: c.highlightBorder || c.sky,
+      backgroundColor: c.unread || c.highlight
+    },
+    unreadPip: {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      bottom: 0,
+      width: 4,
+      backgroundColor: c.gold
+    },
+    icon: {
+      width: 34,
+      height: 34,
+      borderRadius: 0,
+      borderWidth: 2,
+      borderColor: c.border,
+      backgroundColor: c.greenDark,
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    title: {
+      color: c.ink,
+      fontFamily: pixelTitle,
+      fontSize: 9,
+      letterSpacing: 0.4
+    },
+    bodyText: {
+      color: c.muted,
+      marginTop: 4,
+      fontSize: 16,
+      lineHeight: 20,
+      fontFamily: pixelBody
+    },
+    meta: {
+      color: c.muted,
+      fontSize: 14,
+      marginTop: 6,
+      fontFamily: pixelBody
+    }
+  })
+}

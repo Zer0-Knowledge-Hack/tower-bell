@@ -1,23 +1,22 @@
 import { useMemo } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import { pixelBody } from '../../utils/pixel'
 import { useThemeColors } from '../../utils/useThemeColors'
 
-export function NetworkStatus({ network, p2pStatus, peers }) {
+export function NetworkStatus({ p2pStatus, peers }) {
   const c = useThemeColors()
   const styles = useMemo(() => makeStyles(c), [c])
   const active =
     p2pStatus === 'connected' || p2pStatus === 'scanning' || p2pStatus === 'broadcasting'
   return (
     <View style={styles.wrap}>
-      <Row ok={network?.internet} label='Internet' c={c} styles={styles} />
-      <Row ok={network?.localNetwork} label='Local net' c={c} styles={styles} />
-      <Row ok={network?.bluetooth} label='Bluetooth' c={c} styles={styles} />
-      <View style={styles.row}>
-        <View style={[styles.dot, { backgroundColor: active ? c.success : c.rose }]} />
-        <Text style={[styles.label, { color: active ? c.success : c.muted }]}>
-          {p2pStatus === 'broadcasting' ? 'Broadcasting' : active ? 'P2P' : 'Paused'} · {peers}
-        </Text>
-      </View>
+      <Row
+        ok={active}
+        label={p2pStatus === 'broadcasting' ? 'BEACON' : 'SWARM'}
+        c={c}
+        styles={styles}
+      />
+      <Row ok={peers > 0} label={`${peers} NEAR`} c={c} styles={styles} />
     </View>
   )
 }
@@ -26,7 +25,7 @@ function Row({ ok, label, c, styles }) {
   return (
     <View style={styles.row}>
       <View style={[styles.dot, { backgroundColor: ok ? c.success : c.rose }]} />
-      <Text style={[styles.label, { color: ok ? c.ink : c.muted }]}>{label}</Text>
+      <Text style={[styles.label, { color: ok ? c.sky : c.muted }]}>{label}</Text>
     </View>
   )
 }
@@ -37,16 +36,16 @@ function makeStyles(c) {
       flexDirection: 'row',
       flexWrap: 'wrap',
       alignItems: 'center',
-      gap: 10,
+      gap: 12,
       backgroundColor: c.panel,
-      borderRadius: 12,
-      borderWidth: 1,
+      borderRadius: 0,
+      borderWidth: 2,
       borderColor: c.border,
       paddingHorizontal: 12,
       paddingVertical: 10
     },
-    row: { flexDirection: 'row', alignItems: 'center', gap: 5 },
-    dot: { width: 7, height: 7, borderRadius: 4 },
-    label: { fontSize: 11, fontWeight: '700' }
+    row: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+    dot: { width: 8, height: 8, borderRadius: 0 },
+    label: { fontSize: 16, fontFamily: pixelBody }
   })
 }

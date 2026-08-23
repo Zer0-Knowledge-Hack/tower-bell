@@ -4,14 +4,14 @@ Use this sheet when presenting. Everything below is **implemented in the Expo fr
 
 ## Technicality
 
-| Challenge | What we built |
-|-----------|----------------|
-| Offline-first discovery UX | Traveler **Nearby** with live peer list + pull-to-refresh scan |
-| Clean engine boundary | UI only calls `scan()` / `beacon()` from `frontend/backend` |
-| Mobile sandbox vs Bare | Mock contract today; same API for Pear Bare worklet later |
-| Permissions for real devices | Gate screen + Android/iOS declarations in `app.json` |
-| Local map without Google keys | Leaflet + OpenStreetMap / CARTO tiles |
-| State & persistence | Zustand + AsyncStorage, role ACL (`src/utils/acl.js`) |
+| Challenge                     | What we built                                                  |
+| ----------------------------- | -------------------------------------------------------------- |
+| Offline-first discovery UX    | Traveler **Nearby** with live peer list + pull-to-refresh scan |
+| Clean engine boundary         | UI only calls `scan()` / `beacon()` from `frontend/backend`    |
+| Mobile sandbox vs Bare        | Mock contract today; same API for Pear Bare worklet later      |
+| Permissions for real devices  | Gate screen + Android/iOS declarations in `app.json`           |
+| Local map without Google keys | Leaflet + OpenStreetMap / CARTO tiles                          |
+| State & persistence           | Zustand + AsyncStorage, role ACL (`src/utils/acl.js`)          |
 
 **Completeness:** Demo is fully runnable on web/Expo. Path to production P2P: embed Bare Kit (documented in About + README).
 
@@ -23,13 +23,13 @@ Use this sheet when presenting. Everything below is **implemented in the Expo fr
 
 ## UI / UX / DX
 
-| Area | Evidence |
-|------|----------|
-| Easy to use | Role select → permissions → one job per tab |
-| Map / radar / list | Three views for the same nearby data |
-| Feedback | Loading blocks, toasts, notification bell |
-| Accessibility of demo | Dark mode, English copy, owl brand |
-| DX | Screens by role, barrel `screens/index.js`, docs folder |
+| Area                  | Evidence                                                |
+| --------------------- | ------------------------------------------------------- |
+| Easy to use           | Role select → permissions → one job per tab             |
+| Map / radar / list    | Three views for the same nearby data                    |
+| Feedback              | Loading blocks, toasts, notification bell               |
+| Accessibility of demo | Dark mode, English copy, owl brand                      |
+| DX                    | Screens by role, barrel `screens/index.js`, docs folder |
 
 ## Practicality
 

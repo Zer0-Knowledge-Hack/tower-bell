@@ -2,9 +2,9 @@ import { useNavigation } from '@react-navigation/native'
 import { useMemo } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { HeaderBar } from '../../components/common/HeaderBar'
-import { Icon } from '../../components/common/Icon'
 import { RoleGuard } from '../../components/common/RoleGuard'
 import { useAppStore } from '../../store/app.store'
+import { pixelBody } from '../../utils/pixel'
 import { useThemeColors } from '../../utils/useThemeColors'
 
 export function VisitorsScreen() {
@@ -18,32 +18,22 @@ export function VisitorsScreen() {
     <RoleGuard feature='visitors'>
       <View style={styles.screen}>
         <HeaderBar
-          title='Visitors'
-          subtitle='Who came near your beacon'
+          title='HITS'
+          subtitle='Scanners that reached your beacon'
           onSettings={() => navigation.navigate('Settings')}
         />
         <ScrollView contentContainerStyle={styles.body}>
           <View style={styles.card}>
-            <View style={styles.iconWrap}>
-              <Icon name='users' size={20} color={c.sky} />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.label}>Travelers who saw you</Text>
-              <Text style={styles.value}>{beacon.peersSeen || 0}</Text>
-            </View>
+            <Text style={styles.label}>Travelers who saw you</Text>
+            <Text style={styles.value}>{beacon.peersSeen || 0}</Text>
           </View>
           <View style={styles.card}>
-            <View style={styles.iconWrap}>
-              <Icon name='link' size={20} color={c.sky} />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.label}>Unique connections</Text>
-              <Text style={styles.value}>{beacon.uniqueConnections || 0}</Text>
-            </View>
+            <Text style={styles.label}>Unique links</Text>
+            <Text style={styles.value}>{beacon.uniqueConnections || 0}</Text>
           </View>
           <Text style={styles.note}>
-            You only see your own shop. Travelers cannot open this screen. If nobody appears, make
-            sure the beacon is on air.
+            This is the visitor event from the nucleus. Keep the beacon on air so scanners can copy
+            your record.
           </Text>
         </ScrollView>
       </View>
@@ -57,24 +47,13 @@ function makeStyles(c) {
     body: { padding: 16, gap: 12 },
     card: {
       backgroundColor: c.panel,
-      borderRadius: 14,
+      borderRadius: 0,
       padding: 16,
-      borderWidth: 1,
-      borderColor: c.border,
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 14
+      borderWidth: 2,
+      borderColor: c.border
     },
-    iconWrap: {
-      width: 44,
-      height: 44,
-      borderRadius: 12,
-      backgroundColor: c.greenDark,
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-    label: { color: c.muted, fontWeight: '700' },
-    value: { color: c.navy, fontSize: 32, fontWeight: '800', marginTop: 4 },
-    note: { color: c.muted, lineHeight: 20 }
+    label: { color: c.muted, fontFamily: pixelBody, fontSize: 16 },
+    value: { color: c.sky, fontSize: 36, fontFamily: pixelBody, marginTop: 6 },
+    note: { color: c.muted, lineHeight: 22, fontFamily: pixelBody, fontSize: 16 }
   })
 }

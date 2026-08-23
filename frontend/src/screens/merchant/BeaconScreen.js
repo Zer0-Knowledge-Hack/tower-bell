@@ -1,11 +1,12 @@
 import { useNavigation } from '@react-navigation/native'
 import { useMemo, useState } from 'react'
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import { HeaderBar } from '../../components/common/HeaderBar'
-import { RoleGuard } from '../../components/common/RoleGuard'
-import { Icon } from '../../components/common/Icon'
 import { CATEGORIES, CATEGORY_META } from '../../../backend'
+import { HeaderBar } from '../../components/common/HeaderBar'
+import { Icon } from '../../components/common/Icon'
+import { RoleGuard } from '../../components/common/RoleGuard'
 import { useAppStore } from '../../store/app.store'
+import { pixelBody, pixelTitle } from '../../utils/pixel'
 import { useThemeColors } from '../../utils/useThemeColors'
 
 export function BeaconScreen() {
@@ -49,22 +50,16 @@ export function BeaconScreen() {
     <RoleGuard feature='beacon'>
       <View style={styles.screen}>
         <HeaderBar
-          title='My shop'
-          subtitle='How nearby travelers see you'
+          title='BEACON'
+          subtitle='What travelers receive nearby'
           onSettings={() => navigation.navigate('Settings')}
-          right={
-            <Text style={styles.airBadge}>{beacon.broadcasting ? 'ON AIR' : 'PAUSED'}</Text>
-          }
+          right={<Text style={styles.air}>{beacon.broadcasting ? 'ON AIR' : 'IDLE'}</Text>}
         />
         <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps='handled'>
           <View style={[styles.card, beacon.broadcasting && styles.cardOn]}>
             <View style={styles.row}>
               <View style={styles.pulse}>
-                <Icon
-                  name='signal'
-                  size={22}
-                  color={beacon.broadcasting ? c.sky : c.muted}
-                />
+                <Icon name='signal' size={22} color={beacon.broadcasting ? c.success : c.muted} />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.name}>{beacon.name}</Text>
@@ -74,32 +69,27 @@ export function BeaconScreen() {
             <Text style={styles.promo}>{beacon.message}</Text>
             <Text style={styles.help}>
               {beacon.broadcasting
-                ? 'Nearby travelers can already see you. Keep the phone unlocked or allow background mode.'
-                : 'When you start, your name, category, and message are shared with anyone scanning nearby.'}
+                ? 'Your record is on the swarm. Nearby scanners can copy it.'
+                : 'Start broadcasting to publish name, category and promo over scan().'}
             </Text>
             <Pressable
               style={[styles.toggle, beacon.broadcasting && styles.toggleStop]}
               onPress={onToggle}
             >
-              <Icon
-                name={beacon.broadcasting ? 'x' : 'signal'}
-                size={16}
-                color={beacon.broadcasting ? c.rose : c.sky}
-              />
               <Text style={[styles.toggleText, beacon.broadcasting && { color: c.rose }]}>
-                {beacon.broadcasting ? 'Stop broadcasting' : 'Start broadcasting'}
+                {beacon.broadcasting ? 'STOP BEACON' : 'START BEACON'}
               </Text>
             </Pressable>
           </View>
 
-          <Text style={styles.section}>DETAILS SHOWN NEARBY</Text>
+          <Text style={styles.section}>RECORD</Text>
           <Field
+            styles={styles}
+            c={c}
             label='Name'
             value={data.name}
             onChangeText={(v) => patch('name', v)}
             error={errors.name}
-            c={c}
-            styles={styles}
           />
           <Text style={styles.label}>Category</Text>
           <View style={styles.chips}>
@@ -130,30 +120,30 @@ export function BeaconScreen() {
             ))}
           </View>
           <Field
+            styles={styles}
+            c={c}
             label='Message'
             value={data.message}
             onChangeText={(v) => patch('message', v)}
             error={errors.message}
-            c={c}
-            styles={styles}
           />
           <Field
+            styles={styles}
+            c={c}
             label='Hours HH:MM-HH:MM'
             value={data.hours}
             onChangeText={(v) => patch('hours', v)}
             error={errors.hours}
-            c={c}
-            styles={styles}
           />
           <Pressable style={styles.save} onPress={onSave}>
-            <Icon name='edit' size={16} color={c.headerText} />
-            <Text style={styles.saveText}>Save changes</Text>
+            <Icon name='edit' size={16} color={c.sky} />
+            <Text style={styles.saveText}>SAVE RECORD</Text>
           </Pressable>
 
-          <Text style={styles.section}>TODAY</Text>
+          <Text style={styles.section}>HITS</Text>
           <View style={styles.stats}>
-            <Stat label='Peers today' value={beacon.peersSeen || 0} styles={styles} />
-            <Stat label='Connections' value={beacon.uniqueConnections || 0} styles={styles} />
+            <Stat styles={styles} label='Seen' value={beacon.peersSeen || 0} />
+            <Stat styles={styles} label='Links' value={beacon.uniqueConnections || 0} />
           </View>
         </ScrollView>
       </View>
@@ -161,7 +151,7 @@ export function BeaconScreen() {
   )
 }
 
-function Field({ label, error, c, styles, ...props }) {
+function Field({ styles, c, label, error, ...props }) {
   return (
     <View style={{ gap: 6 }}>
       <Text style={styles.label}>{label}</Text>
@@ -175,7 +165,7 @@ function Field({ label, error, c, styles, ...props }) {
   )
 }
 
-function Stat({ label, value, styles }) {
+function Stat({ styles, label, value }) {
   return (
     <View style={styles.stat}>
       <Text style={styles.statVal}>{value}</Text>
@@ -188,86 +178,96 @@ function makeStyles(c) {
   return StyleSheet.create({
     screen: { flex: 1, backgroundColor: c.bg },
     body: { padding: 16, gap: 12, paddingBottom: 36 },
-    airBadge: { color: c.headerText, fontWeight: '800', fontSize: 11 },
+    air: { color: c.sky, fontFamily: pixelTitle, fontSize: 8 },
     card: {
       backgroundColor: c.panel,
-      borderWidth: 1,
+      borderWidth: 2,
       borderColor: c.border,
-      borderRadius: 14,
+      borderRadius: 0,
       padding: 14,
       gap: 12
     },
-    cardOn: { borderColor: c.sky },
+    cardOn: { borderColor: c.success },
     row: { flexDirection: 'row', alignItems: 'center', gap: 10 },
     pulse: {
       width: 48,
       height: 48,
-      borderRadius: 24,
+      borderRadius: 0,
+      borderWidth: 2,
+      borderColor: c.border,
       backgroundColor: c.greenDark,
       alignItems: 'center',
       justifyContent: 'center'
     },
-    name: { color: c.text, fontSize: 18, fontWeight: '800' },
-    meta: { color: c.muted },
-    promo: { color: c.navy, fontWeight: '600' },
-    help: { color: c.muted, fontSize: 13, lineHeight: 18 },
+    name: { color: c.text, fontSize: 22, fontFamily: pixelBody },
+    meta: { color: c.muted, fontFamily: pixelBody, fontSize: 16 },
+    promo: { color: c.sky, fontFamily: pixelBody, fontSize: 18 },
+    help: { color: c.muted, fontSize: 16, lineHeight: 20, fontFamily: pixelBody },
     toggle: {
-      borderWidth: 1,
-      borderColor: c.sky,
-      borderRadius: 10,
+      borderWidth: 2,
+      borderColor: c.success,
+      borderRadius: 0,
       minHeight: 46,
-      flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'center',
-      gap: 8
+      justifyContent: 'center'
     },
     toggleStop: { borderColor: c.rose },
-    toggleText: { color: c.sky, fontWeight: '800' },
-    section: { color: c.muted, fontSize: 11, fontWeight: '800', letterSpacing: 1, marginTop: 4 },
-    label: { color: c.text, fontSize: 12, fontWeight: '700' },
+    toggleText: { color: c.success, fontFamily: pixelTitle, fontSize: 9 },
+    section: {
+      color: c.sky,
+      fontSize: 8,
+      fontFamily: pixelTitle,
+      letterSpacing: 1,
+      marginTop: 4
+    },
+    label: { color: c.text, fontSize: 16, fontFamily: pixelBody },
     input: {
       backgroundColor: c.panel,
-      borderWidth: 1,
+      borderWidth: 2,
       borderColor: c.border,
-      borderRadius: 10,
+      borderRadius: 0,
       minHeight: 46,
       paddingHorizontal: 12,
-      color: c.text
+      color: c.text,
+      fontFamily: pixelBody,
+      fontSize: 18
     },
     inputErr: { borderColor: c.rose },
-    error: { color: c.rose, fontSize: 12 },
+    error: { color: c.rose, fontSize: 14, fontFamily: pixelBody },
     save: {
-      backgroundColor: c.header,
-      borderRadius: 10,
+      backgroundColor: c.deep,
+      borderRadius: 0,
+      borderWidth: 2,
+      borderColor: c.border,
       minHeight: 48,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       gap: 8
     },
-    saveText: { color: c.headerText, fontWeight: '800' },
+    saveText: { color: c.sky, fontFamily: pixelTitle, fontSize: 9 },
     chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
     chip: {
-      backgroundColor: c.panelAlt,
-      borderWidth: 1,
+      backgroundColor: c.panel,
+      borderWidth: 2,
       borderColor: c.border,
-      borderRadius: 999,
+      borderRadius: 0,
       paddingHorizontal: 10,
       paddingVertical: 8
     },
-    chipOn: { backgroundColor: c.header, borderColor: c.header },
-    chipText: { color: c.ink, fontWeight: '700', fontSize: 12 },
-    chipTextOn: { color: c.headerText },
+    chipOn: { backgroundColor: c.greenDark, borderColor: c.sky },
+    chipText: { color: c.ink, fontFamily: pixelBody, fontSize: 16 },
+    chipTextOn: { color: c.sky },
     stats: { flexDirection: 'row', gap: 10 },
     stat: {
       flex: 1,
       backgroundColor: c.panel,
-      borderWidth: 1,
+      borderWidth: 2,
       borderColor: c.border,
-      borderRadius: 12,
+      borderRadius: 0,
       padding: 14
     },
-    statVal: { color: c.sky, fontSize: 24, fontWeight: '800' },
-    statLabel: { color: c.muted, marginTop: 4 }
+    statVal: { color: c.sky, fontSize: 28, fontFamily: pixelBody },
+    statLabel: { color: c.muted, marginTop: 4, fontFamily: pixelBody }
   })
 }

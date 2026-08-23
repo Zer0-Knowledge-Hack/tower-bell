@@ -16,7 +16,7 @@ export function CopyCommand({ command, className = '' }) {
   return (
     <div className={`cmd w-full min-w-0 ${className}`}>
       <code>{command}</code>
-      <button type="button" onClick={copy}>
+      <button type='button' onClick={copy}>
         {copied ? 'Copied' : 'Copy'}
       </button>
     </div>

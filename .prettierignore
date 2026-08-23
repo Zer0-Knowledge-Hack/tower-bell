@@ -1,0 +1,12 @@
+pnpm-lock.yaml
+**/pnpm-lock.yaml
+package-lock.yaml
+**/package-lock.json
+**/node_modules
+out
+deployment
+*.jpg
+*.png
+*.webp
+landing/public/demo
+

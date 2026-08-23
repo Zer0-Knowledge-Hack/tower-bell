@@ -1,12 +1,13 @@
-import { useMemo } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useThemeColors } from '../../utils/useThemeColors';
-import { Icon } from '../common/Icon';
-import { StatusBadge } from '../common/StatusBadge';
+import { useMemo } from 'react'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { pixelBody, pixelTitle } from '../../utils/pixel'
+import { useThemeColors } from '../../utils/useThemeColors'
+import { Icon } from '../common/Icon'
+import { StatusBadge } from '../common/StatusBadge'
 
 export function MerchantCard({ merchant, onView }) {
-  const c = useThemeColors();
-  const styles = useMemo(() => makeStyles(c), [c]);
+  const c = useThemeColors()
+  const styles = useMemo(() => makeStyles(c), [c])
 
   return (
     <Pressable style={styles.card} onPress={() => onView(merchant)}>
@@ -23,69 +24,48 @@ export function MerchantCard({ merchant, onView }) {
         <StatusBadge status={merchant.status} />
       </View>
       {merchant.message || merchant.promotion ? (
-        <View style={styles.promoRow}>
-          <Icon name="zap" size={13} color={c.gold} />
-          <Text style={styles.promo} numberOfLines={2}>
-            {merchant.message || merchant.promotion}
-          </Text>
-        </View>
+        <Text style={styles.promo}>{merchant.message || merchant.promotion}</Text>
       ) : null}
-      <View style={styles.footer}>
-        <View style={styles.signal}>
-          {[1, 2, 3, 4, 5].map((n) => (
-            <View
-              key={n}
-              style={[
-                styles.bar,
-                { height: 4 + n * 2, opacity: n <= (merchant.signal || 3) ? 1 : 0.2 },
-              ]}
-            />
-          ))}
-        </View>
-        <View style={styles.btn}>
-          <Icon name="link" size={13} color={c.sky} />
-          <Text style={styles.btnText}>Open</Text>
-        </View>
+      <View style={styles.btn}>
+        <Text style={styles.btnText}>OPEN RECORD</Text>
       </View>
     </Pressable>
-  );
+  )
 }
 
 function makeStyles(c) {
   return StyleSheet.create({
     card: {
       backgroundColor: c.panel,
-      borderWidth: 1,
+      borderWidth: 2,
       borderColor: c.border,
-      borderRadius: 16,
+      borderRadius: 0,
       padding: 14,
-      gap: 10,
+      gap: 10
     },
     top: { flexDirection: 'row', alignItems: 'center', gap: 10 },
     icon: {
-      width: 42,
-      height: 42,
-      borderRadius: 12,
+      width: 40,
+      height: 40,
+      borderRadius: 0,
+      borderWidth: 2,
+      borderColor: c.border,
       backgroundColor: c.greenDark,
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'center'
     },
-    name: { color: c.text, fontSize: 16, fontWeight: '800' },
-    meta: { color: c.muted, fontSize: 12, marginTop: 2 },
-    promoRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 6 },
-    promo: { color: c.ink, fontSize: 13, fontWeight: '600', flex: 1, lineHeight: 18 },
-    footer: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-    signal: { flexDirection: 'row', alignItems: 'flex-end', gap: 2 },
-    bar: { width: 4, backgroundColor: c.sky, borderRadius: 1 },
+    name: { color: c.text, fontSize: 18, fontFamily: pixelBody },
+    meta: { color: c.muted, fontSize: 14, marginTop: 2, fontFamily: pixelBody },
+    promo: { color: c.sky, fontSize: 16, fontFamily: pixelBody },
     btn: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 6,
+      alignSelf: 'flex-start',
       backgroundColor: c.greenDark,
-      borderRadius: 10,
-      paddingHorizontal: 12,
-      paddingVertical: 8,
+      borderRadius: 0,
+      borderWidth: 2,
+      borderColor: c.sky,
+      paddingHorizontal: 14,
+      paddingVertical: 8
     },
-    btnText: { color: c.sky, fontWeight: '800', fontSize: 12 },
-  });
+    btnText: { color: c.sky, fontFamily: pixelTitle, fontSize: 8 }
+  })
 }

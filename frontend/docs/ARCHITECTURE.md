@@ -29,12 +29,12 @@ await live.stop();
 
 ## Screen map by role
 
-| Folder | Screens |
-|--------|---------|
-| `screens/traveler` | Discover (map/radar/list), Chat, Wallet |
-| `screens/merchant` | Beacon, Visitors |
-| `screens/admin` | Admin dashboard, Network debug |
-| `screens/system` | Role select, Settings, Permissions, Notifications, About |
+| Folder             | Screens                                                  |
+| ------------------ | -------------------------------------------------------- |
+| `screens/traveler` | Discover (map/radar/list), Chat, Wallet                  |
+| `screens/merchant` | Beacon, Visitors                                         |
+| `screens/admin`    | Admin dashboard, Network debug                           |
+| `screens/system`   | Role select, Settings, Permissions, Notifications, About |
 
 ## Theme
 

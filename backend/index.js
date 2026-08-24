@@ -59,6 +59,13 @@ class Scanner extends EventEmitter {
       await onRecord()
       db.core.on('append', onRecord)
     })
+
+    dht.on('peer-left', (publicKey) => {
+      const keyHex = b4a.toString(publicKey, 'hex')
+      if (this.peers.delete(keyHex)) {
+        this.emit('peer-lost', keyHex)
+      }
+    })
   }
 
   list() {

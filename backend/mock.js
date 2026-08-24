@@ -27,6 +27,14 @@ class MockScanner extends EventEmitter {
     this.timer = setTimeout(() => {
       this.peers.set(mockData.id, mockData)
       this.emit('peer-found', mockData)
+
+      // Simulate the beacon moving out of range so --fake also exercises
+      // peer-lost, since the real backend only emits it on disconnect.
+      this.lossTimer = setTimeout(() => {
+        if (this.peers.delete(mockData.id)) {
+          this.emit('peer-lost', mockData.id)
+        }
+      }, 15000)
     }, 3000)
   }
 

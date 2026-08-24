@@ -108,6 +108,20 @@ class MockScanner extends Emitter {
         )
       )
     })
+
+    // Send the last-discovered beacon out of range so the UI also gets to
+    // handle peer-lost in the demo, not just peer-found.
+    const lastPeer = MOCK_PEERS[MOCK_PEERS.length - 1]
+    this.timers.push(
+      setTimeout(
+        () => {
+          if (this.peers.delete(lastPeer.id)) {
+            this.emit('peer-lost', lastPeer.id)
+          }
+        },
+        700 + MOCK_PEERS.length * 650 + 6000
+      )
+    )
   }
 
   stopTimers() {

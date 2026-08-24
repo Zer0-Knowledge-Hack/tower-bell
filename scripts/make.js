@@ -31,8 +31,8 @@ const opts = {
   stdio: 'inherit'
 }
 const res = isWindows
-  ? spawnSync(`npm.cmd run ${script}`, { ...opts, shell: true })
-  : spawnSync('npm', ['run', script], opts)
+  ? spawnSync(`pnpm.cmd run ${script}`, { ...opts, shell: true })
+  : spawnSync('pnpm', ['run', script], opts)
 if (res.error) {
   console.error(res.error.message)
   process.exit(1)

@@ -14,6 +14,7 @@ network.on('status', ({ mode, connected, error }) => {}) // mode: 'dht' (only mo
 network.on('peer-found', (record) => {})
 network.on('peer-lost', (id) => {})
 network.list() // -> array of currently known records
+network.stop() // async -- closes the swarm; added so callers can shut a scan down cleanly
 
 const myBeacon = beacon(record)
 myBeacon.on('visitor', ({ total }) => {})

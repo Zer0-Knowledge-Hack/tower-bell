@@ -26,17 +26,17 @@ Names are English and frozen: `scan`, `beacon`, `peer-found`, `peer-lost`, `stat
 ### Record schema
 
 ```js
-{ id, name, category, status, message, hours, updated }
+const record = { id, name, category, status, message, hours, updated }
 ```
 
 `status` is `'open'` or `'closed'`. `updated` is an ISO timestamp. Anything else on a record (`distance`, `signal`, `icon`, `categoryLabel`, `peerId`, `promotion`, …) is UI-only sugar added by a consumer (see `frontend/backend/schema.js#toUiRecord`), not part of the contract — do not depend on it being present from `backend/index.js` or `backend/mock.js` directly.
 
 ## Two consumers, same contract, different backend
 
-| Consumer | Entry point | Backend it gets |
-|---|---|---|
-| Pear CLI + TUI (the track binary) | `bin.mjs` → `frontend/traveler.mjs` / `frontend/trade.mjs` → `frontend/cli/*.mjs` | Real `backend/index.js` (or `backend/mock.js` with `--fake`), running under Bare |
-| Expo / React Native app | `frontend/App.js` → `frontend/src/*` | Always `frontend/backend/index.js`, which always re-exports `frontend/backend/mock.js` |
+| Consumer                          | Entry point                                                                       | Backend it gets                                                                        |
+| --------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Pear CLI + TUI (the track binary) | `bin.mjs` → `frontend/traveler.mjs` / `frontend/trade.mjs` → `frontend/cli/*.mjs` | Real `backend/index.js` (or `backend/mock.js` with `--fake`), running under Bare       |
+| Expo / React Native app           | `frontend/App.js` → `frontend/src/*`                                              | Always `frontend/backend/index.js`, which always re-exports `frontend/backend/mock.js` |
 
 Expo/web cannot load `hyperswarm` or any native Bare module, so `frontend/backend/` is a standalone folder that mirrors the `scan()`/`beacon()` shape with a mock swarm. It is **not** a copy of `backend/` that happens to also work — it is deliberately mock-only. If a Pear Mobile / Bare-in-Expo path is ever wired, `frontend/backend/index.js` is the one file to swap to re-export the native backend; nothing else in `frontend/src/` should need to change if the contract above is respected.
 

@@ -1,4 +1,4 @@
-// frontend/style.mjs — 8-bit HUD identity (Zero-Knolage / owl tower)
+// frontend/cli/style.mjs — 8-bit HUD identity (Zero-Knolage / owl tower)
 
 const ESC = '\x1b['
 const RESET = `${ESC}0m`

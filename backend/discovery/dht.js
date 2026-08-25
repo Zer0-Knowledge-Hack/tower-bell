@@ -16,11 +16,13 @@ class DiscoveryDHT extends EventEmitter {
     this.swarm.on('connection', (conn) => {
       const frames = new FramedStream(conn)
       conn.frames = frames
+      let remoteKey = null
 
       frames.on('data', (msg) => {
         try {
           const parsed = JSON.parse(b4a.toString(msg, 'utf-8'))
           if (parsed.type === 'BEACON_ANNOUNCE' && parsed.key) {
+            remoteKey = parsed.key
             const publicKey = b4a.from(parsed.key, 'hex')
             this.emit('peer-beacon', {
               publicKey,
@@ -34,6 +36,13 @@ class DiscoveryDHT extends EventEmitter {
       })
 
       conn.on('error', () => {})
+
+      // A closed connection is the only reliable "peer left" signal we get
+      // from a direct Hyperswarm link. If we never learned the peer's
+      // announced key, there is nothing to report as lost.
+      conn.on('close', () => {
+        if (remoteKey) this.emit('peer-left', b4a.from(remoteKey, 'hex'))
+      })
 
       if (this._announcePayload) frames.write(this._announcePayload)
     })

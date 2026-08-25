@@ -1,4 +1,4 @@
-// frontend/cli/traveler.mjs ? Traveler panel (scan)
+// frontend/cli/traveler.mjs - Traveler panel (scan)
 // Uses the contract interface: scan() -> events peer-found, peer-lost, status
 
 import { colors, BANNER, categoryIcon, statusBadge, separatorLine, timestamp } from './style.mjs'
@@ -8,7 +8,7 @@ const { BOLD, DIM, CYAN, GREEN, YELLOW, RED, WHITE } = colors
 export function startTravelerPanel(backendFn) {
   console.clear()
   console.log(BANNER)
-  console.log(BOLD(WHITE('  SCAN MODE ? listening for nearby beacons\n')))
+  console.log(BOLD(WHITE('  SCAN MODE - listening for nearby beacons\n')))
   console.log(separatorLine())
   console.log(DIM('  Connecting to P2P network...\n'))
 
@@ -17,10 +17,10 @@ export function startTravelerPanel(backendFn) {
 
   network.on('status', ({ mode, connected, error }) => {
     if (connected) {
-      console.log(`  ${GREEN('?')} ${BOLD(mode.toUpperCase())} Network connected ${timestamp()}`)
+      console.log(`  ${GREEN('+')} ${BOLD(mode.toUpperCase())} Network connected ${timestamp()}`)
     } else {
       console.log(
-        `  ${RED('?')} ${mode.toUpperCase()} Network disconnected ${error ? '? ' + error.message : ''} ${timestamp()}`
+        `  ${RED('x')} ${mode.toUpperCase()} Network disconnected ${error ? 'x ' + error.message : ''} ${timestamp()}`
       )
     }
     console.log(separatorLine())

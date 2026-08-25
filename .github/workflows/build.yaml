@@ -31,17 +31,20 @@ jobs:
       - name: Setup repo
         uses: holepunchto/actions/.github/steps/setup-repo@v1
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Install w/ dev deps
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: npm run make:${{ matrix.host }}
+        run: pnpm run make:${{ matrix.host }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.host }}
-          path: out/${{ matrix.host }}/hello-pear-bare*
+          path: out/${{ matrix.host }}/towerbell*
           if-no-files-found: error
           retention-days: 1
 
@@ -61,16 +64,19 @@ jobs:
         with:
           path: apps
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Build by-arch
         run: |
-          chmod +x apps/darwin-*/hello-pear-bare apps/linux-*/hello-pear-bare
-          npx --yes pear-build@1.1.1 \
-            --darwin-arm64-app apps/darwin-arm64/hello-pear-bare \
-            --darwin-x64-app apps/darwin-x64/hello-pear-bare \
-            --linux-arm64-app apps/linux-arm64/hello-pear-bare \
-            --linux-x64-app apps/linux-x64/hello-pear-bare \
-            --win32-x64-app apps/win32-x64/hello-pear-bare.exe \
-            --win32-arm64-app apps/win32-arm64/hello-pear-bare.exe \
+          chmod +x apps/darwin-*/towerbell apps/linux-*/towerbell
+          pnpm dlx pear-build@1.1.1 \
+            --darwin-arm64-app apps/darwin-arm64/towerbell \
+            --darwin-x64-app apps/darwin-x64/towerbell \
+            --linux-arm64-app apps/linux-arm64/towerbell \
+            --linux-x64-app apps/linux-x64/towerbell \
+            --win32-x64-app apps/win32-x64/towerbell.exe \
+            --win32-arm64-app apps/win32-arm64/towerbell.exe \
             --target deployment \
             --package package.json
           tar -C deployment -czf by-arch.tar.gz .

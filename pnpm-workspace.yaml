@@ -1,0 +1,11 @@
+# pnpm >=10.6 ignores node-linker in .npmrc entirely -- only auth/registry
+# settings are still read from there. This is the setting that actually
+# takes effect; .npmrc keeps node-linker=hoisted too for anyone still on an
+# older pnpm. Bare's module resolver does not walk pnpm's isolated .pnpm
+# symlink structure the way Node's require() does, so without this, deep
+# transitive deps (e.g. streamx, pulled in by framed-stream) fail to
+# resolve at runtime even though they're installed.
+nodeLinker: hoisted
+
+minimumReleaseAgeExclude:
+  - bare-fs@4.8.1

@@ -34,7 +34,7 @@ Someone on the team must keep this running:
 pear seed pear://xtj3nobayrtccxp68dnngayheeor3bc8kt8j4q19b3d5znrj1yqy
 ```
 
-Without a seeder, `pear install` cannot fetch the app. OTA: bump `version` in `package.json`, rebuild, `pear stage` the same link. An installed copy logs `[updater] updating` → `updated`.
+Without a seeder, `pear install` cannot fetch the app. OTA: bump `version` in `package.json`, rebuild, `pear stage` the same link — see [docs/RELEASES.md](docs/RELEASES.md) for the exact by-arch packaging steps, staging the repo root directly does not work. An installed copy logs `[updater] updating` → `updated`.
 
 ## Phone UI demo (Expo)
 

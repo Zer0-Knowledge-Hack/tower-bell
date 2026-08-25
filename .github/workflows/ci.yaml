@@ -10,7 +10,9 @@ jobs:
     name: Lint
     steps:
       - uses: holepunchto/actions/node-base@v1
-      - run: npm run lint
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint
 
   build:
     name: ${{ matrix.host }}
@@ -35,14 +37,17 @@ jobs:
       - name: Setup repo
         uses: holepunchto/actions/.github/steps/setup-repo@v1
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Install w/ dev deps
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build Local Runtime
-        run: npm run make
+        run: pnpm run make
 
       - name: Install Bare
-        run: npm i -g bare-runtime
+        run: pnpm add -g bare-runtime
 
       - name: Test
-        run: npm test
+        run: pnpm test

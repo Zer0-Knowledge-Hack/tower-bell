@@ -2,28 +2,63 @@ const Corestore = require('corestore')
 const path = require('bare-path')
 const { persistent } = require('bare-storage')
 const os = require('bare-os')
-const process = require('bare-process')
 const EventEmitter = require('bare-events')
 const b4a = require('b4a')
 const { DataManager } = require('./data.js')
 const { DiscoveryDHT } = require('./discovery/dht.js')
 
-function getStorageDir() {
-  const suffix = process.pid
+// Storage root used when the caller does not pass one. Deliberately stable
+// across runs: a beacon's identity is the key of its hypercore, which lives
+// here, so a shop that restarts has to come back as the same peer. Suffixing
+// this with process.pid gave every run a fresh identity and left a dead
+// corestore directory behind each time.
+//
+// Two instances on one machine (the usual P2P check) pass different roots via
+// the --storage flag instead.
+function defaultStorageRoot() {
   try {
-    return path.join(persistent(), 'towerbell-corestore-' + suffix)
+    return path.join(persistent(), 'towerbell')
   } catch (e) {
-    return path.join(os.tmpdir(), 'towerbell-corestore-' + suffix)
+    return path.join(os.tmpdir(), 'towerbell')
   }
 }
 
-const store = new Corestore(getStorageDir())
-const data = new DataManager(store)
-const dht = new DiscoveryDHT(store)
+let store = null
+let data = null
+let dht = null
+let storageRoot = null
+
+// Corestore locks its directory, so a second instance pointed at the same
+// root fails deep inside rocksdb with "File descriptor could not be locked".
+// Running two peers on one machine is the normal way to test this app, so the
+// error has to say what to do about it instead of dumping a stack trace.
+function describeStorageError(err) {
+  if (err && /could not be locked/i.test(err.message || '')) {
+    const e = new Error(
+      `another Towerbell instance is already using ${storageRoot} — ` +
+        'pass --storage <dir> to run a second one on this machine'
+    )
+    e.code = 'STORAGE_LOCKED'
+    return e
+  }
+  return err
+}
+
+// Opening a Corestore is a side effect, so it waits until a scanner or beacon
+// is actually created. That is also what lets the caller choose the root.
+function init(options = {}) {
+  if (store !== null) return
+
+  storageRoot = options.storage || defaultStorageRoot()
+  store = new Corestore(path.join(storageRoot, 'corestore'))
+  data = new DataManager(store)
+  dht = new DiscoveryDHT(store)
+}
 
 class Scanner extends EventEmitter {
-  constructor() {
+  constructor(options = {}) {
     super()
+    init(options)
     this.peers = new Map()
     this.connected = false
 
@@ -52,12 +87,16 @@ class Scanner extends EventEmitter {
         return
       }
 
-      const { db } = await data.getRemoteDb(publicKey)
-      const onRecord = async () => {
-        emitRecord(await data.readRecord(db))
+      try {
+        const { db } = await data.getRemoteDb(publicKey)
+        const onRecord = async () => {
+          emitRecord(await data.readRecord(db))
+        }
+        await onRecord()
+        db.core.on('append', onRecord)
+      } catch (err) {
+        this.emit('error', describeStorageError(err))
       }
-      await onRecord()
-      db.core.on('append', onRecord)
     })
 
     dht.on('peer-left', (publicKey) => {
@@ -78,13 +117,14 @@ class Scanner extends EventEmitter {
 }
 
 class Beacon extends EventEmitter {
-  constructor(initialRecord) {
+  constructor(initialRecord, options = {}) {
     super()
+    init(options)
     this.record = initialRecord
     this.visitors = 0
     this.localDb = null
 
-    this._init()
+    this._init().catch((err) => this.emit('error', describeStorageError(err)))
   }
 
   async _init() {
@@ -115,12 +155,12 @@ class Beacon extends EventEmitter {
   }
 }
 
-function scan() {
-  return new Scanner()
+function scan(options) {
+  return new Scanner(options)
 }
 
-function beacon(record) {
-  return new Beacon(record)
+function beacon(record, options) {
+  return new Beacon(record, options)
 }
 
 module.exports = { scan, beacon }

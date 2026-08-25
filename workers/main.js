@@ -43,6 +43,18 @@ pear.updater.on('error', (err) => pipe.write(`error: ${err.message}`))
 pear.updater.on('updating', () => pipe.write('updating'))
 pear.updater.on('updated', () => pipe.write('updated'))
 
+// App.js/bin.mjs already had an 'updating-delta' listener (dead until now:
+// nothing ever sent it). pear.updater emits one entry per mirrored file
+// while the update downloads -- forward it as JSON on the same ad hoc
+// message protocol the other control messages use.
+pear.updater.on('updating-delta', (delta) => {
+  try {
+    pipe.write(`updating-delta:${JSON.stringify(delta)}`)
+  } catch (err) {
+    pipe.write(`updating-delta:${String(delta)}`)
+  }
+})
+
 pipe.on('data', (data) => {
   const message = data.toString()
   if (message === 'pear:applyUpdate') {

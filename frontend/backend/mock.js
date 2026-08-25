@@ -132,6 +132,10 @@ class MockScanner extends Emitter {
   list() {
     return Array.from(this.peers.values())
   }
+
+  async stop() {
+    this.stopTimers()
+  }
 }
 
 class MockBeacon extends Emitter {

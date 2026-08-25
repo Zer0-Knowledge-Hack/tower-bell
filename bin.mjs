@@ -5,6 +5,7 @@ import os from 'bare-os'
 import { isWindows } from 'which-runtime'
 import path from 'bare-path'
 import fs from 'bare-fs'
+import goodbye from 'graceful-goodbye'
 import pkg from './package.json'
 import App from './app.js'
 import { scan, beacon } from './backend/index.js'
@@ -98,7 +99,11 @@ try {
   const mode = cmd.args.mode || (Array.isArray(cmd.args) ? cmd.args[0] : null)
 
   if (mode === 'scan') {
-    startTravelerPanel(backendScan)
+    const network = startTravelerPanel(backendScan)
+    // Close the DHT swarm on exit so a Ctrl+C traveler drops off the
+    // network right away instead of lingering until the OS tears down the
+    // connection on its own.
+    goodbye(() => network.stop?.())
   } else if (mode === 'beacon') {
     const myRecord = {
       name: cmd.flags.name || 'Café Rivadavia',
@@ -108,7 +113,10 @@ try {
       hours: cmd.flags.hours || '08:00-20:00',
       updated: new Date().toISOString()
     }
-    startBeaconPanel(backendBeacon, myRecord)
+    const myBeacon = startBeaconPanel(backendBeacon, myRecord)
+    // Same for a beacon: stop announcing right away instead of leaving a
+    // stale record for scanners until the connection drops on its own.
+    goodbye(() => myBeacon.stop?.())
   } else {
     console.log('\n  Usage: towerbell <scan|beacon> [options]\n')
     console.log('  Commands:')

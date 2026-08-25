@@ -41,6 +41,17 @@ class MockScanner extends EventEmitter {
   list() {
     return Array.from(this.peers.values())
   }
+
+  async stop() {
+    if (this.timer) {
+      clearTimeout(this.timer)
+      this.timer = null
+    }
+    if (this.lossTimer) {
+      clearTimeout(this.lossTimer)
+      this.lossTimer = null
+    }
+  }
 }
 
 class MockBeacon extends EventEmitter {

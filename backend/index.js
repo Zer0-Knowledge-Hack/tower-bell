@@ -71,6 +71,10 @@ class Scanner extends EventEmitter {
   list() {
     return Array.from(this.peers.values())
   }
+
+  async stop() {
+    await dht.stop()
+  }
 }
 
 class Beacon extends EventEmitter {

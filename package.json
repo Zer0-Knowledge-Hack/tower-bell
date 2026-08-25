@@ -3,6 +3,7 @@
   "productName": "towerbell",
   "version": "1.0.1",
   "description": "Hyperlocal P2P shop discovery: scan nearby beacons or broadcast your shop. No internet, no servers, no accounts.",
+  "packageManager": "pnpm@10.34.5",
   "homepage": "https://tower-bell.vercel.app",
   "keywords": [
     "p2p",

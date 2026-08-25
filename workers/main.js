@@ -34,7 +34,11 @@ const pear = new PearRuntime({
 
 const pipe = new FramedStream(Bare.IPC)
 
+// PearRuntime itself swallows its own ready() rejection (see pear-runtime's
+// constructor), so the errors that actually matter here — a failed drive
+// update, a failed prefetch — are emitted on pear.updater, not on pear.
 pear.on('error', (err) => pipe.write(`error: ${err.message}`))
+pear.updater.on('error', (err) => pipe.write(`error: ${err.message}`))
 
 pear.updater.on('updating', () => pipe.write('updating'))
 pear.updater.on('updated', () => pipe.write('updated'))

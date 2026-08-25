@@ -35,7 +35,11 @@ class DiscoveryDHT extends EventEmitter {
         }
       })
 
+      // A peer going away is normal in P2P, not exceptional. Both the raw
+      // connection and the FramedStream wrapping it emit 'error' on reset;
+      // an unhandled one on either takes the whole process down.
       conn.on('error', () => {})
+      frames.on('error', () => {})
 
       // A closed connection is the only reliable "peer left" signal we get
       // from a direct Hyperswarm link. If we never learned the peer's

@@ -87,9 +87,26 @@ process.on('SIGTERM', () => app.exit(143))
 try {
   await app.ready()
 
-  // Select backend: real or mock based on --fake
-  let backendScan = scan
-  let backendBeacon = beacon
+  // Select backend: real or mock based on --fake.
+  // The real backend gets the same storage root the updater uses, so
+  // --storage separates two instances on one machine and, without it, a
+  // beacon keeps its identity across restarts.
+  // An EventEmitter with no 'error' listener throws on emit, so the backend's
+  // failures are surfaced here as a one-line message rather than a stack.
+  const onBackendError = (err) => {
+    console.error(`[towerbell] ${err.message}`)
+    Bare.exit(1)
+  }
+  let backendScan = () => {
+    const network = scan({ storage: dir })
+    network.on('error', onBackendError)
+    return network
+  }
+  let backendBeacon = (record) => {
+    const bcn = beacon(record, { storage: dir })
+    bcn.on('error', onBackendError)
+    return bcn
+  }
   if (cmd.flags.fake) {
     const mock = await import('./backend/mock.js')
     backendScan = mock.scan

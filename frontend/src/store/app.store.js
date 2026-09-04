@@ -35,6 +35,16 @@ export const useAppStore = create((set, get) => ({
       }
       get().addLog(`peer-found ${record.name}`)
     })
+    // A beacon that walks out of range has to leave the list. Without this the
+    // UI keeps showing shops that are no longer reachable -- the contract emits
+    // peer-lost for exactly this, and the CLI TUI already handles it.
+    network.on('peer-lost', (id) => {
+      const gone = get().peers.find((item) => item.id === id)
+      set({ peers: network.list().map((item) => toUiRecord(item)) })
+      // Whatever is open in the sheet may be the peer that just left.
+      if (get().selectedMerchant?.id === id) set({ selectedMerchant: null })
+      if (gone) get().addLog(`peer-lost ${gone.name}`)
+    })
     network.on('status', ({ connected }) => {
       set({ p2pStatus: connected ? 'connected' : 'scanning' })
     })
@@ -42,6 +52,22 @@ export const useAppStore = create((set, get) => ({
     setTimeout(() => {
       announcePeers = true
     }, 4500)
+  },
+
+  // Closes both halves of the contract. The scan holds a swarm open for as long
+  // as the app lives, so leaving without stop() leaks it -- network.stop() was
+  // added to the contract for this and nothing was calling it.
+  async teardown() {
+    if (liveBeacon) {
+      await liveBeacon.stop()
+      liveBeacon = null
+    }
+    if (network) {
+      await network.stop()
+      network = null
+    }
+    announcePeers = false
+    set({ ready: false, peers: [], p2pStatus: 'idle', selectedMerchant: null })
   },
 
   async persist(next) {

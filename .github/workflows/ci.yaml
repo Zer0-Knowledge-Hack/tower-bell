@@ -5,6 +5,41 @@ on:
   pull_request:
     branches: [main]
 jobs:
+  # Two rules the team wrote down but nothing enforced. Both have already been
+  # broken once: a 260KB frontend/package-lock.json reached main, which is the
+  # documented cause of "works in dev, missing in the binary". No install
+  # needed, so this fails in seconds instead of after a six-platform matrix.
+  guards:
+    runs-on: ubuntu-latest
+    name: Guards
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: This repo is pnpm-only
+        run: |
+          found=$(git ls-files '*package-lock.json' '*yarn.lock')
+          if [ -n "$found" ]; then
+            echo "::error::Committed npm/yarn lockfile:"
+            echo "$found"
+            echo "pear stage bundles by walking node_modules and depends on the hoisted"
+            echo "layout, so an npm or yarn install here breaks the staged app."
+            echo "Delete the file and run pnpm install. See AGENTS.md."
+            exit 1
+          fi
+          echo "No npm or yarn lockfiles tracked."
+
+      - name: The hoisted node-linker is still set
+        run: |
+          # pnpm >=10.6 reads nodeLinker from pnpm-workspace.yaml and ignores
+          # node-linker in .npmrc, so the workspace file is the one that counts.
+          if ! grep -qE '^nodeLinker:[[:space:]]*hoisted' pnpm-workspace.yaml; then
+            echo "::error file=pnpm-workspace.yaml::nodeLinker: hoisted is missing."
+            echo "Bare's resolver does not walk pnpm's isolated .pnpm symlink tree, so"
+            echo "deep transitive deps fail at runtime even though they are installed."
+            exit 1
+          fi
+          echo "nodeLinker: hoisted is set."
+
   lint:
     runs-on: ubuntu-latest
     name: Lint

@@ -1,16 +1,27 @@
 const EventEmitter = require('bare-events')
 
+// Delays for the fake discovery timeline. They are paced for a human watching
+// `--fake` in a terminal, which is far too slow for a test suite, so callers
+// can shrink them. Nothing else about the mock changes.
+const DEFAULT_TIMINGS = {
+  connect: 1000,
+  found: 3000,
+  lost: 15000,
+  visitor: 5000
+}
+
 class MockScanner extends EventEmitter {
-  constructor() {
+  constructor(options = {}) {
     super()
     this.peers = new Map()
     this.timer = null
+    this.timings = { ...DEFAULT_TIMINGS, ...(options.timings || {}) }
 
     // Simulate initial network connection
-    setTimeout(() => {
+    this.connectTimer = setTimeout(() => {
       this.emit('status', { mode: 'dht', connected: true })
       this._simulateDiscovery()
-    }, 1000)
+    }, this.timings.connect)
   }
 
   _simulateDiscovery() {
@@ -34,8 +45,8 @@ class MockScanner extends EventEmitter {
         if (this.peers.delete(mockData.id)) {
           this.emit('peer-lost', mockData.id)
         }
-      }, 15000)
-    }, 3000)
+      }, this.timings.lost)
+    }, this.timings.found)
   }
 
   list() {
@@ -43,6 +54,10 @@ class MockScanner extends EventEmitter {
   }
 
   async stop() {
+    if (this.connectTimer) {
+      clearTimeout(this.connectTimer)
+      this.connectTimer = null
+    }
     if (this.timer) {
       clearTimeout(this.timer)
       this.timer = null
@@ -55,17 +70,18 @@ class MockScanner extends EventEmitter {
 }
 
 class MockBeacon extends EventEmitter {
-  constructor(record) {
+  constructor(record, options = {}) {
     super()
     this.record = record
     this.visitors = 0
     this.timer = null
+    this.timings = { ...DEFAULT_TIMINGS, ...(options.timings || {}) }
 
     // Simulate visitors arriving
     this.timer = setInterval(() => {
       this.visitors++
       this.emit('visitor', { total: this.visitors })
-    }, 5000)
+    }, this.timings.visitor)
   }
 
   async update(record) {
@@ -80,12 +96,12 @@ class MockBeacon extends EventEmitter {
   }
 }
 
-function scan() {
-  return new MockScanner()
+function scan(options) {
+  return new MockScanner(options)
 }
 
-function beacon(record) {
-  return new MockBeacon(record)
+function beacon(record, options) {
+  return new MockBeacon(record, options)
 }
 
-module.exports = { scan, beacon }
+module.exports = { scan, beacon, DEFAULT_TIMINGS }

@@ -34,6 +34,9 @@ export default function App() {
   useEffect(() => {
     loadPixelFonts()
     hydrate()
+    return () => {
+      useAppStore.getState().teardown()
+    }
   }, [hydrate])
 
   useEffect(() => {
